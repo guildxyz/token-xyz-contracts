@@ -5,7 +5,7 @@
     The file was modified by Agora.
 
     2022 agora.xyz
-    
+
 */
 
 /*
@@ -39,7 +39,8 @@ library LibStorage {
     enum StorageId {
         Proxy,
         SimpleFunctionRegistry,
-        Ownable
+        Ownable,
+        TokenFactory
     }
 
     /// @dev Get the storage slot given a storage ID. We assign unique, well-spaced

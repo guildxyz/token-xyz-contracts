@@ -5,7 +5,7 @@
     The file was modified by Agora.
 
     2022 agora.xyz
-    
+
 */
 
 /*
@@ -30,9 +30,10 @@ pragma solidity ^0.8.0;
 
 import "./features/interfaces/IOwnableFeature.sol";
 import "./features/interfaces/ISimpleFunctionRegistryFeature.sol";
+import "./features/interfaces/ITokenFactoryFeature.sol";
 
 /// @dev Interface for a fully featured token.xyz Proxy.
-interface ITokenXyz is IOwnableFeature, ISimpleFunctionRegistryFeature {
+interface ITokenXyz is IOwnableFeature, ISimpleFunctionRegistryFeature, ITokenFactoryFeature {
     // solhint-disable state-visibility
 
     /// @dev Error thrown when the requested function is not found in any features.
