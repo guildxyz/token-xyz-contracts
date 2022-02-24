@@ -1,0 +1,22 @@
+{
+  "name": "token-xyz-contracts",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "node run-tests.js"
+  },
+  "keywords": [],
+  "license": "MIT",
+  "devDependencies": {
+    "@openzeppelin/test-helpers": "^0.5.15",
+    "eth-gas-reporter": "^0.2.24",
+    "prettier": "^2.5.1",
+    "prettier-plugin-solidity": "^1.0.0-beta.19",
+    "truffle-plugin-verify": "^0.5.21"
+  },
+  "dependencies": {
+    "@truffle/hdwallet-provider": "^2.0.3",
+    "dotenv": "^16.0.0"
+  }
+}
