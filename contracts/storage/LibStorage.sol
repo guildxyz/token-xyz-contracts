@@ -41,7 +41,8 @@ library LibStorage {
         SimpleFunctionRegistry,
         Ownable,
         TokenFactory,
-        MerkleDistributorFactory
+        MerkleDistributorFactory,
+        MerkleVestingFactory
     }
 
     /// @dev Get the storage slot given a storage ID. We assign unique, well-spaced
