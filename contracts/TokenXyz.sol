@@ -54,8 +54,6 @@ contract TokenXyz {
         LibProxyStorage.getStorage().impls[bootstrap.bootstrap.selector] = address(bootstrap);
     }
 
-    // solhint-disable state-visibility
-
     /// @dev Forwards calls to the appropriate implementation contract.
     fallback() external payable {
         bytes4 selector = msg.data.readBytes4(0);
@@ -71,8 +69,6 @@ contract TokenXyz {
 
     /// @dev Fallback for just receiving ether.
     receive() external payable {}
-
-    // solhint-enable state-visibility
 
     /// @dev Get the implementation contract of a registered function.
     /// @param selector The function selector.
