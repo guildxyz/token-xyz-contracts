@@ -13,6 +13,11 @@ interface IMerkleVestingFactoryFeature {
         address owner
     ) external;
 
+    /// @notice Returns all the deployed vesting contract addresses by a specific creator.
+    /// @param creatorId The id of the creator.
+    /// @return vestingAddresses The requested array of contract addresses.
+    function getDeployedVestings(string calldata creatorId) external view returns (address[] memory vestingAddresses);
+
     /// @notice Event emitted when creating a new vesting contract.
     /// @param instance The address of the newly created vesting contract.
     event MerkleVestingDeployed(address instance);

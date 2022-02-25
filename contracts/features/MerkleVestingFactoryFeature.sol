@@ -19,6 +19,7 @@ contract MerkleVestingFactoryFeature is IFeature, IMerkleVestingFactoryFeature, 
     /// @return success `LibMigrate.SUCCESS` on success.
     function migrate() external returns (bytes4 success) {
         _registerFeatureFunction(this.createVesting.selector);
+        _registerFeatureFunction(this.getDeployedVestings.selector);
         return LibMigrate.MIGRATE_SUCCESS;
     }
 
@@ -34,5 +35,12 @@ contract MerkleVestingFactoryFeature is IFeature, IMerkleVestingFactoryFeature, 
         address instance = address(new MerkleVesting(token, owner));
         LibMerkleVestingFactoryStorage.getStorage().deploys[creatorId].push(instance);
         emit MerkleVestingDeployed(instance);
+    }
+
+    /// @notice Returns all the deployed vesting contract addresses by a specific creator.
+    /// @param creatorId The id of the creator.
+    /// @return vestingAddresses The requested array of contract addresses.
+    function getDeployedVestings(string calldata creatorId) external view returns (address[] memory vestingAddresses) {
+        return LibMerkleVestingFactoryStorage.getStorage().deploys[creatorId];
     }
 }
