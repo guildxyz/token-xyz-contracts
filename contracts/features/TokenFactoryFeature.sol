@@ -23,9 +23,18 @@ contract TokenFactoryFeature is IFeature, ITokenFactoryFeature, FixinCommon {
         return LibMigrate.MIGRATE_SUCCESS;
     }
 
+    /// @notice Deploys a new ERC20 token contract.
+    /// @param creatorId The id of the creator.
+    /// @param tokenName The token's name.
+    /// @param tokenSymbol The token's symbol.
+    /// @param tokenDecimals The token's number of decimals.
+    /// @param initialSupply The initial amount of tokens to mint.
+    /// @param firstOwner The first address to assign ownership/minting rights to (if mintable). The recipient of the initial supply.
+    /// @param mintable Whether to create a mintable token.
+    /// @param multiOwner If true, use AccessControl, otherwise Ownable (does not apply if the token is not mintable).
     // prettier-ignore
     function createToken(
-        string calldata creator,
+        string calldata creatorId,
         string calldata tokenName,
         string calldata tokenSymbol,
         uint8 tokenDecimals,
@@ -66,7 +75,7 @@ contract TokenFactoryFeature is IFeature, ITokenFactoryFeature, FixinCommon {
                     initialSupply
                 )
             );
-        LibTokenFactoryStorage.getStorage().deploys[creator].push(token);
+        LibTokenFactoryStorage.getStorage().deploys[creatorId].push(token);
         emit TokenDeployed(token);
     }
 }

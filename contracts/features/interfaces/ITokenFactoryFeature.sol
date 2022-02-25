@@ -3,13 +3,8 @@ pragma solidity ^0.8.0;
 
 /// @title A contract that deploys ERC20 token contracts for anyone.
 interface ITokenFactoryFeature {
-    /// @dev Initialize and register this feature.
-    ///      Should be delegatecalled by `Migrate.migrate()`.
-    /// @return success `LibMigrate.SUCCESS` on success.
-    function migrate() external returns (bytes4 success);
-
     /// @notice Deploys a new ERC20 token contract.
-    /// @param creator The id of the creator.
+    /// @param creatorId The id of the creator.
     /// @param tokenName The token's name.
     /// @param tokenSymbol The token's symbol.
     /// @param tokenDecimals The token's number of decimals.
@@ -18,7 +13,7 @@ interface ITokenFactoryFeature {
     /// @param mintable Whether to create a mintable token.
     /// @param multiOwner If true, use AccessControl, otherwise Ownable (does not apply if the token is not mintable).
     function createToken(
-        string calldata creator,
+        string calldata creatorId,
         string calldata tokenName,
         string calldata tokenSymbol,
         uint8 tokenDecimals,
