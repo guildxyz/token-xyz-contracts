@@ -31,11 +31,15 @@ pragma solidity ^0.8.0;
 import "./features/interfaces/IOwnableFeature.sol";
 import "./features/interfaces/ISimpleFunctionRegistryFeature.sol";
 import "./features/interfaces/ITokenFactoryFeature.sol";
+import "./features/interfaces/IMerkleDistributorFactoryFeature.sol";
 
 /// @dev Interface for a fully featured token.xyz Proxy.
-interface ITokenXyz is IOwnableFeature, ISimpleFunctionRegistryFeature, ITokenFactoryFeature {
-    // solhint-disable state-visibility
-
+interface ITokenXyz is
+    IOwnableFeature,
+    ISimpleFunctionRegistryFeature,
+    ITokenFactoryFeature,
+    IMerkleDistributorFactoryFeature
+{
     /// @dev Error thrown when the requested function is not found in any features.
     /// @param selector The function's selector that was attempted to be called.
     error NotImplemented(bytes4 selector);

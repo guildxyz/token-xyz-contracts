@@ -17,11 +17,13 @@ contract MerkleDistributor is IMerkleDistributor, Ownable {
     constructor(
         address token_,
         bytes32 merkleRoot_,
-        uint256 distributionDuration
+        uint256 distributionDuration,
+        address owner
     ) {
         token = token_;
         merkleRoot = merkleRoot_;
         distributionEnd = block.timestamp + distributionDuration;
+        transferOwnership(owner);
     }
 
     function isClaimed(uint256 index) public view returns (bool) {

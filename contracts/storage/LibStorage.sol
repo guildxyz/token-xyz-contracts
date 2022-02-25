@@ -40,7 +40,8 @@ library LibStorage {
         Proxy,
         SimpleFunctionRegistry,
         Ownable,
-        TokenFactory
+        TokenFactory,
+        MerkleDistributorFactory
     }
 
     /// @dev Get the storage slot given a storage ID. We assign unique, well-spaced
