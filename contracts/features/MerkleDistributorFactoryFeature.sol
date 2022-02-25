@@ -19,6 +19,7 @@ contract MerkleDistributorFactoryFeature is IFeature, IMerkleDistributorFactoryF
     /// @return success `LibMigrate.SUCCESS` on success.
     function migrate() external returns (bytes4 success) {
         _registerFeatureFunction(this.createAirdrop.selector);
+        _registerFeatureFunction(this.getDeployedAirdrops.selector);
         return LibMigrate.MIGRATE_SUCCESS;
     }
 
@@ -38,5 +39,12 @@ contract MerkleDistributorFactoryFeature is IFeature, IMerkleDistributorFactoryF
         address instance = address(new MerkleDistributor(token, merkleRoot, distributionDuration, owner));
         LibMerkleDistributorFactoryStorage.getStorage().deploys[creatorId].push(instance);
         emit MerkleDistributorDeployed(instance);
+    }
+
+    /// @notice Returns all the deployed airdrop contract addresses by a specific creator.
+    /// @param creatorId The id of the creator.
+    /// @return airdropAddresses The requested array of contract addresses.
+    function getDeployedAirdrops(string calldata creatorId) external view returns (address[] memory airdropAddresses) {
+        return LibMerkleDistributorFactoryStorage.getStorage().deploys[creatorId];
     }
 }

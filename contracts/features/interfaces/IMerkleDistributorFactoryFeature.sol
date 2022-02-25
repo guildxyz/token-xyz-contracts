@@ -17,6 +17,11 @@ interface IMerkleDistributorFactoryFeature {
         address owner
     ) external;
 
+    /// @notice Returns all the deployed airdrop contract addresses by a specific creator.
+    /// @param creatorId The id of the creator.
+    /// @return airdropAddresses The requested array of contract addresses.
+    function getDeployedAirdrops(string calldata creatorId) external view returns (address[] memory airdropAddresses);
+
     /// @notice Event emitted when creating a new airdrop contract.
     /// @param instance The address of the newly created airdrop contract.
     event MerkleDistributorDeployed(address instance);
