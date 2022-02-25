@@ -30,15 +30,15 @@ pragma solidity 0.8.12;
 
 import "./LibStorage.sol";
 
-/// @dev Storage helpers for the `SimpleFunctionRegistry` feature.
+/// @title Storage helpers for the `SimpleFunctionRegistry` feature.
 library LibSimpleFunctionRegistryStorage {
-    /// @dev Storage bucket for this feature.
+    /// @notice Storage bucket for this feature.
     struct Storage {
         // Mapping of function selector -> implementation history.
         mapping(bytes4 => address[]) implHistory;
     }
 
-    /// @dev Get the storage bucket for this contract.
+    /// @notice Get the storage bucket for this contract.
     function getStorage() internal pure returns (Storage storage stor) {
         uint256 storageSlot = LibStorage.getStorageSlot(LibStorage.StorageId.SimpleFunctionRegistry);
         // Dip into assembly to change the slot pointed to by the local

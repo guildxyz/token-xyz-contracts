@@ -31,27 +31,27 @@ pragma solidity 0.8.12;
 import "../features/interfaces/IOwnableFeature.sol";
 import "../features/interfaces/ISimpleFunctionRegistryFeature.sol";
 
-/// @dev Common feature utilities.
+/// @title Common feature utilities.
 abstract contract FixinCommon {
-    /// @dev The implementation address of this feature.
+    /// @notice The implementation address of this feature.
     address internal immutable _implementation;
 
-    /// @dev Error thrown when a function only callable by self was called by another address.
+    /// @notice Error thrown when a function only callable by self was called by another address.
     /// @param caller The caller of the function.
     error OnlyCallableBySelf(address caller);
 
-    /// @dev Error thrown when a function only callable by the owner was called by another address.
+    /// @notice Error thrown when a function only callable by the owner was called by another address.
     /// @param caller The caller of the function.
     /// @param owner The owner's address.
     error OnlyOwner(address caller, address owner);
 
-    /// @dev The caller must be this contract.
+    /// @notice The caller must be this contract.
     modifier onlySelf() virtual {
         if (msg.sender != address(this)) revert OnlyCallableBySelf(msg.sender);
         _;
     }
 
-    /// @dev The caller of this function must be the owner.
+    /// @notice The caller of this function must be the owner.
     modifier onlyOwner() virtual {
         {
             address owner = IOwnableFeature(address(this)).owner();
@@ -65,7 +65,7 @@ abstract contract FixinCommon {
         _implementation = address(this);
     }
 
-    /// @dev Registers a function implemented by this feature at `_implementation`.
+    /// @notice Registers a function implemented by this feature at `_implementation`.
     ///      Can and should only be called within a `migrate()`.
     /// @param selector The selector of the function whose implementation
     ///        is at `_implementation`.
@@ -73,7 +73,7 @@ abstract contract FixinCommon {
         ISimpleFunctionRegistryFeature(address(this)).extend(selector, _implementation);
     }
 
-    /// @dev Encode a feature version as a `uint256`.
+    /// @notice Encode a feature version as a `uint256`.
     /// @param major The major version number of the feature.
     /// @param minor The minor version number of the feature.
     /// @param revision The revision number of the feature.

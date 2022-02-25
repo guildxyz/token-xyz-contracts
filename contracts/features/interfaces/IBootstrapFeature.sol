@@ -28,19 +28,19 @@
 
 pragma solidity ^0.8.0;
 
-/// @dev Detachable `bootstrap()` feature.
+/// @title Detachable `bootstrap()` feature.
 interface IBootstrapFeature {
-    /// @dev Error thrown when the bootstrap() function is called by the wrong address.
+    /// @notice Error thrown when the bootstrap() function is called by the wrong address.
     /// @param actualCaller The caller of the function.
     /// @param allowedCaller The address that is allowed to call the function.
     error InvalidBootstrapCaller(address actualCaller, address allowedCaller);
 
-    /// @dev Error thrown when the die() function is called by the wrong address.
+    /// @notice Error thrown when the die() function is called by the wrong address.
     /// @param actualCaller The caller of the function.
     /// @param deployer The deployer's address, which is allowed to call the function.
     error InvalidDieCaller(address actualCaller, address deployer);
 
-    /// @dev Bootstrap the initial feature set of this contract by delegatecalling
+    /// @notice Bootstrap the initial feature set of this contract by delegatecalling
     ///      into `target`. Before exiting the `bootstrap()` function will
     ///      deregister itself from the proxy to prevent being called again.
     /// @param target The bootstrapper contract address.

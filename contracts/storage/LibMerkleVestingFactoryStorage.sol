@@ -4,15 +4,15 @@ pragma solidity 0.8.12;
 
 import "./LibStorage.sol";
 
-/// @dev Storage helpers for the `MerkleVestingFactory` feature.
+/// @title Storage helpers for the `MerkleVestingFactory` feature.
 library LibMerkleVestingFactoryStorage {
-    /// @dev Storage bucket for this feature.
+    /// @notice Storage bucket for this feature.
     struct Storage {
         // The addresses of deployments by entities
         mapping(string => address[]) deploys;
     }
 
-    /// @dev Get the storage bucket for this contract.
+    /// @notice Get the storage bucket for this contract.
     function getStorage() internal pure returns (Storage storage stor) {
         uint256 storageSlot = LibStorage.getStorageSlot(LibStorage.StorageId.MerkleVestingFactory);
         // Dip into assembly to change the slot pointed to by the local

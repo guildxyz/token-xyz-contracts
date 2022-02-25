@@ -34,7 +34,7 @@ import "./features/interfaces/ITokenFactoryFeature.sol";
 import "./features/interfaces/IMerkleDistributorFactoryFeature.sol";
 import "./features/interfaces/IMerkleVestingFactoryFeature.sol";
 
-/// @dev Interface for a fully featured token.xyz Proxy.
+/// @title Interface for a fully featured token.xyz Proxy.
 interface ITokenXyz is
     IOwnableFeature,
     ISimpleFunctionRegistryFeature,
@@ -42,10 +42,10 @@ interface ITokenXyz is
     IMerkleDistributorFactoryFeature,
     IMerkleVestingFactoryFeature
 {
-    /// @dev Error thrown when the requested function is not found in any features.
+    /// @notice Error thrown when the requested function is not found in any features.
     /// @param selector The function's selector that was attempted to be called.
     error NotImplemented(bytes4 selector);
 
-    /// @dev Fallback for just receiving ether.
+    /// @notice Fallback for just receiving ether.
     receive() external payable;
 }

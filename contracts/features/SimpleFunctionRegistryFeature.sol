@@ -35,14 +35,14 @@ import "../migrations/LibBootstrap.sol";
 import "./interfaces/IFeature.sol";
 import "./interfaces/ISimpleFunctionRegistryFeature.sol";
 
-/// @dev Basic registry management features.
+/// @title Basic registry management features.
 contract SimpleFunctionRegistryFeature is IFeature, ISimpleFunctionRegistryFeature, FixinCommon {
-    /// @dev Name of this feature.
+    /// @notice Name of this feature.
     string public constant override FEATURE_NAME = "SimpleFunctionRegistry";
-    /// @dev Version of this feature.
+    /// @notice Version of this feature.
     uint256 public immutable override FEATURE_VERSION = _encodeVersion(1, 0, 0);
 
-    /// @dev Initializes this feature, registering its own functions.
+    /// @notice Initializes this feature, registering its own functions.
     /// @return success Magic bytes if successful.
     function bootstrap() external returns (bytes4 success) {
         // Register the registration functions (inception vibes).
@@ -56,7 +56,7 @@ contract SimpleFunctionRegistryFeature is IFeature, ISimpleFunctionRegistryFeatu
         return LibBootstrap.BOOTSTRAP_SUCCESS;
     }
 
-    /// @dev Roll back to a prior implementation of a function.
+    /// @notice Roll back to a prior implementation of a function.
     ///      Only directly callable by an authority.
     /// @param selector The function selector.
     /// @param targetImpl The address of an older implementation of the function.
@@ -86,7 +86,7 @@ contract SimpleFunctionRegistryFeature is IFeature, ISimpleFunctionRegistryFeatu
         emit ProxyFunctionUpdated(selector, currentImpl, targetImpl);
     }
 
-    /// @dev Register or replace a function.
+    /// @notice Register or replace a function.
     ///      Only directly callable by an authority.
     /// @param selector The function selector.
     /// @param impl The implementation contract for the function.
@@ -94,7 +94,7 @@ contract SimpleFunctionRegistryFeature is IFeature, ISimpleFunctionRegistryFeatu
         _extend(selector, impl);
     }
 
-    /// @dev Register or replace a function.
+    /// @notice Register or replace a function.
     ///      Only callable from within.
     ///      This function is only used during the bootstrap process and
     ///      should be deregistered by the deployer after bootstrapping is
@@ -105,7 +105,7 @@ contract SimpleFunctionRegistryFeature is IFeature, ISimpleFunctionRegistryFeatu
         _extend(selector, impl);
     }
 
-    /// @dev Retrieve the length of the rollback history for a function.
+    /// @notice Retrieve the length of the rollback history for a function.
     /// @param selector The function selector.
     /// @return rollbackLength The number of items in the rollback history for
     ///         the function.
@@ -113,7 +113,7 @@ contract SimpleFunctionRegistryFeature is IFeature, ISimpleFunctionRegistryFeatu
         return LibSimpleFunctionRegistryStorage.getStorage().implHistory[selector].length;
     }
 
-    /// @dev Retrieve an entry in the rollback history for a function.
+    /// @notice Retrieve an entry in the rollback history for a function.
     /// @param selector The function selector.
     /// @param idx The index in the rollback history.
     /// @return impl An implementation address for the function at
@@ -122,7 +122,7 @@ contract SimpleFunctionRegistryFeature is IFeature, ISimpleFunctionRegistryFeatu
         return LibSimpleFunctionRegistryStorage.getStorage().implHistory[selector][idx];
     }
 
-    /// @dev Register or replace a function.
+    /// @notice Register or replace a function.
     /// @param selector The function selector.
     /// @param impl The implementation contract for the function.
     function _extend(bytes4 selector, address impl) private {
@@ -138,7 +138,7 @@ contract SimpleFunctionRegistryFeature is IFeature, ISimpleFunctionRegistryFeatu
         emit ProxyFunctionUpdated(selector, oldImpl, impl);
     }
 
-    /// @dev Get the storage buckets for this feature and the proxy.
+    /// @notice Get the storage buckets for this feature and the proxy.
     /// @return stor Storage bucket for this feature.
     /// @return proxyStor age bucket for the proxy.
     function _getStorages()

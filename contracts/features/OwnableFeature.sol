@@ -36,14 +36,14 @@ import "./interfaces/IFeature.sol";
 import "./interfaces/IOwnableFeature.sol";
 import "./SimpleFunctionRegistryFeature.sol";
 
-/// @dev Owner management features.
+/// @title Owner management features.
 contract OwnableFeature is IFeature, IOwnableFeature, FixinCommon {
-    /// @dev Name of this feature.
+    /// @notice Name of this feature.
     string public constant override FEATURE_NAME = "Ownable";
-    /// @dev Version of this feature.
+    /// @notice Version of this feature.
     uint256 public immutable override FEATURE_VERSION = _encodeVersion(1, 0, 0);
 
-    /// @dev Initializes this feature. The intial owner will be set to this (TokenXyz)
+    /// @notice Initializes this feature. The intial owner will be set to this (TokenXyz)
     ///      to allow the bootstrappers to call `extend()`. Ownership should be
     ///      transferred to the real owner by the bootstrapper after
     ///      bootstrapping is complete.
@@ -59,7 +59,7 @@ contract OwnableFeature is IFeature, IOwnableFeature, FixinCommon {
         return LibBootstrap.BOOTSTRAP_SUCCESS;
     }
 
-    /// @dev Change the owner of this contract.
+    /// @notice Change the owner of this contract.
     ///      Only directly callable by the owner.
     /// @param newOwner New owner address.
     function transferOwnership(address newOwner) external override onlyOwner {
@@ -73,7 +73,7 @@ contract OwnableFeature is IFeature, IOwnableFeature, FixinCommon {
         }
     }
 
-    /// @dev Execute a migration function in the context of the TokenXyz contract.
+    /// @notice Execute a migration function in the context of the TokenXyz contract.
     ///      The result of the function being called should be the magic bytes
     ///      0x2c64c5ef (`keccack('MIGRATE_SUCCESS')`). Only callable by the owner.
     ///      Temporarily sets the owner to ourselves so we can perform admin functions.
@@ -101,7 +101,7 @@ contract OwnableFeature is IFeature, IOwnableFeature, FixinCommon {
         emit Migrated(msg.sender, target, newOwner);
     }
 
-    /// @dev Get the owner of this contract.
+    /// @notice Get the owner of this contract.
     /// @return owner_ The owner of this contract.
     function owner() external view override returns (address owner_) {
         return LibOwnableStorage.getStorage().owner;

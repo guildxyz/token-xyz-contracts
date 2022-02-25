@@ -29,32 +29,32 @@
 pragma solidity ^0.8.0;
 
 interface IOwnableV06 {
-    /// @dev Emitted by Ownable when ownership is transferred.
+    /// @notice Emitted by Ownable when ownership is transferred.
     /// @param previousOwner The previous owner of the contract.
     /// @param newOwner The new owner of the contract.
     event OwnershipTransferred(address indexed previousOwner, address indexed newOwner);
 
-    /// @dev Transfers ownership of the contract to a new address.
+    /// @notice Transfers ownership of the contract to a new address.
     /// @param newOwner The address that will become the owner.
     function transferOwnership(address newOwner) external;
 
-    /// @dev The owner of this contract.
+    /// @notice The owner of this contract.
     /// @return ownerAddress The owner address.
     function owner() external view returns (address ownerAddress);
 }
 
-/// @dev Owner management and migration features.
+/// @title Owner management and migration features.
 interface IOwnableFeature is IOwnableV06 {
-    /// @dev Emitted when `migrate()` is called.
+    /// @notice Emitted when `migrate()` is called.
     /// @param caller The caller of `migrate()`.
     /// @param migrator The migration contract.
     /// @param newOwner The address of the new owner.
     event Migrated(address caller, address migrator, address newOwner);
 
-    /// @dev Error thrown when attempting to transfer the ownership to the zero address.
+    /// @notice Error thrown when attempting to transfer the ownership to the zero address.
     error TransferOwnerToZero();
 
-    /// @dev Execute a migration function in the context of the TokenXyz contract.
+    /// @notice Execute a migration function in the context of the TokenXyz contract.
     ///      The result of the function being called should be the magic bytes
     ///      0x2c64c5ef (`keccak('MIGRATE_SUCCESS')`). Only callable by the owner.
     ///      The owner will be temporarily set to `address(this)` inside the call.

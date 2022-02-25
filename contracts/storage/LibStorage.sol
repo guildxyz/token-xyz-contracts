@@ -28,13 +28,13 @@
 
 pragma solidity 0.8.12;
 
-/// @dev Common storage helpers
+/// @title Common storage helpers
 library LibStorage {
-    /// @dev What to bit-shift a storage ID by to get its slot.
+    /// @notice What to bit-shift a storage ID by to get its slot.
     ///      This gives us a maximum of 2**128 inline fields in each bucket.
     uint256 private constant STORAGE_SLOT_EXP = 128;
 
-    /// @dev Storage IDs for feature storage buckets.
+    /// @notice Storage IDs for feature storage buckets.
     ///      WARNING: APPEND-ONLY.
     enum StorageId {
         Proxy,
@@ -45,7 +45,7 @@ library LibStorage {
         MerkleVestingFactory
     }
 
-    /// @dev Get the storage slot given a storage ID. We assign unique, well-spaced
+    /// @notice Get the storage slot given a storage ID. We assign unique, well-spaced
     ///     slots to storage bucket variables to ensure they do not overlap.
     ///     See: https://solidity.readthedocs.io/en/v0.8.12/assembly.html#access-to-external-variables-functions-and-libraries
     /// @param storageId An entry in `StorageId`

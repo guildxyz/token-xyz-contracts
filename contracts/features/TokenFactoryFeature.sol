@@ -10,12 +10,12 @@ import "../migrations/LibMigrate.sol";
 import "./interfaces/IFeature.sol";
 
 contract TokenFactoryFeature is IFeature, ITokenFactoryFeature, FixinCommon {
-    /// @dev Name of this feature.
+    /// @notice Name of this feature.
     string public constant override FEATURE_NAME = "TokenFactory";
-    /// @dev Version of this feature.
+    /// @notice Version of this feature.
     uint256 public immutable override FEATURE_VERSION = _encodeVersion(1, 0, 0);
 
-    /// @dev Initialize and register this feature.
+    /// @notice Initialize and register this feature.
     ///      Should be delegatecalled by `Migrate.migrate()`.
     /// @return success `LibMigrate.SUCCESS` on success.
     function migrate() external returns (bytes4 success) {

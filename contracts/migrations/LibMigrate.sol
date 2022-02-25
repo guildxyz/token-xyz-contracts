@@ -29,16 +29,16 @@
 pragma solidity 0.8.12;
 
 library LibMigrate {
-    /// @dev Magic bytes returned by a migrator to indicate success.
+    /// @notice Magic bytes returned by a migrator to indicate success.
     ///      This is `keccack('MIGRATE_SUCCESS')`.
     bytes4 internal constant MIGRATE_SUCCESS = 0x2c64c5ef;
 
-    /// @dev Error thrown when a delegatecall to a migrate function failed.
+    /// @notice Error thrown when a delegatecall to a migrate function failed.
     /// @param target The address that was attempted to be called.
     /// @param resultData The result bytes of the call.
     error MigrateCallFailed(address target, bytes resultData);
 
-    /// @dev Perform a delegatecall and ensure it returns the magic bytes.
+    /// @notice Perform a delegatecall and ensure it returns the magic bytes.
     /// @param target The call target.
     /// @param data The call data.
     function delegatecallMigrateFunction(address target, bytes memory data) internal {

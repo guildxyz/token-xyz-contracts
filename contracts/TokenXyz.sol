@@ -33,17 +33,17 @@ import "./migrations/LibBootstrap.sol";
 import "./features/BootstrapFeature.sol";
 import "./storage/LibProxyStorage.sol";
 
-/// @dev An extensible proxy contract that serves as a universal entry point for
+/// @title An extensible proxy contract that serves as a universal entry point for
 ///      interacting with the token.xyz contracts.
 contract TokenXyz {
     // solhint-disable separate-by-one-line-in-contract,indent,var-name-mixedcase
     using LibBytesV06 for bytes;
 
-    /// @dev Error thrown when the requested function is not found in any features.
+    /// @notice Error thrown when the requested function is not found in any features.
     /// @param selector The function's selector that was attempted to be called.
     error NotImplemented(bytes4 selector);
 
-    /// @dev Construct this contract and register the `BootstrapFeature` feature.
+    /// @notice Construct this contract and register the `BootstrapFeature` feature.
     ///      After constructing this contract, `bootstrap()` should be called
     ///      by `bootstrap()` to seed the initial feature set.
     /// @param bootstrapper Who can call `bootstrap()`.
@@ -54,7 +54,7 @@ contract TokenXyz {
         LibProxyStorage.getStorage().impls[bootstrap.bootstrap.selector] = address(bootstrap);
     }
 
-    /// @dev Forwards calls to the appropriate implementation contract.
+    /// @notice Forwards calls to the appropriate implementation contract.
     fallback() external payable {
         bytes4 selector = msg.data.readBytes4(0);
         address impl = getFunctionImplementation(selector);
@@ -67,17 +67,17 @@ contract TokenXyz {
         _returnWithData(resultData);
     }
 
-    /// @dev Fallback for just receiving ether.
+    /// @notice Fallback for just receiving ether.
     receive() external payable {}
 
-    /// @dev Get the implementation contract of a registered function.
+    /// @notice Get the implementation contract of a registered function.
     /// @param selector The function selector.
     /// @return impl The implementation contract address.
     function getFunctionImplementation(bytes4 selector) public view returns (address impl) {
         return LibProxyStorage.getStorage().impls[selector];
     }
 
-    /// @dev Revert with arbitrary bytes.
+    /// @notice Revert with arbitrary bytes.
     /// @param data Revert data.
     function _revertWithData(bytes memory data) private pure {
         assembly {
@@ -85,7 +85,7 @@ contract TokenXyz {
         }
     }
 
-    /// @dev Return with arbitrary bytes.
+    /// @notice Return with arbitrary bytes.
     /// @param data Return data.
     function _returnWithData(bytes memory data) private pure {
         assembly {

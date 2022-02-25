@@ -34,21 +34,21 @@ import "../features/SimpleFunctionRegistryFeature.sol";
 import "../features/OwnableFeature.sol";
 import "./LibBootstrap.sol";
 
-/// @dev A contract for deploying and configuring a minimal TokenXyz contract.
+/// @title A contract for deploying and configuring a minimal TokenXyz contract.
 contract InitialMigration {
-    /// @dev Features to bootstrap into the the proxy contract.
+    /// @notice Features to bootstrap into the the proxy contract.
     struct BootstrapFeatures {
         SimpleFunctionRegistryFeature registry;
         OwnableFeature ownable;
     }
 
-    /// @dev The allowed caller of `initializeTokenXyz()`. In production, this would be
+    /// @notice The allowed caller of `initializeTokenXyz()`. In production, this would be
     ///      the governor.
     address public immutable initializeCaller;
-    /// @dev The real address of this contract.
+    /// @notice The real address of this contract.
     address private immutable _implementation;
 
-    /// @dev Instantiate this contract and set the allowed caller of `initializeTokenXyz()`
+    /// @notice Instantiate this contract and set the allowed caller of `initializeTokenXyz()`
     ///      to `initializeCaller_`.
     /// @param initializeCaller_ The allowed caller of `initializeTokenXyz()`.
     constructor(address initializeCaller_) {
@@ -56,7 +56,7 @@ contract InitialMigration {
         _implementation = address(this);
     }
 
-    /// @dev Initialize the `TokenXyz` contract with the minimum feature set,
+    /// @notice Initialize the `TokenXyz` contract with the minimum feature set,
     ///      transfers ownership to `owner`, then self-destructs.
     ///      Only callable by `initializeCaller` set in the contstructor.
     /// @param owner The owner of the contract.
@@ -85,7 +85,7 @@ contract InitialMigration {
         return tokenXyz;
     }
 
-    /// @dev Sets up the initial state of the `TokenXyz` contract.
+    /// @notice Sets up the initial state of the `TokenXyz` contract.
     ///      The `TokenXyz` contract will delegatecall into this function.
     /// @param owner The new owner of the TokenXyz contract.
     /// @param features Features to bootstrap into the proxy.
@@ -118,7 +118,7 @@ contract InitialMigration {
         success = LibBootstrap.BOOTSTRAP_SUCCESS;
     }
 
-    /// @dev Self-destructs this contract. Only callable by this contract.
+    /// @notice Self-destructs this contract. Only callable by this contract.
     /// @param ethRecipient Who to transfer outstanding ETH to.
     function die(address payable ethRecipient) public virtual {
         require(msg.sender == _implementation, "InitialMigration/INVALID_SENDER");

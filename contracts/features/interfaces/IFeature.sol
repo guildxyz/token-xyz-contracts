@@ -28,13 +28,13 @@
 
 pragma solidity ^0.8.0;
 
-/// @dev Basic interface for a feature contract.
+/// @title Basic interface for a feature contract.
 interface IFeature {
     // solhint-disable func-name-mixedcase
 
-    /// @dev The name of this feature set.
+    /// @notice The name of this feature set.
     function FEATURE_NAME() external view returns (string memory name);
 
-    /// @dev The version of this feature set.
+    /// @notice The version of this feature set.
     function FEATURE_VERSION() external view returns (uint256 version);
 }

@@ -31,25 +31,25 @@ pragma solidity 0.8.12;
 library LibBytesV06 {
     using LibBytesV06 for bytes;
 
-    /// @dev Error thrown on an invalid byte operation.
+    /// @notice Error thrown on an invalid byte operation.
     error FromLessThanOrEqualsToRequired(uint256 from, uint256 to);
 
-    /// @dev Error thrown on an invalid byte operation.
+    /// @notice Error thrown on an invalid byte operation.
     error ToLessThanOrEqualsLengthRequired(uint256 to, uint256 length);
 
-    /// @dev Error thrown on an invalid byte operation.
+    /// @notice Error thrown on an invalid byte operation.
     error LengthGreaterThanZeroRequired(uint256 length);
 
-    /// @dev Error thrown on an invalid byte operation.
+    /// @notice Error thrown on an invalid byte operation.
     error LengthGreaterThanOrEqualsTwentyRequired(uint256 length, uint256 minimum);
 
-    /// @dev Error thrown on an invalid byte operation.
+    /// @notice Error thrown on an invalid byte operation.
     error LengthGreaterThanOrEqualsThirtyTwoRequired(uint256 length, uint256 minimum);
 
-    /// @dev Error thrown on an invalid byte operation.
+    /// @notice Error thrown on an invalid byte operation.
     error LengthGreaterThanOrEqualsFourRequired(uint256 length, uint256 minimum);
 
-    /// @dev Gets the memory address for a byte array.
+    /// @notice Gets the memory address for a byte array.
     /// @param input Byte array to lookup.
     /// @return memoryAddress Memory address of byte array. This
     ///         points to the header of the byte array which contains
@@ -61,7 +61,7 @@ library LibBytesV06 {
         return memoryAddress;
     }
 
-    /// @dev Gets the memory address for the contents of a byte array.
+    /// @notice Gets the memory address for the contents of a byte array.
     /// @param input Byte array to lookup.
     /// @return memoryAddress Memory address of the contents of the byte array.
     function contentAddress(bytes memory input) internal pure returns (uint256 memoryAddress) {
@@ -71,7 +71,7 @@ library LibBytesV06 {
         return memoryAddress;
     }
 
-    /// @dev Copies `length` bytes from memory location `source` to `dest`.
+    /// @notice Copies `length` bytes from memory location `source` to `dest`.
     /// @param dest memory address to copy bytes to.
     /// @param source memory address to copy bytes from.
     /// @param length number of bytes to copy.
@@ -183,7 +183,7 @@ library LibBytesV06 {
         }
     }
 
-    /// @dev Returns a slices from a byte array.
+    /// @notice Returns a slices from a byte array.
     /// @param b The byte array to take a slice from.
     /// @param from The starting index for the slice (inclusive).
     /// @param to The final index for the slice (exclusive).
@@ -208,7 +208,7 @@ library LibBytesV06 {
         return result;
     }
 
-    /// @dev Returns a slice from a byte array without preserving the input.
+    /// @notice Returns a slice from a byte array without preserving the input.
     ///      When `from == 0`, the original array will match the slice.
     ///      In other cases its state will be corrupted.
     /// @param b The byte array to take a slice from. Will be destroyed in the process.
@@ -237,7 +237,7 @@ library LibBytesV06 {
         return result;
     }
 
-    /// @dev Pops the last byte off of a byte array by modifying its length.
+    /// @notice Pops the last byte off of a byte array by modifying its length.
     /// @param b Byte array that will be modified.
     /// @return result The byte that was popped off.
     function popLastByte(bytes memory b) internal pure returns (bytes1 result) {
@@ -256,7 +256,7 @@ library LibBytesV06 {
         return result;
     }
 
-    /// @dev Tests equality of two byte arrays.
+    /// @notice Tests equality of two byte arrays.
     /// @param lhs First byte array to compare.
     /// @param rhs Second byte array to compare.
     /// @return equal True if arrays are the same. False otherwise.
@@ -267,7 +267,7 @@ library LibBytesV06 {
         return lhs.length == rhs.length && keccak256(lhs) == keccak256(rhs);
     }
 
-    /// @dev Reads an address from a position in a byte array.
+    /// @notice Reads an address from a position in a byte array.
     /// @param b Byte array containing an address.
     /// @param index Index in byte array of address.
     /// @return result address from byte array.
@@ -294,7 +294,7 @@ library LibBytesV06 {
         return result;
     }
 
-    /// @dev Writes an address into a specific position in a byte array.
+    /// @notice Writes an address into a specific position in a byte array.
     /// @param b Byte array to insert address into.
     /// @param index Index in byte array of address.
     /// @param input Address to put into byte array.
@@ -339,7 +339,7 @@ library LibBytesV06 {
         }
     }
 
-    /// @dev Reads a bytes32 value from a position in a byte array.
+    /// @notice Reads a bytes32 value from a position in a byte array.
     /// @param b Byte array containing a bytes32 value.
     /// @param index Index in byte array of bytes32 value.
     /// @return result bytes32 value from byte array.
@@ -358,7 +358,7 @@ library LibBytesV06 {
         return result;
     }
 
-    /// @dev Writes a bytes32 into a specific position in a byte array.
+    /// @notice Writes a bytes32 into a specific position in a byte array.
     /// @param b Byte array to insert <input> into.
     /// @param index Index in byte array of <input>.
     /// @param input bytes32 to put into byte array.
@@ -380,7 +380,7 @@ library LibBytesV06 {
         }
     }
 
-    /// @dev Reads a uint256 value from a position in a byte array.
+    /// @notice Reads a uint256 value from a position in a byte array.
     /// @param b Byte array containing a uint256 value.
     /// @param index Index in byte array of uint256 value.
     /// @return result uint256 value from byte array.
@@ -389,7 +389,7 @@ library LibBytesV06 {
         return result;
     }
 
-    /// @dev Writes a uint256 into a specific position in a byte array.
+    /// @notice Writes a uint256 into a specific position in a byte array.
     /// @param b Byte array to insert <input> into.
     /// @param index Index in byte array of <input>.
     /// @param input uint256 to put into byte array.
@@ -401,7 +401,7 @@ library LibBytesV06 {
         writeBytes32(b, index, bytes32(input));
     }
 
-    /// @dev Reads an unpadded bytes4 value from a position in a byte array.
+    /// @notice Reads an unpadded bytes4 value from a position in a byte array.
     /// @param b Byte array containing a bytes4 value.
     /// @param index Index in byte array of bytes4 value.
     /// @return result bytes4 value from byte array.
@@ -423,7 +423,7 @@ library LibBytesV06 {
         return result;
     }
 
-    /// @dev Writes a new length to a byte array.
+    /// @notice Writes a new length to a byte array.
     ///      Decreasing length will lead to removing the corresponding lower order bytes from the byte array.
     ///      Increasing length may lead to appending adjacent in-memory bytes to the end of the byte array.
     /// @param b Bytes array to write new length to.

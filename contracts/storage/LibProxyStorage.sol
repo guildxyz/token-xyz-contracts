@@ -30,9 +30,9 @@ pragma solidity 0.8.12;
 
 import "./LibStorage.sol";
 
-/// @dev Storage helpers for the proxy contract.
+/// @title Storage helpers for the proxy contract.
 library LibProxyStorage {
-    /// @dev Storage bucket for proxy contract.
+    /// @notice Storage bucket for proxy contract.
     struct Storage {
         // Mapping of function selector -> function implementation
         mapping(bytes4 => address) impls;
@@ -40,7 +40,7 @@ library LibProxyStorage {
         address owner;
     }
 
-    /// @dev Get the storage bucket for this contract.
+    /// @notice Get the storage bucket for this contract.
     function getStorage() internal pure returns (Storage storage stor) {
         uint256 storageSlot = LibStorage.getStorageSlot(LibStorage.StorageId.Proxy);
         // Dip into assembly to change the slot pointed to by the local
