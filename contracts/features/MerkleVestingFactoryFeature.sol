@@ -8,6 +8,7 @@ import "../storage/LibMerkleVestingFactoryStorage.sol";
 import "../migrations/LibMigrate.sol";
 import "./interfaces/IFeature.sol";
 
+/// @title A contract that deploys token vesting contracts for anyone.
 contract MerkleVestingFactoryFeature is IFeature, IMerkleVestingFactoryFeature, FixinCommon {
     /// @notice Name of this feature.
     string public constant override FEATURE_NAME = "MerkleVestingFactory";

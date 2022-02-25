@@ -8,6 +8,7 @@ import "../storage/LibMerkleDistributorFactoryStorage.sol";
 import "../migrations/LibMigrate.sol";
 import "./interfaces/IFeature.sol";
 
+/// @title A contract that deploys token airdrop contracts for anyone.
 contract MerkleDistributorFactoryFeature is IFeature, IMerkleDistributorFactoryFeature, FixinCommon {
     /// @notice Name of this feature.
     string public constant override FEATURE_NAME = "MerkleDistributorFactory";
