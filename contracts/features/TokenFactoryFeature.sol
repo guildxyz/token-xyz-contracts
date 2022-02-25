@@ -20,6 +20,7 @@ contract TokenFactoryFeature is IFeature, ITokenFactoryFeature, FixinCommon {
     /// @return success `LibMigrate.SUCCESS` on success.
     function migrate() external returns (bytes4 success) {
         _registerFeatureFunction(this.createToken.selector);
+        _registerFeatureFunction(this.getDeployedTokens.selector);
         return LibMigrate.MIGRATE_SUCCESS;
     }
 
@@ -77,5 +78,12 @@ contract TokenFactoryFeature is IFeature, ITokenFactoryFeature, FixinCommon {
             );
         LibTokenFactoryStorage.getStorage().deploys[creatorId].push(token);
         emit TokenDeployed(token);
+    }
+
+    /// @notice Returns all the deployed token addresses by a specific creator.
+    /// @param creatorId The id of the creator.
+    /// @return tokenAddresses The requested array of tokens addresses.
+    function getDeployedTokens(string calldata creatorId) external view returns (address[] memory tokenAddresses) {
+        return LibTokenFactoryStorage.getStorage().deploys[creatorId];
     }
 }

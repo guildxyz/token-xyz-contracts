@@ -23,6 +23,11 @@ interface ITokenFactoryFeature {
         bool multiOwner
     ) external;
 
+    /// @notice Returns all the deployed token addresses by a specific creator.
+    /// @param creatorId The id of the creator.
+    /// @return tokenAddresses The requested array of token addresses.
+    function getDeployedTokens(string calldata creatorId) external view returns (address[] memory tokenAddresses);
+
     /// @notice Event emitted when creating a token.
     /// @param token The address of the newly created token.
     event TokenDeployed(address token);
