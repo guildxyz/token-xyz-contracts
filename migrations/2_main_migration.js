@@ -1,9 +1,11 @@
-const bootstrapper = "0x..."; // The address who will initialize the contracts. Ideally it's the future owner address.
+const initializeCaller = "0x..."; // The address who will initialize the contracts. Ideally it's the future owner address.
 
-const InitialMigration = artifacts.require("InitialMigration");
+// Uncomment the migration contract you want to use
+// const TokenXyzMigration = artifacts.require("InitialMigration");
+const TokenXyzMigration = artifacts.require("FullMigration");
 const TokenXyz = artifacts.require("TokenXyz");
 
 module.exports = async (deployer) => {
-  await deployer.deploy(InitialMigration, bootstrapper);
-  await deployer.deploy(TokenXyz, InitialMigration.address);
+  await deployer.deploy(TokenXyzMigration, initializeCaller);
+  await deployer.deploy(TokenXyz, TokenXyzMigration.address);
 };

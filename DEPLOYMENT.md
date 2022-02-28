@@ -2,20 +2,20 @@
 
 Step-by-step instructions on how to deploy the full contract set on a network. We will use _ropsten_ in this example, but the process is the same for any supported network.
 
-## Initial migration
+## First migration
 
-First deploy InitialMigration and TokenXyz (with InitialMigration's address served as the bootstrapper address in it's constructor - edit migrations/2_main_migration for this), then deploy the features defined in InitialMigration.
+First, decide the way you migrate the contracts. There are two possibilities: to deploy everything and initialize them at once using the FullMigration contract (it will need changes if any new features were added), or to deploy just the most important contracts and deal with the rest later (use InitialMigration in this case). Choose whichever method suits you best. We will refer to both of them (FullMigration and InitialMigration) as _migration_contract_ from now on. Deploy _migration_contract_ and TokenXyz (with _migration_contract_'s address served as the initializeCaller address in it's constructor), then deploy the features defined in _migration_contract_. Note: to choose the migration contract and to specify the initializeCaller address, you'll have to edit _migrations/2_main_migration.js_.
 
 ```sh
 truffle migrate --network ropsten -f 2 --to 2
-truffle run verify --network ropsten InitialMigration
+truffle run verify --network ropsten _migration_contract_
 truffle run verify --network ropsten TokenXyz
 truffle migrate --network ropsten -f 3 --to 3
 truffle run verify --network ropsten SimpleFunctionRegistryFeature
 truffle run verify --network ropsten OwnableFeature
 ```
 
-Next, call initializeTokenXyz(...) on InitialMigration, with the deployed features' addresses supplied as the last parameter. Order matters here.
+Next, call the initializer function on _migration_contract_ (called initializeTokenXyz(...) on InitialMigration and migrateTokenXyz(...) on FullMigration), with the deployed features' addresses supplied as the last parameter. Order matters here.
 
 ## Adding new feature contracts or updating existing ones
 
