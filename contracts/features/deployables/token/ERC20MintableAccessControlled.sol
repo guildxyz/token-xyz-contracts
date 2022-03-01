@@ -20,8 +20,7 @@ contract ERC20MintableAccessControlled is ERC20InitialSupply, AccessControl {
     }
 
     /// @notice Mint an amount of tokens to an account
-    function mint(address account, uint256 amount) public {
-        require(hasRole(MINTER_ROLE, _msgSender()));
+    function mint(address account, uint256 amount) public onlyRole(MINTER_ROLE) {
         _mint(account, amount);
     }
 }
