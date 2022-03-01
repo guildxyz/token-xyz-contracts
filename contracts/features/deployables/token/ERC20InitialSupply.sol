@@ -3,7 +3,7 @@ pragma solidity 0.8.12;
 
 import "@openzeppelin/contracts/token/ERC20/ERC20.sol";
 
-/// @title An ERC20 token with initial supply
+/// @title An ERC20 token with initial supply.
 contract ERC20InitialSupply is ERC20 {
     uint8 private _tokenDecimals;
 

@@ -4,7 +4,7 @@ pragma solidity 0.8.12;
 import "./ERC20InitialSupply.sol";
 import "@openzeppelin/contracts/access/Ownable.sol";
 
-/// @title A mintable ERC20 token
+/// @title A mintable ERC20 token.
 contract ERC20MintableOwnedMaxSupply is ERC20InitialSupply, Ownable {
     uint256 public immutable maxSupply;
 
@@ -24,7 +24,9 @@ contract ERC20MintableOwnedMaxSupply is ERC20InitialSupply, Ownable {
         transferOwnership(minter);
     }
 
-    /// @notice Mint an amount of tokens to an account
+    /// @notice Mint an amount of tokens to an account.
+    /// @param account The address of the account receiving the tokens.
+    /// @param amount The amount of tokens the account receives.
     function mint(address account, uint256 amount) public onlyOwner {
         uint256 total = totalSupply();
         if (total + amount > maxSupply) revert MaxSupplyExceeded(total + amount, total);

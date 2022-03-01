@@ -4,7 +4,7 @@ pragma solidity 0.8.12;
 import "./ERC20InitialSupply.sol";
 import "@openzeppelin/contracts/access/AccessControl.sol";
 
-/// @title A mintable ERC20 token
+/// @title A mintable ERC20 token.
 contract ERC20MintableAccessControlledMaxSupply is ERC20InitialSupply, AccessControl {
     bytes32 public constant MINTER_ROLE = keccak256("MINTER_ROLE");
     uint256 public immutable maxSupply;
@@ -26,7 +26,9 @@ contract ERC20MintableAccessControlledMaxSupply is ERC20InitialSupply, AccessCon
         _setupRole(MINTER_ROLE, minter);
     }
 
-    /// @notice Mint an amount of tokens to an account
+    /// @notice Mint an amount of tokens to an account.
+    /// @param account The address of the account receiving the tokens.
+    /// @param amount The amount of tokens the account receives.
     function mint(address account, uint256 amount) public onlyRole(MINTER_ROLE) {
         uint256 total = totalSupply();
         if (total + amount > maxSupply) revert MaxSupplyExceeded(total + amount, total);
