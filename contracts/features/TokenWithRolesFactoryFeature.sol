@@ -1,18 +1,18 @@
 // SPDX-License-Identifier: MIT
 pragma solidity 0.8.12;
 
-import "./interfaces/ITokenFactoryFeature.sol";
-import "./deployables/token/ERC20MintableOwned.sol";
-import "./deployables/token/ERC20MintableOwnedMaxSupply.sol";
+import "./interfaces/ITokenWithRolesFactoryFeature.sol";
+import "./deployables/token/ERC20MintableAccessControlled.sol";
+import "./deployables/token/ERC20MintableAccessControlledMaxSupply.sol";
 import "../fixins/FixinCommon.sol";
 import "../storage/LibTokenFactoryStorage.sol";
 import "../migrations/LibMigrate.sol";
 import "./interfaces/IFeature.sol";
 
-/// @title A contract that deploys ERC20 token contracts for anyone.
-contract TokenFactoryFeature is IFeature, ITokenFactoryFeature, FixinCommon {
+/// @title A contract that deploys ERC20 token contracts with OpenZeppelin's AccessControl for anyone.
+contract TokenWithRolesFactoryFeature is IFeature, ITokenWithRolesFactoryFeature, FixinCommon {
     /// @notice Name of this feature.
-    string public constant override FEATURE_NAME = "TokenFactory";
+    string public constant override FEATURE_NAME = "TokenWithRolesFactory";
     /// @notice Version of this feature.
     uint256 public immutable override FEATURE_VERSION = _encodeVersion(1, 0, 0);
 
@@ -20,7 +20,7 @@ contract TokenFactoryFeature is IFeature, ITokenFactoryFeature, FixinCommon {
     ///      Should be delegatecalled by `Migrate.migrate()`.
     /// @return success `LibMigrate.SUCCESS` on success.
     function migrate() external returns (bytes4 success) {
-        _registerFeatureFunction(this.createToken.selector);
+        _registerFeatureFunction(this.createTokenWithRoles.selector);
         _registerFeatureFunction(this.getDeployedTokens.selector);
         return LibMigrate.MIGRATE_SUCCESS;
     }
@@ -35,7 +35,7 @@ contract TokenFactoryFeature is IFeature, ITokenFactoryFeature, FixinCommon {
     /// @param firstOwner The first address to assign ownership/minting rights to (if mintable). The recipient of the initial supply.
     /// @param mintable Whether to create a mintable token.
     // prettier-ignore
-    function createToken(
+    function createTokenWithRoles(
         string calldata urlName,
         string calldata tokenName,
         string calldata tokenSymbol,
@@ -49,7 +49,7 @@ contract TokenFactoryFeature is IFeature, ITokenFactoryFeature, FixinCommon {
         if (mintable)
             if (maxSupply > 0)
                 token = address(
-                    new ERC20MintableOwnedMaxSupply(
+                    new ERC20MintableAccessControlledMaxSupply(
                         tokenName,
                         tokenSymbol,
                         tokenDecimals,
@@ -60,7 +60,7 @@ contract TokenFactoryFeature is IFeature, ITokenFactoryFeature, FixinCommon {
                 );
             else
                 token = address(
-                    new ERC20MintableOwned(
+                    new ERC20MintableAccessControlled(
                         tokenName,
                         tokenSymbol,
                         tokenDecimals,

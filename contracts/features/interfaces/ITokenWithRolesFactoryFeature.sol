@@ -2,7 +2,7 @@
 pragma solidity ^0.8.0;
 
 /// @title A contract that deploys ERC20 token contracts for anyone.
-interface ITokenFactoryFeature {
+interface ITokenWithRolesFactoryFeature {
     /// @notice Deploys a new ERC20 token contract.
     /// @param urlName The url name used by the frontend, kind of an id of the creator.
     /// @param tokenName The token's name.
@@ -12,7 +12,7 @@ interface ITokenFactoryFeature {
     /// @param maxSupply The maximum amount of tokens that can ever be minted. Unlimited if set to zero.
     /// @param firstOwner The first address to assign ownership/minting rights to (if mintable). The recipient of the initial supply.
     /// @param mintable Whether to create a mintable token.
-    function createToken(
+    function createTokenWithRoles(
         string calldata urlName,
         string calldata tokenName,
         string calldata tokenSymbol,
