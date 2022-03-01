@@ -62,7 +62,8 @@ Replace _[start]_ with the number of the first and _[end]_ with the number of th
 - 1 - Migrations
 - 2 - InitialMigration & TokenXyz
 - 3 - SimpleFunctionRegistryFeature & OwnableFeature
-- 4 - TokenFactoryFeature
+- 5 - MerkleDistributorFactoryFeature
+- 6 - MerkleVestingFactoryFeature
 
 If the script fails before starting the deployment, you might need to run the first one, too.
 
