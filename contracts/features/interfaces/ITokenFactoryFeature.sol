@@ -4,7 +4,7 @@ pragma solidity ^0.8.0;
 /// @title A contract that deploys ERC20 token contracts for anyone.
 interface ITokenFactoryFeature {
     /// @notice Deploys a new ERC20 token contract.
-    /// @param creatorId The id of the creator.
+    /// @param urlName The url name used by the frontend, kind of an id of the creator.
     /// @param tokenName The token's name.
     /// @param tokenSymbol The token's symbol.
     /// @param tokenDecimals The token's number of decimals.
@@ -13,7 +13,7 @@ interface ITokenFactoryFeature {
     /// @param mintable Whether to create a mintable token.
     /// @param multiOwner If true, use AccessControl, otherwise Ownable (does not apply if the token is not mintable).
     function createToken(
-        string calldata creatorId,
+        string calldata urlName,
         string calldata tokenName,
         string calldata tokenSymbol,
         uint8 tokenDecimals,
@@ -24,9 +24,9 @@ interface ITokenFactoryFeature {
     ) external;
 
     /// @notice Returns all the deployed token addresses by a specific creator.
-    /// @param creatorId The id of the creator.
+    /// @param urlName The url name used by the frontend, kind of an id of the creator.
     /// @return tokenAddresses The requested array of token addresses.
-    function getDeployedTokens(string calldata creatorId) external view returns (address[] memory tokenAddresses);
+    function getDeployedTokens(string calldata urlName) external view returns (address[] memory tokenAddresses);
 
     /// @notice Event emitted when creating a token.
     /// @param token The address of the newly created token.

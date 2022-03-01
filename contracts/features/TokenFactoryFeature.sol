@@ -26,7 +26,7 @@ contract TokenFactoryFeature is IFeature, ITokenFactoryFeature, FixinCommon {
     }
 
     /// @notice Deploys a new ERC20 token contract.
-    /// @param creatorId The id of the creator.
+    /// @param urlName The url name used by the frontend, kind of an id of the creator.
     /// @param tokenName The token's name.
     /// @param tokenSymbol The token's symbol.
     /// @param tokenDecimals The token's number of decimals.
@@ -36,7 +36,7 @@ contract TokenFactoryFeature is IFeature, ITokenFactoryFeature, FixinCommon {
     /// @param multiOwner If true, use AccessControl, otherwise Ownable (does not apply if the token is not mintable).
     // prettier-ignore
     function createToken(
-        string calldata creatorId,
+        string calldata urlName,
         string calldata tokenName,
         string calldata tokenSymbol,
         uint8 tokenDecimals,
@@ -77,14 +77,14 @@ contract TokenFactoryFeature is IFeature, ITokenFactoryFeature, FixinCommon {
                     initialSupply
                 )
             );
-        LibTokenFactoryStorage.getStorage().deploys[creatorId].push(token);
+        LibTokenFactoryStorage.getStorage().deploys[urlName].push(token);
         emit TokenDeployed(token);
     }
 
     /// @notice Returns all the deployed token addresses by a specific creator.
-    /// @param creatorId The id of the creator.
+    /// @param urlName The url name used by the frontend, kind of an id of the creator.
     /// @return tokenAddresses The requested array of tokens addresses.
-    function getDeployedTokens(string calldata creatorId) external view returns (address[] memory tokenAddresses) {
-        return LibTokenFactoryStorage.getStorage().deploys[creatorId];
+    function getDeployedTokens(string calldata urlName) external view returns (address[] memory tokenAddresses) {
+        return LibTokenFactoryStorage.getStorage().deploys[urlName];
     }
 }

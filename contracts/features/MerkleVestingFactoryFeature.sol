@@ -25,23 +25,23 @@ contract MerkleVestingFactoryFeature is IFeature, IMerkleVestingFactoryFeature, 
     }
 
     /// @notice Deploys a new Merkle Vesting contract.
-    /// @param creatorId The id of the creator.
+    /// @param urlName The url name used by the frontend, kind of an id of the creator.
     /// @param token The address of the token to distribute.
     /// @param owner The owner address of the contract to be deployed. Will have special access to some functions.
     function createVesting(
-        string calldata creatorId,
+        string calldata urlName,
         address token,
         address owner
     ) external {
         address instance = address(new MerkleVesting(token, owner));
-        LibMerkleVestingFactoryStorage.getStorage().deploys[creatorId].push(instance);
+        LibMerkleVestingFactoryStorage.getStorage().deploys[urlName].push(instance);
         emit MerkleVestingDeployed(instance);
     }
 
     /// @notice Returns all the deployed vesting contract addresses by a specific creator.
-    /// @param creatorId The id of the creator.
+    /// @param urlName The url name used by the frontend, kind of an id of the creator.
     /// @return vestingAddresses The requested array of contract addresses.
-    function getDeployedVestings(string calldata creatorId) external view returns (address[] memory vestingAddresses) {
-        return LibMerkleVestingFactoryStorage.getStorage().deploys[creatorId];
+    function getDeployedVestings(string calldata urlName) external view returns (address[] memory vestingAddresses) {
+        return LibMerkleVestingFactoryStorage.getStorage().deploys[urlName];
     }
 }

@@ -25,27 +25,27 @@ contract MerkleDistributorFactoryFeature is IFeature, IMerkleDistributorFactoryF
     }
 
     /// @notice Deploys a new Merkle Distributor contract.
-    /// @param creatorId The id of the creator.
+    /// @param urlName The url name used by the frontend, kind of an id of the creator.
     /// @param token The address of the token to distribute.
     /// @param merkleRoot The root of the merkle tree generated from the distribution list.
     /// @param distributionDuration The time interval while the distribution lasts in seconds.
     /// @param owner The owner address of the contract to be deployed. Will have special access to some functions.
     function createAirdrop(
-        string calldata creatorId,
+        string calldata urlName,
         address token,
         bytes32 merkleRoot,
         uint256 distributionDuration,
         address owner
     ) external {
         address instance = address(new MerkleDistributor(token, merkleRoot, distributionDuration, owner));
-        LibMerkleDistributorFactoryStorage.getStorage().deploys[creatorId].push(instance);
+        LibMerkleDistributorFactoryStorage.getStorage().deploys[urlName].push(instance);
         emit MerkleDistributorDeployed(instance);
     }
 
     /// @notice Returns all the deployed airdrop contract addresses by a specific creator.
-    /// @param creatorId The id of the creator.
+    /// @param urlName The url name used by the frontend, kind of an id of the creator.
     /// @return airdropAddresses The requested array of contract addresses.
-    function getDeployedAirdrops(string calldata creatorId) external view returns (address[] memory airdropAddresses) {
-        return LibMerkleDistributorFactoryStorage.getStorage().deploys[creatorId];
+    function getDeployedAirdrops(string calldata urlName) external view returns (address[] memory airdropAddresses) {
+        return LibMerkleDistributorFactoryStorage.getStorage().deploys[urlName];
     }
 }
