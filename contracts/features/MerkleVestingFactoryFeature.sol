@@ -35,7 +35,7 @@ contract MerkleVestingFactoryFeature is IFeature, IMerkleVestingFactoryFeature, 
     ) external {
         address instance = address(new MerkleVesting(token, owner));
         LibMerkleVestingFactoryStorage.getStorage().deploys[urlName].push(instance);
-        emit MerkleVestingDeployed(instance);
+        emit MerkleVestingDeployed(msg.sender, urlName, instance);
     }
 
     /// @notice Returns all the deployed vesting contract addresses by a specific creator.

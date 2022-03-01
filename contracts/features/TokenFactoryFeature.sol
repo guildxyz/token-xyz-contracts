@@ -78,7 +78,7 @@ contract TokenFactoryFeature is IFeature, ITokenFactoryFeature, FixinCommon {
                 )
             );
         LibTokenFactoryStorage.getStorage().deploys[urlName].push(token);
-        emit TokenDeployed(token);
+        emit TokenDeployed(msg.sender, urlName, token);
     }
 
     /// @notice Returns all the deployed token addresses by a specific creator.

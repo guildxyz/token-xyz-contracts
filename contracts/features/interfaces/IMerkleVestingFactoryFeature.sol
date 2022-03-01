@@ -19,6 +19,8 @@ interface IMerkleVestingFactoryFeature {
     function getDeployedVestings(string calldata urlName) external view returns (address[] memory vestingAddresses);
 
     /// @notice Event emitted when creating a new vesting contract.
+    /// @param deployer The address which created the vesting.
+    /// @param urlName The urlName, where the created vesting contract is sorted in.
     /// @param instance The address of the newly created vesting contract.
-    event MerkleVestingDeployed(address instance);
+    event MerkleVestingDeployed(address indexed deployer, string urlName, address instance);
 }

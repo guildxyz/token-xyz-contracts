@@ -23,6 +23,8 @@ interface IMerkleDistributorFactoryFeature {
     function getDeployedAirdrops(string calldata urlName) external view returns (address[] memory airdropAddresses);
 
     /// @notice Event emitted when creating a new airdrop contract.
+    /// @param deployer The address which created the airdrop.
+    /// @param urlName The urlName, where the created airdrop contract is sorted in.
     /// @param instance The address of the newly created airdrop contract.
-    event MerkleDistributorDeployed(address instance);
+    event MerkleDistributorDeployed(address indexed deployer, string urlName, address instance);
 }

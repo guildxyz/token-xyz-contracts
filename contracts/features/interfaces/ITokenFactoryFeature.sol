@@ -29,6 +29,8 @@ interface ITokenFactoryFeature {
     function getDeployedTokens(string calldata urlName) external view returns (address[] memory tokenAddresses);
 
     /// @notice Event emitted when creating a token.
+    /// @param deployer The address which created the token.
+    /// @param urlName The urlName, where the created token is sorted in.
     /// @param token The address of the newly created token.
-    event TokenDeployed(address token);
+    event TokenDeployed(address indexed deployer, string urlName, address token);
 }

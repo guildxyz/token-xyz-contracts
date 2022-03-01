@@ -39,7 +39,7 @@ contract MerkleDistributorFactoryFeature is IFeature, IMerkleDistributorFactoryF
     ) external {
         address instance = address(new MerkleDistributor(token, merkleRoot, distributionDuration, owner));
         LibMerkleDistributorFactoryStorage.getStorage().deploys[urlName].push(instance);
-        emit MerkleDistributorDeployed(instance);
+        emit MerkleDistributorDeployed(msg.sender, urlName, instance);
     }
 
     /// @notice Returns all the deployed airdrop contract addresses by a specific creator.
