@@ -6,8 +6,9 @@ The smart contracts in this repository are the core of token.xyz.
 
 To run the project you need:
 
-- [Node.js](https://nodejs.org) development environment.
-- [Truffle](https://www.trufflesuite.com/truffle) for compiling, deploying and testing.
+- [Node.js](https://nodejs.org/en/download) development environment (version 12 or newer).
+- [Truffle](https://www.trufflesuite.com/truffle) for compiling, deploying and testing (version 5.4.30 or newer).
+- (optional) [Ganache](https://github.com/trufflesuite/ganache/releases) environment for local testing (version 7.0.0 or newer).
 - (optional) A file named `.env`. An example can be found in the project's root folder. It should contain the following variables:
 
   ```bash
