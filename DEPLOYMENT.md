@@ -55,10 +55,10 @@ If you are updating an already deployed feature, ensure you have done these step
 
 To extend the contracts with a new feature contract, deploy it first.
 
-Let's say we want to add a new feature called TestFeature and added a 4th migration script for it:
+Let's say we want to add a new feature called TestFeature and added a 7th migration script for it:
 
 ```sh
-truffle migrate --network ropsten -f 4 --to 4
+truffle migrate --network ropsten -f 7 --to 7
 truffle run verify --network ropsten TestFeature
 ```
 
