@@ -256,7 +256,7 @@ contract("MerkleDistributor", (accounts) => {
         expect(tx.receipt.gasUsed).to.closeTo(94090, gasEps);
       });
 
-      it.only("gas average random distribution", async function () {
+      it("gas average random distribution", async function () {
         let total = BigNumber.from(0);
         let count = 0;
         for (let i = 0; i < NUM_LEAVES; i += NUM_LEAVES / NUM_SAMPLES) {
@@ -266,11 +266,11 @@ contract("MerkleDistributor", (accounts) => {
           count++;
         }
         const average = total.div(count);
-        expect(average.toString()).to.closeTo(77797, gasEps);
+        expect(average.toNumber()).to.closeTo(77617, gasEps);
       });
 
       // this is what we gas golfed by packing the bitmap
-      it.only("gas average first 25", async function () {
+      it("gas average first 25", async function () {
         let total = BigNumber.from(0);
         let count = 0;
         for (let i = 0; i < 25; i++) {
@@ -280,7 +280,7 @@ contract("MerkleDistributor", (accounts) => {
           count++;
         }
         const average = total.div(count);
-        expect(average.toString()).to.closeTo(63559, gasEps);
+        expect(average.toNumber()).to.closeTo(61186, gasEps);
       });
 
       it("no double claims in random distribution", async function () {
