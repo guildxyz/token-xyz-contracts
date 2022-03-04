@@ -25,7 +25,7 @@ async function setBalance(token, to, amount) {
   else if (old.gt(amount)) await token.burn(to, old.sub(amount));
 }
 
-contract("MerkleDistributor", (accounts) => {
+contract("MerkleDistributor", function (accounts) {
   const [wallet0, wallet1] = accounts;
   const distributionDuration = 86400;
   let token;
