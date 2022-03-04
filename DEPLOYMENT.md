@@ -71,7 +71,7 @@ const wallet = await walletManager.fromMnemonic("ropsten"); // A wallet connecte
 
 const entry = new ethers.Contract(tokenXyzAddress, ITokenXyzAbi, wallet);
 
-const migrateInterface = new ethers.utils.Interface(ITokenXyzAbi);
+const migrateInterface = new ethers.utils.Interface(["function migrate()"]);
 const migrateCallData = migrateInterface.encodeFunctionData("migrate()");
 
 await entry["migrate(address,bytes,address)"](newFeatureAddress, migrateCallData, wallet.address);
