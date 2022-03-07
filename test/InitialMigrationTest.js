@@ -34,7 +34,7 @@ contract("InitialMigration", function (accounts) {
     expect(contractCode).to.eq("0x");
   });
 
-  it("non-deployer cannot call initializeZeroEx()", async function () {
+  it("non-deployer cannot call initializeTokenXyz()", async function () {
     await expectRevert(
       initialMigration.initializeTokenXyz(wallet0, tokenXyz.address, features, { from: wallet1 }),
       "InitialMigration/INVALID_SENDER"
