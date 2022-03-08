@@ -30,6 +30,7 @@ pragma solidity ^0.8.0;
 
 import "./features/interfaces/IOwnableFeature.sol";
 import "./features/interfaces/ISimpleFunctionRegistryFeature.sol";
+import "./features/interfaces/IMulticallFeature.sol";
 import "./features/interfaces/ITokenFactoryFeature.sol";
 import "./features/interfaces/ITokenWithRolesFactoryFeature.sol";
 import "./features/interfaces/IMerkleDistributorFactoryFeature.sol";
@@ -39,6 +40,7 @@ import "./features/interfaces/IMerkleVestingFactoryFeature.sol";
 interface ITokenXyz is
     IOwnableFeature,
     ISimpleFunctionRegistryFeature,
+    IMulticallFeature,
     ITokenFactoryFeature,
     ITokenWithRolesFactoryFeature,
     IMerkleDistributorFactoryFeature,

@@ -13,6 +13,7 @@ truffle run verify --network ropsten TokenXyz
 truffle migrate --network ropsten -f 3 --to 3
 truffle run verify --network ropsten SimpleFunctionRegistryFeature
 truffle run verify --network ropsten OwnableFeature
+truffle run verify --network ropsten MulticallFeature
 ```
 
 Next, call the initializer function on _migration_contract_ (called initializeTokenXyz(...) on InitialMigration and migrateTokenXyz(...) on FullMigration), with the deployed features' addresses supplied as the last parameter. Order matters here.
