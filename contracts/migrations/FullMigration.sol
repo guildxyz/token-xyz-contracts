@@ -30,7 +30,9 @@ pragma solidity 0.8.12;
 
 import "../TokenXyz.sol";
 import "../features/interfaces/IOwnableFeature.sol";
+import "../features/MulticallFeature.sol";
 import "../features/TokenFactoryFeature.sol";
+import "../features/TokenWithRolesFactoryFeature.sol";
 import "../features/MerkleDistributorFactoryFeature.sol";
 import "../features/MerkleVestingFactoryFeature.sol";
 import "./InitialMigration.sol";
@@ -41,7 +43,9 @@ contract FullMigration {
     struct Features {
         SimpleFunctionRegistryFeature registry;
         OwnableFeature ownable;
+        MulticallFeature multicall;
         TokenFactoryFeature tokenFactory;
+        TokenWithRolesFactoryFeature tokenWithRolesFactory;
         MerkleDistributorFactoryFeature merkleDistributorFactory;
         MerkleVestingFactoryFeature merkleVestingFactory;
     }
@@ -114,12 +118,30 @@ contract FullMigration {
     /// @param features Features to add to the proxy.
     function _addFeatures(TokenXyz tokenXyz, Features memory features) private {
         IOwnableFeature ownable = IOwnableFeature(address(tokenXyz));
+        // MulticallFeature
+        {
+            // Register the feature.
+            ownable.migrate(
+                address(features.multicall),
+                abi.encodeWithSelector(MulticallFeature.migrate.selector),
+                address(this)
+            );
+        }
         // TokenFactoryFeature
         {
             // Register the feature.
             ownable.migrate(
                 address(features.tokenFactory),
                 abi.encodeWithSelector(TokenFactoryFeature.migrate.selector),
+                address(this)
+            );
+        }
+        // TokenWithRolesFactoryFeature
+        {
+            // Register the feature.
+            ownable.migrate(
+                address(features.tokenWithRolesFactory),
+                abi.encodeWithSelector(TokenWithRolesFactoryFeature.migrate.selector),
                 address(this)
             );
         }
