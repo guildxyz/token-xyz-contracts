@@ -7,6 +7,7 @@ const TokenXyz = artifacts.require("TokenXyz");
 const ITokenXyz = artifacts.require("ITokenXyz");
 const SimpleFunctionRegistryFeature = artifacts.require("SimpleFunctionRegistryFeature");
 const OwnableFeature = artifacts.require("OwnableFeature");
+const TokenFactoryFeature = artifacts.require("TokenFactoryFeature");
 
 contract("InitialMigration", function (accounts) {
   const [wallet0, wallet1] = accounts;
@@ -39,6 +40,16 @@ contract("InitialMigration", function (accounts) {
       initialMigration.initializeTokenXyz(wallet0, tokenXyz.address, features, { from: wallet1 }),
       "InitialMigration/INVALID_SENDER"
     );
+  });
+
+  it("can add more features", async function () {
+    // Deploy a TokenFactory and try to call a function from it.
+    await initialMigration.initializeTokenXyz(wallet0, tokenXyz.address, features);
+    const tokenFactory = await TokenFactoryFeature.new();
+    const migrateInterface = new utils.Interface(["function migrate()"]);
+    await tokenXyz.migrate(tokenFactory.address, migrateInterface.encodeFunctionData("migrate()"), wallet0);
+    const result = await tokenXyz.createToken("owo", "OWO Token", "OWO", "18", 0, 1, wallet0, false);
+    expect(result.receipt.status).to.be.true;
   });
 
   context("Ownable feature", function () {
