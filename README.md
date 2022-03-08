@@ -60,14 +60,12 @@ truffle migrate -f [start] --to [end] --network [name]
 
 Replace _[start]_ with the number of the first and _[end]_ with the number of the last migration script you wish to run. To run only one script, _[start]_ and _[end]_ should match. The numbers of the scripts are:
 
-- 1 - Migrations
-- 2 - InitialMigration & TokenXyz
+- 1 - Migrations (Truffle feature, optional)
+- 2 - Full- or InitialMigration & TokenXyz
 - 3 - SimpleFunctionRegistryFeature & OwnableFeature & MulticallFeature
 - 4 - TokenFactoryFeature & TokenWithRolesFactoryFeature
 - 5 - MerkleDistributorFactoryFeature
 - 6 - MerkleVestingFactoryFeature
-
-If the script fails before starting the deployment, you might need to run the first one, too.
 
 ### Extended instructions
 
