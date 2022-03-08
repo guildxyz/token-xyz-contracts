@@ -56,6 +56,12 @@ contract InitialMigration {
         _implementation = address(this);
     }
 
+    /// @notice Retrieve the bootstrapper address to use when constructing `TokenXyz`.
+    /// @return bootstrapper The bootstrapper address.
+    function getBootstrapper() external view returns (address bootstrapper) {
+        return _implementation;
+    }
+
     /// @notice Initialize the `TokenXyz` contract with the minimum feature set,
     ///      transfers ownership to `owner`, then self-destructs.
     ///      Only callable by `initializeCaller` set in the contstructor.

@@ -7,5 +7,6 @@ const TokenXyz = artifacts.require("TokenXyz");
 
 module.exports = async (deployer) => {
   await deployer.deploy(TokenXyzMigration, initializeCaller);
-  await deployer.deploy(TokenXyz, TokenXyzMigration.address);
+  const migrator = await TokenXyzMigration.deployed();
+  await deployer.deploy(TokenXyz, await migrator.getBootstrapper());
 };

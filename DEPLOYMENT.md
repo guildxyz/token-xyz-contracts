@@ -1,22 +1,31 @@
 # Deployment instructions - Extended version
 
-Step-by-step instructions on how to deploy the full contract set on a network. We will use _ropsten_ in this example, but the process is the same for any supported network.
+Step-by-step instructions on how to deploy the full contract set on a network. We will use _goerli_ in this example, but the process is the same for any supported network.
 
 ## First migration
 
-First, decide the way you migrate the contracts. There are two possibilities: to deploy everything and initialize them at once using the FullMigration contract (it will need changes if any new features were added), or to deploy just the most important contracts and deal with the rest later (use InitialMigration in this case). Choose whichever method suits you best. We will refer to both of them (FullMigration and InitialMigration) as _migration_contract_ from now on. Deploy _migration_contract_ and TokenXyz (with _migration_contract_'s address served as the initializeCaller address in it's constructor), then deploy the features defined in _migration_contract_. Note: to choose the migration contract and to specify the initializeCaller address, you'll have to edit _migrations/2_main_migration.js_.
+First, decide the way you migrate the contracts. There are two possibilities: to deploy everything and initialize them at once using the FullMigration contract (it will need changes if any new features were added), or to deploy just the most important contracts and deal with the rest later (use InitialMigration in this case). Choose whichever method suits you best.  
+Note: to choose the migration contract and to specify the initializeCaller address, you'll have to edit _migrations/2_main_migration.js_.
+
+### InitialMigration
+
+Deploy InitialMigration and TokenXyz, then deploy the defined features (SimpleFunctionRegistry and Ownable). Run the following command:
 
 ```sh
-truffle migrate --network ropsten -f 2 --to 2
-truffle run verify --network ropsten _migration_contract_
-truffle run verify --network ropsten TokenXyz
-truffle migrate --network ropsten -f 3 --to 3
-truffle run verify --network ropsten SimpleFunctionRegistryFeature
-truffle run verify --network ropsten OwnableFeature
-truffle run verify --network ropsten MulticallFeature
+truffle migrate --network goerli -f 2 --to 3
 ```
 
-Next, call the initializer function on _migration_contract_ (called initializeTokenXyz(...) on InitialMigration and migrateTokenXyz(...) on FullMigration), with the deployed features' addresses supplied as the last parameter. Order matters here.
+Next, call the initializer function on InitialMigration, called initializeTokenXyz(...), with the deployed features' addresses supplied as the last parameter. Order matters here. You should initiate the transaction from the initializeCaller address to succeed.
+
+### FullMigration
+
+Deploy FullMigration and TokenXyz, then deploy the defined features. Replace _[lastMigrationScript]_ in the following command with the number of the migration script you last want to run (make sure they deploy all contracts defined in FullMigration):
+
+```sh
+truffle migrate --network goerli -f 2 --to [lastMigrationScript]
+```
+
+Next, call the initializer function on FullMigration, called migrateTokenXyz(...), with the deployed features' addresses supplied as the last parameter. Order matters here. You should initiate the transaction from the initializeCaller address to succeed.
 
 ## Adding new feature contracts or updating existing ones
 
@@ -59,8 +68,7 @@ To extend the contracts with a new feature contract, deploy it first.
 Let's say we want to add a new feature called TestFeature and added a 7th migration script for it:
 
 ```sh
-truffle migrate --network ropsten -f 7 --to 7
-truffle run verify --network ropsten TestFeature
+truffle migrate --network goerli -f 7 --to 7
 ```
 
 As a last step, call migrate() on TokenXyz. Simple node.js code to demonstrate this:
@@ -68,7 +76,7 @@ As a last step, call migrate() on TokenXyz. Simple node.js code to demonstrate t
 ```js
 const tokenXyzAddress = "0x..."; // Address of the TokenXyz contract
 const newFeatureAddress = "0x..."; // Address of the feature we just deployed
-const wallet = await walletManager.fromMnemonic("ropsten"); // A wallet connected to a provider. Not including the boilerplate code here
+const wallet = await walletManager.fromMnemonic("goerli"); // A wallet connected to a provider. Not including the boilerplate code here
 
 const entry = new ethers.Contract(tokenXyzAddress, ITokenXyzAbi, wallet);
 
