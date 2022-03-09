@@ -9,8 +9,16 @@ contract ERC20MintableAccessControlledMaxSupply is ERC20InitialSupply, AccessCon
     bytes32 public constant MINTER_ROLE = keccak256("MINTER_ROLE");
     uint256 public immutable maxSupply;
 
+    /// @notice Error thrown when the max supply is attempted to be set lower than the initial supply.
+    /// @param maxSupply The desired max supply.
+    /// @param initialSupply The desired initial supply, that cannot be higher than the max.
     error MaxSupplyTooLow(uint256 maxSupply, uint256 initialSupply);
-    error MaxSupplyExceeded(uint256 amount, uint256 maxSupply);
+
+    /// @notice Error thrown when more tokens are attempted to be minted than the max supply.
+    /// @param amount The amount of tokens attempted to be minted.
+    /// @param currentSupply The current supply of the token.
+    /// @param maxSupply The max supply of the token.
+    error MaxSupplyExceeded(uint256 amount, uint256 currentSupply, uint256 maxSupply);
 
     constructor(
         string memory name,
@@ -31,7 +39,7 @@ contract ERC20MintableAccessControlledMaxSupply is ERC20InitialSupply, AccessCon
     /// @param amount The amount of tokens the account receives.
     function mint(address account, uint256 amount) public onlyRole(MINTER_ROLE) {
         uint256 total = totalSupply();
-        if (total + amount > maxSupply) revert MaxSupplyExceeded(total + amount, total);
+        if (total + amount > maxSupply) revert MaxSupplyExceeded(amount, total, maxSupply);
         _mint(account, amount);
     }
 }
