@@ -33,7 +33,6 @@ contract TokenWithRolesFactoryFeature is IFeature, ITokenWithRolesFactoryFeature
     /// @param initialSupply The initial amount of tokens to mint.
     /// @param maxSupply The maximum amount of tokens that can ever be minted. Unlimited if set to zero.
     /// @param firstOwner The first address to assign ownership/minting rights to (if mintable). The recipient of the initial supply.
-    /// @param mintable Whether to create a mintable token.
     // prettier-ignore
     function createTokenWithRoles(
         string calldata urlName,
@@ -42,11 +41,16 @@ contract TokenWithRolesFactoryFeature is IFeature, ITokenWithRolesFactoryFeature
         uint8 tokenDecimals,
         uint256 initialSupply,
         uint256 maxSupply,
-        address firstOwner,
-        bool mintable
+        address firstOwner
     ) external {
         address token;
-        if (mintable)
+
+        /*
+            mintable: initialSupply < maxSupply or either of them is 0
+            non-mintable: initialSupply = maxSupply (i.e. fixed supply)
+            otherwise revert
+        */
+        if (initialSupply == 0 || maxSupply == 0 || initialSupply < maxSupply)
             if (maxSupply > 0)
                 token = address(
                     new ERC20MintableAccessControlledMaxSupply(
@@ -68,7 +72,7 @@ contract TokenWithRolesFactoryFeature is IFeature, ITokenWithRolesFactoryFeature
                         initialSupply
                     )
                 );
-        else
+        else if (initialSupply == maxSupply)
             token = address(
                 new ERC20InitialSupply(
                     tokenName,
@@ -78,6 +82,7 @@ contract TokenWithRolesFactoryFeature is IFeature, ITokenWithRolesFactoryFeature
                     initialSupply
                 )
             );
+        else revert MaxSupplyTooLow(maxSupply, initialSupply);
         LibTokenFactoryStorage.getStorage().deploys[urlName].push(token);
         emit TokenDeployed(msg.sender, urlName, token);
     }

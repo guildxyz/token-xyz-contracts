@@ -13,7 +13,6 @@ interface ITokenFactoryFeature is ITokenFactoryBase {
     /// @param initialSupply The initial amount of tokens to mint.
     /// @param maxSupply The maximum amount of tokens that can ever be minted. Unlimited if set to zero.
     /// @param firstOwner The first address to assign ownership/minting rights to (if mintable). The recipient of the initial supply.
-    /// @param mintable Whether to create a mintable token.
     function createToken(
         string calldata urlName,
         string calldata tokenName,
@@ -21,7 +20,6 @@ interface ITokenFactoryFeature is ITokenFactoryBase {
         uint8 tokenDecimals,
         uint256 initialSupply,
         uint256 maxSupply,
-        address firstOwner,
-        bool mintable
+        address firstOwner
     ) external;
 }

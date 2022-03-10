@@ -13,4 +13,9 @@ interface ITokenFactoryBase {
     /// @param urlName The urlName, where the created token is sorted in.
     /// @param token The address of the newly created token.
     event TokenDeployed(address indexed deployer, string urlName, address token);
+
+    /// @notice Error thrown when the max supply is attempted to be set lower than the initial supply.
+    /// @param maxSupply The desired max supply.
+    /// @param initialSupply The desired initial supply, that cannot be higher than the max.
+    error MaxSupplyTooLow(uint256 maxSupply, uint256 initialSupply);
 }
