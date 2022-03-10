@@ -48,7 +48,7 @@ contract("InitialMigration", function (accounts) {
     const tokenFactory = await TokenFactoryFeature.new();
     const migrateInterface = new utils.Interface(["function migrate()"]);
     await tokenXyz.migrate(tokenFactory.address, migrateInterface.encodeFunctionData("migrate()"), wallet0);
-    const result = await tokenXyz.createToken("owo", "OWO Token", "OWO", "18", 0, 1, wallet0, false);
+    const result = await tokenXyz.createToken("owo", "OWO Token", "OWO", "18", 0, 1, wallet0);
     expect(result.receipt.status).to.be.true;
   });
 

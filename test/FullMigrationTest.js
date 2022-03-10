@@ -91,7 +91,7 @@ contract("FullMigration", function (accounts) {
       const selector = tokenxyzInterface.getSighash("createToken");
       const tokenXyzWithOwnAbi = await TokenXyz.at(tokenXyz.address);
       expect(await tokenXyzWithOwnAbi.getFunctionImplementation(selector)).to.eq(tokenFactory.address);
-      const result = await tokenXyz.createToken("Test", "OwoToken", "OWO", 18, 10, 10, wallet0, false);
+      const result = await tokenXyz.createToken("Test", "OwoToken", "OWO", 18, 10, 10, wallet0);
       expect(result.receipt.status).to.be.true;
     });
 
@@ -99,7 +99,7 @@ contract("FullMigration", function (accounts) {
       const selector = tokenxyzInterface.getSighash("createTokenWithRoles");
       const tokenXyzWithOwnAbi = await TokenXyz.at(tokenXyz.address);
       expect(await tokenXyzWithOwnAbi.getFunctionImplementation(selector)).to.eq(tokenWithRolesFactory.address);
-      const result = await tokenXyz.createTokenWithRoles("Test", "OwoToken", "OWO", 18, 10, 10, wallet0, false);
+      const result = await tokenXyz.createTokenWithRoles("Test", "OwoToken", "OWO", 18, 10, 10, wallet0);
       expect(result.receipt.status).to.be.true;
     });
 
