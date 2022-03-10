@@ -31,7 +31,7 @@ contract ERC20MintableAccessControlledMaxSupply is ERC20InitialSupply, AccessCon
         if (maxSupply_ < initialSupply) revert MaxSupplyTooLow(maxSupply_, initialSupply);
         maxSupply = maxSupply_;
         _setRoleAdmin(MINTER_ROLE, MINTER_ROLE);
-        _setupRole(MINTER_ROLE, minter);
+        _grantRole(MINTER_ROLE, minter);
     }
 
     /// @notice Mint an amount of tokens to an account.

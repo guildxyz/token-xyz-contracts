@@ -16,7 +16,7 @@ contract ERC20MintableAccessControlled is ERC20InitialSupply, AccessControl {
         uint256 initialSupply
     ) ERC20InitialSupply(name, symbol, tokenDecimals, minter, initialSupply) {
         _setRoleAdmin(MINTER_ROLE, MINTER_ROLE);
-        _setupRole(MINTER_ROLE, minter);
+        _grantRole(MINTER_ROLE, minter);
     }
 
     /// @notice Mint an amount of tokens to an account.
