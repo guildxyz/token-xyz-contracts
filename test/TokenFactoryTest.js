@@ -42,7 +42,7 @@ const runOptions = [
   }
 ];
 
-runOptions.forEach((runOption) => {
+runOptions.forEach(function (runOption) {
   contract(runOption.contract, function (accounts) {
     const [wallet0, wallet1] = accounts;
     let tokenXyz;
