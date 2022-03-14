@@ -247,6 +247,7 @@ runOptions.forEach((runOption) => {
       });
 
       it("should revert if max supply is lower than initial supply", async function () {
+        // error MaxSupplyTooLow(uint256 maxSupply, uint256 initialSupply);
         await expectRevert.unspecified(
           tokenXyz[runOption.createToken](
             "Test",

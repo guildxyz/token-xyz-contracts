@@ -351,7 +351,7 @@ contract("MerkleDistributor", function (accounts) {
       await setBalance(token, distributor.address, new BN(tokenTotal));
     });
 
-    it("check the proofs is as expected", function () {
+    it("check the proofs are as expected", function () {
       expect(claims).to.deep.eq({
         [wallet0]: {
           index: 0,
