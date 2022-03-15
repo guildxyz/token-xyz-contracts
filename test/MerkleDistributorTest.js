@@ -330,7 +330,7 @@ contract("MerkleDistributor", function (accounts) {
     });
   });
 
-  xcontext("parseBalanceMap", function () {
+  context("parseBalanceMap", function () {
     let distributor;
     let claims;
 
@@ -344,35 +344,34 @@ contract("MerkleDistributor", function (accounts) {
         [wallet1]: 300,
         [accounts[2]]: 250
       });
-      console.log(innerClaims);
       expect(tokenTotal).to.eq("0x02ee"); // 750
       claims = innerClaims;
       distributor = await Distributor.new(token.address, merkleRoot, distributionDuration, wallet0);
-      await setBalance(token, distributor.address, new BN(tokenTotal));
+      await setBalance(token, distributor.address, new BN(BigNumber.from(tokenTotal).toString()));
     });
 
     it("check the proofs are as expected", function () {
       expect(claims).to.deep.eq({
-        [wallet0]: {
-          index: 0,
-          amount: "0xc8",
-          proof: ["0x2a411ed78501edb696adca9e41e78d8256b61cfac45612fa0434d7cf87d916c6"]
-        },
         [wallet1]: {
-          index: 1,
+          index: 0,
           amount: "0x012c",
           proof: [
-            "0xbfeb956a3b705056020a3b64c540bff700c0f6c96c55c0a5fcab57124cb36f7b",
-            "0xd31de46890d4a77baeebddbd77bf73b5c626397b73ee8c69b51efe4c9a5a72fa"
+            "0x457a7ea6173187b2ab1cd4ffbc688b5119e65a7d5079d6a97f2a1010232f953e",
+            "0xd1d56b96964e4c3eacb47e9a0d78a19635474a359bbd0dbc99420cabbb996ab9"
+          ]
+        },
+        [wallet0]: {
+          index: 1,
+          amount: "0xc8",
+          proof: [
+            "0xc48a4bd2d62eacb8296f75dd2bf6987cbfba264dfd27cfe77a70dbd7d82bd2ac",
+            "0xd1d56b96964e4c3eacb47e9a0d78a19635474a359bbd0dbc99420cabbb996ab9"
           ]
         },
         [accounts[2]]: {
           index: 2,
           amount: "0xfa",
-          proof: [
-            "0xceaacce7533111e902cc548e961d77b23a4d8cd073c6b68ccf55c62bd47fc36b",
-            "0xd31de46890d4a77baeebddbd77bf73b5c626397b73ee8c69b51efe4c9a5a72fa"
-          ]
+          proof: ["0x93fbca20a981321e9e96e40acb59dd6282ab43a16009d4e3f396b992818acf9f"]
         }
       });
     });
@@ -389,7 +388,7 @@ contract("MerkleDistributor", function (accounts) {
         // error DropClaimed();
         await expectRevert.unspecified(distributor.claim(claim.index, account, claim.amount, claim.proof));
       }
-      expect(await token.balanceOf(distributor.address)).to.eq(0);
+      expect(await token.balanceOf(distributor.address)).to.bignumber.eq(new BN(0));
     });
   });
 });
