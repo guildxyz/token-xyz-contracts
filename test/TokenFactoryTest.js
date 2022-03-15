@@ -207,13 +207,13 @@ runOptions.forEach(function (runOption) {
           await runOption.ERC20Mintable.at(getEventArg(creation1.receipt.logs, "TokenDeployed", "token")),
           await runOption.ERC20Mintable.at(getEventArg(creation2.receipt.logs, "TokenDeployed", "token"))
         ];
-        tokenContracts.forEach(async function (tokenContract) {
+        for (tokenContract of tokenContracts) {
           const oldBalance = await tokenContract.balanceOf(wallet1);
           const amountToMint = ether("1");
           await tokenContract.mint(wallet1, amountToMint);
           const newBalance = await tokenContract.balanceOf(wallet1);
           expect(newBalance).to.bignumber.eq(oldBalance.add(amountToMint));
-        });
+        }
       });
 
       it("should have max supply if and only if non-zero was set", async function () {
