@@ -26,7 +26,7 @@
 
 */
 
-pragma solidity 0.8.12;
+pragma solidity 0.8.13;
 
 library LibBytesV06 {
     using LibBytesV06 for bytes;
