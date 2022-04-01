@@ -2,8 +2,8 @@
 pragma solidity 0.8.13;
 
 import "./interfaces/ITokenFactoryFeature.sol";
-import "./deployables/token/ERC20MintableOwned.sol";
-import "./deployables/token/ERC20MintableOwnedMaxSupply.sol";
+import "./deployables/token/ERC20/ERC20MintableOwned.sol";
+import "./deployables/token/ERC20/ERC20MintableOwnedMaxSupply.sol";
 import "../fixins/FixinCommon.sol";
 import "../storage/LibTokenFactoryStorage.sol";
 import "../migrations/LibMigrate.sol";
