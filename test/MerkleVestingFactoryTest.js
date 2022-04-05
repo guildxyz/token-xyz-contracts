@@ -14,6 +14,7 @@ const ERC20InitialSupply = artifacts.require("ERC20InitialSupply");
 contract("MerkleVestingFactory", function (accounts) {
   const [wallet0, wallet1] = accounts;
   let tokenXyz;
+  let merkleVestingFactory;
   let token;
 
   before("deploy contracts", async function () {
@@ -27,7 +28,7 @@ contract("MerkleVestingFactory", function (accounts) {
       ownable: ownable.address
     };
     await initialMigration.initializeTokenXyz(wallet0, tokenXyz.address, features);
-    const merkleVestingFactory = await MerkleVestingFactoryFeature.new();
+    merkleVestingFactory = await MerkleVestingFactoryFeature.new();
     const migrateInterface = new utils.Interface(["function migrate()"]);
     await tokenXyz.migrate(merkleVestingFactory.address, migrateInterface.encodeFunctionData("migrate()"), wallet0);
     token = await ERC20InitialSupply.new("OwoToken", "OWO", 18, wallet0, ether("1000"));
@@ -62,15 +63,18 @@ contract("MerkleVestingFactory", function (accounts) {
     const res1 = await tokenXyz.createVesting("Bob", token.address, wallet1, { from: wallet1 });
     const vestingAddressesAlice = await tokenXyz.getDeployedVestings("Alice");
     const vestingAddressesBob = await tokenXyz.getDeployedVestings("Bob");
+    const factoryVersion = await merkleVestingFactory.FEATURE_VERSION();
     await expectEvent(res0.receipt, "MerkleVestingDeployed", {
       deployer: wallet0,
       urlName: "Alice",
-      instance: vestingAddressesAlice[vestingAddressesAlice.length - 1]
+      instance: vestingAddressesAlice[vestingAddressesAlice.length - 1].contractAddress,
+      factoryVersion: factoryVersion
     });
     await expectEvent(res1.receipt, "MerkleVestingDeployed", {
       deployer: wallet1,
       urlName: "Bob",
-      instance: vestingAddressesBob[vestingAddressesBob.length - 1]
+      instance: vestingAddressesBob[vestingAddressesBob.length - 1].contractAddress,
+      factoryVersion: factoryVersion
     });
   });
 });

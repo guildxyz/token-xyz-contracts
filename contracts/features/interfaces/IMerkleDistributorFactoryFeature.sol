@@ -26,5 +26,6 @@ interface IMerkleDistributorFactoryFeature {
     /// @param deployer The address which created the airdrop.
     /// @param urlName The urlName, where the created airdrop contract is sorted in.
     /// @param instance The address of the newly created airdrop contract.
-    event MerkleDistributorDeployed(address indexed deployer, string urlName, address instance);
+    /// @param factoryVersion The version number of the factory that was used to deploy the contract.
+    event MerkleDistributorDeployed(address indexed deployer, string urlName, address instance, uint96 factoryVersion);
 }

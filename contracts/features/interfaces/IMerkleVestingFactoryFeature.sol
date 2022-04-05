@@ -22,5 +22,6 @@ interface IMerkleVestingFactoryFeature {
     /// @param deployer The address which created the vesting.
     /// @param urlName The urlName, where the created vesting contract is sorted in.
     /// @param instance The address of the newly created vesting contract.
-    event MerkleVestingDeployed(address indexed deployer, string urlName, address instance);
+    /// @param factoryVersion The version number of the factory that was used to deploy the contract.
+    event MerkleVestingDeployed(address indexed deployer, string urlName, address instance, uint96 factoryVersion);
 }

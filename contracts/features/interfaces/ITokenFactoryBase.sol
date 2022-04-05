@@ -12,7 +12,8 @@ interface ITokenFactoryBase {
     /// @param deployer The address which created the token.
     /// @param urlName The urlName, where the created token is sorted in.
     /// @param token The address of the newly created token.
-    event TokenDeployed(address indexed deployer, string urlName, address token);
+    /// @param factoryVersion The version number of the factory that was used to deploy the contract.
+    event TokenDeployed(address indexed deployer, string urlName, address token, uint96 factoryVersion);
 
     /// @notice Error thrown when the max supply is attempted to be set lower than the initial supply.
     /// @param maxSupply The desired max supply.

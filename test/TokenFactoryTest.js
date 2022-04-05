@@ -46,6 +46,7 @@ runOptions.forEach(function (runOption) {
   contract(runOption.contract, function (accounts) {
     const [wallet0, wallet1] = accounts;
     let tokenXyz;
+    let tokenFactory;
 
     before("deploy contracts", async function () {
       const initialMigration = await InitialMigration.new(wallet0);
@@ -58,7 +59,7 @@ runOptions.forEach(function (runOption) {
         ownable: ownable.address
       };
       await initialMigration.initializeTokenXyz(wallet0, tokenXyz.address, features);
-      const tokenFactory = await runOption.TokenFactory.new();
+      tokenFactory = await runOption.TokenFactory.new();
       const migrateInterface = new utils.Interface(["function migrate()"]);
       await tokenXyz.migrate(tokenFactory.address, migrateInterface.encodeFunctionData("migrate()"), wallet0);
     });
@@ -84,15 +85,18 @@ runOptions.forEach(function (runOption) {
       const res1 = await tokenXyz[runOption.createToken]("Bob", "Bob0", tokenSymbol, tokenDecimals, 0, 0, wallet0);
       const tokenAddressesAlice = await tokenXyz.getDeployedTokens("Alice");
       const tokenAddressesBob = await tokenXyz.getDeployedTokens("Bob");
+      const factoryVersion = await tokenFactory.FEATURE_VERSION();
       await expectEvent(res0.receipt, "TokenDeployed", {
         deployer: wallet0,
         urlName: "Alice",
-        token: tokenAddressesAlice[tokenAddressesAlice.length - 1]
+        token: tokenAddressesAlice[tokenAddressesAlice.length - 1].contractAddress,
+        factoryVersion: factoryVersion
       });
       await expectEvent(res1.receipt, "TokenDeployed", {
         deployer: wallet0,
         urlName: "Bob",
-        token: tokenAddressesBob[tokenAddressesBob.length - 1]
+        token: tokenAddressesBob[tokenAddressesBob.length - 1].contractAddress,
+        factoryVersion: factoryVersion
       });
     });
 

@@ -16,6 +16,7 @@ const randomRoot = "0xf7f77ea15719ea30bd2a584962ab273b1116f0e70fe80bbb0b30557d0a
 contract("MerkleDistributorFactory", function (accounts) {
   const [wallet0, wallet1] = accounts;
   let tokenXyz;
+  let merkleDistributorFactory;
   let token;
 
   before("deploy contracts", async function () {
@@ -29,7 +30,7 @@ contract("MerkleDistributorFactory", function (accounts) {
       ownable: ownable.address
     };
     await initialMigration.initializeTokenXyz(wallet0, tokenXyz.address, features);
-    const merkleDistributorFactory = await MerkleDistributorFactoryFeature.new();
+    merkleDistributorFactory = await MerkleDistributorFactoryFeature.new();
     const migrateInterface = new utils.Interface(["function migrate()"]);
     await tokenXyz.migrate(merkleDistributorFactory.address, migrateInterface.encodeFunctionData("migrate()"), wallet0);
     token = await ERC20InitialSupply.new("OwoToken", "OWO", 18, wallet0, ether("1000"));
@@ -71,15 +72,18 @@ contract("MerkleDistributorFactory", function (accounts) {
     const res1 = await tokenXyz.createAirdrop("Bob", token.address, randomRoot, 42069, wallet1, { from: wallet1 });
     const airdropAddressesAlice = await tokenXyz.getDeployedAirdrops("Alice");
     const airdropAddressesBob = await tokenXyz.getDeployedAirdrops("Bob");
+    const factoryVersion = await merkleDistributorFactory.FEATURE_VERSION();
     await expectEvent(res0.receipt, "MerkleDistributorDeployed", {
       deployer: wallet0,
       urlName: "Alice",
-      instance: airdropAddressesAlice[airdropAddressesAlice.length - 1]
+      instance: airdropAddressesAlice[airdropAddressesAlice.length - 1].contractAddress,
+      factoryVersion: factoryVersion
     });
     await expectEvent(res1.receipt, "MerkleDistributorDeployed", {
       deployer: wallet1,
       urlName: "Bob",
-      instance: airdropAddressesBob[airdropAddressesBob.length - 1]
+      instance: airdropAddressesBob[airdropAddressesBob.length - 1].contractAddress,
+      factoryVersion: factoryVersion
     });
   });
 });

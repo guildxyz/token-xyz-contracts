@@ -83,8 +83,7 @@ contract TokenFactoryFeature is IFeature, ITokenFactoryFeature, FixinCommon {
                 )
             );
         else revert MaxSupplyTooLow(maxSupply, initialSupply);
-        LibTokenFactoryStorage.getStorage().deploys[urlName].push(token);
-        emit TokenDeployed(msg.sender, urlName, token);
+        emit TokenDeployed(msg.sender, urlName, token, FEATURE_VERSION);
     }
 
     /// @notice Returns all the deployed token addresses by a specific creator.
