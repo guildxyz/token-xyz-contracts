@@ -40,16 +40,20 @@ contract("MerkleVestingFactory", function (accounts) {
     await tokenXyz.createVesting("Bob", token.address, wallet1, { from: wallet1 });
     const vestingAddressesAlice = await tokenXyz.getDeployedVestings("Alice");
     const vestingAddressesBob = await tokenXyz.getDeployedVestings("Bob");
+    const factoryVersion = await merkleVestingFactory.FEATURE_VERSION();
     expect(vestingAddressesAlice.length).to.eq(2);
     expect(vestingAddressesBob.length).to.eq(1);
+    expect(vestingAddressesAlice[0].factoryVersion).to.bignumber.eq(factoryVersion);
+    expect(vestingAddressesAlice[1].factoryVersion).to.bignumber.eq(factoryVersion);
+    expect(vestingAddressesBob[0].factoryVersion).to.bignumber.eq(factoryVersion);
   });
 
   it("creates vesting contracts with the right parameters", async function () {
     const vestingAddressesAlice = await tokenXyz.getDeployedVestings("Alice");
     const vestingAddressesBob = await tokenXyz.getDeployedVestings("Bob");
-    const vestingAlice0 = await MerkleVesting.at(vestingAddressesAlice[0]);
-    const vestingAlice1 = await MerkleVesting.at(vestingAddressesAlice[1]);
-    const vestingBob0 = await MerkleVesting.at(vestingAddressesBob[0]);
+    const vestingAlice0 = await MerkleVesting.at(vestingAddressesAlice[0].contractAddress);
+    const vestingAlice1 = await MerkleVesting.at(vestingAddressesAlice[1].contractAddress);
+    const vestingBob0 = await MerkleVesting.at(vestingAddressesBob[0].contractAddress);
     expect(await vestingAlice0.token()).to.eq(token.address);
     expect(await vestingAlice1.token()).to.eq(token.address);
     expect(await vestingBob0.token()).to.eq(token.address);

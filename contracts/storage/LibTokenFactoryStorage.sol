@@ -3,13 +3,14 @@
 pragma solidity 0.8.13;
 
 import "./LibStorage.sol";
+import "../features/interfaces/IFactoryFeature.sol";
 
 /// @title Storage helpers for the `TokenFactory` feature.
 library LibTokenFactoryStorage {
     /// @notice Storage bucket for this feature.
     struct Storage {
-        // The addresses of deployments by entities
-        mapping(string => address[]) deploys;
+        // The data of deployments by entities
+        mapping(string => IFactoryFeature.DeployData[]) deploys;
     }
 
     /// @notice Get the storage bucket for this contract.

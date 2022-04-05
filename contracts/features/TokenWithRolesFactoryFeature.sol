@@ -83,13 +83,16 @@ contract TokenWithRolesFactoryFeature is IFeature, ITokenWithRolesFactoryFeature
                 )
             );
         else revert MaxSupplyTooLow(maxSupply, initialSupply);
+        LibTokenFactoryStorage.getStorage().deploys[urlName].push(
+            DeployData({factoryVersion: FEATURE_VERSION, contractAddress: token})
+        );
         emit TokenDeployed(msg.sender, urlName, token, FEATURE_VERSION);
     }
 
     /// @notice Returns all the deployed token addresses by a specific creator.
     /// @param urlName The url name used by the frontend, kind of an id of the creator.
     /// @return tokenAddresses The requested array of tokens addresses.
-    function getDeployedTokens(string calldata urlName) external view returns (address[] memory tokenAddresses) {
+    function getDeployedTokens(string calldata urlName) external view returns (DeployData[] memory tokenAddresses) {
         return LibTokenFactoryStorage.getStorage().deploys[urlName];
     }
 }

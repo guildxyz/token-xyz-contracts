@@ -70,14 +70,18 @@ runOptions.forEach(function (runOption) {
       await tokenXyz[runOption.createToken]("Bob", "Bob0", tokenSymbol, tokenDecimals, initialSupply, 0, wallet0);
       const tokenAddressesAlice = await tokenXyz.getDeployedTokens("Alice");
       const tokenAddressesBob = await tokenXyz.getDeployedTokens("Bob");
-      const tokenAlice0 = await runOption.ERC20Mintable.at(tokenAddressesAlice[0]);
-      const tokenAlice1 = await runOption.ERC20Mintable.at(tokenAddressesAlice[1]);
-      const tokenBob0 = await runOption.ERC20Mintable.at(tokenAddressesBob[0]);
+      const tokenAlice0 = await runOption.ERC20Mintable.at(tokenAddressesAlice[0].contractAddress);
+      const tokenAlice1 = await runOption.ERC20Mintable.at(tokenAddressesAlice[1].contractAddress);
+      const tokenBob0 = await runOption.ERC20Mintable.at(tokenAddressesBob[0].contractAddress);
+      const factoryVersion = await tokenFactory.FEATURE_VERSION();
       expect(tokenAddressesAlice.length).to.eq(2);
       expect(tokenAddressesBob.length).to.eq(1);
       expect(await tokenAlice0.name()).to.eq("Alice0");
       expect(await tokenAlice1.name()).to.eq("Alice1");
       expect(await tokenBob0.name()).to.eq("Bob0");
+      expect(tokenAddressesAlice[0].factoryVersion).to.bignumber.eq(factoryVersion);
+      expect(tokenAddressesAlice[1].factoryVersion).to.bignumber.eq(factoryVersion);
+      expect(tokenAddressesBob[0].factoryVersion).to.bignumber.eq(factoryVersion);
     });
 
     it("emits TokenDeployed event", async function () {

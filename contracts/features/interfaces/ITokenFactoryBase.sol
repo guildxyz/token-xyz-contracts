@@ -1,12 +1,14 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.0;
 
+import "./IFactoryFeature.sol";
+
 /// @title Common functions and events for a contract that deploys ERC20 token contracts for anyone.
-interface ITokenFactoryBase {
+interface ITokenFactoryBase is IFactoryFeature {
     /// @notice Returns all the deployed token addresses by a specific creator.
     /// @param urlName The url name used by the frontend, kind of an id of the creator.
     /// @return tokenAddresses The requested array of token addresses.
-    function getDeployedTokens(string calldata urlName) external view returns (address[] memory tokenAddresses);
+    function getDeployedTokens(string calldata urlName) external view returns (DeployData[] memory tokenAddresses);
 
     /// @notice Event emitted when creating a token.
     /// @param deployer The address which created the token.

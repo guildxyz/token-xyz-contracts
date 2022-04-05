@@ -1,8 +1,10 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.0;
 
+import "./IFactoryFeature.sol";
+
 /// @title A contract that deploys token airdrop contracts for anyone.
-interface IMerkleDistributorFactoryFeature {
+interface IMerkleDistributorFactoryFeature is IFactoryFeature {
     /// @notice Deploys a new Merkle Distributor contract.
     /// @param urlName The url name used by the frontend, kind of an id of the creator.
     /// @param token The address of the token to distribute.
@@ -20,7 +22,7 @@ interface IMerkleDistributorFactoryFeature {
     /// @notice Returns all the deployed airdrop contract addresses by a specific creator.
     /// @param urlName The url name used by the frontend, kind of an id of the creator.
     /// @return airdropAddresses The requested array of contract addresses.
-    function getDeployedAirdrops(string calldata urlName) external view returns (address[] memory airdropAddresses);
+    function getDeployedAirdrops(string calldata urlName) external view returns (DeployData[] memory airdropAddresses);
 
     /// @notice Event emitted when creating a new airdrop contract.
     /// @param deployer The address which created the airdrop.

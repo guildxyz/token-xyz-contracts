@@ -42,16 +42,20 @@ contract("MerkleDistributorFactory", function (accounts) {
     await tokenXyz.createAirdrop("Bob", token.address, randomRoot, 42069, wallet1, { from: wallet1 });
     const airdropAddressesAlice = await tokenXyz.getDeployedAirdrops("Alice");
     const airdropAddressesBob = await tokenXyz.getDeployedAirdrops("Bob");
+    const factoryVersion = await merkleDistributorFactory.FEATURE_VERSION();
     expect(airdropAddressesAlice.length).to.eq(2);
     expect(airdropAddressesBob.length).to.eq(1);
+    expect(airdropAddressesAlice[0].factoryVersion).to.bignumber.eq(factoryVersion);
+    expect(airdropAddressesAlice[1].factoryVersion).to.bignumber.eq(factoryVersion);
+    expect(airdropAddressesBob[0].factoryVersion).to.bignumber.eq(factoryVersion);
   });
 
   it("creates airdrop contracts with the right parameters", async function () {
     const airdropAddressesAlice = await tokenXyz.getDeployedAirdrops("Alice");
     const airdropAddressesBob = await tokenXyz.getDeployedAirdrops("Bob");
-    const airdropAlice0 = await MerkleDistributor.at(airdropAddressesAlice[0]);
-    const airdropAlice1 = await MerkleDistributor.at(airdropAddressesAlice[1]);
-    const airdropBob0 = await MerkleDistributor.at(airdropAddressesBob[0]);
+    const airdropAlice0 = await MerkleDistributor.at(airdropAddressesAlice[0].contractAddress);
+    const airdropAlice1 = await MerkleDistributor.at(airdropAddressesAlice[1].contractAddress);
+    const airdropBob0 = await MerkleDistributor.at(airdropAddressesBob[0].contractAddress);
     const blockTime = await time.latest();
     expect(await airdropAlice0.token()).to.eq(token.address);
     expect(await airdropAlice1.token()).to.eq(token.address);

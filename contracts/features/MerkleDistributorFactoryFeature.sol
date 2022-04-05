@@ -38,13 +38,16 @@ contract MerkleDistributorFactoryFeature is IFeature, IMerkleDistributorFactoryF
         address owner
     ) external {
         address instance = address(new MerkleDistributor(token, merkleRoot, distributionDuration, owner));
+        LibMerkleDistributorFactoryStorage.getStorage().deploys[urlName].push(
+            DeployData({factoryVersion: FEATURE_VERSION, contractAddress: instance})
+        );
         emit MerkleDistributorDeployed(msg.sender, urlName, instance, FEATURE_VERSION);
     }
 
     /// @notice Returns all the deployed airdrop contract addresses by a specific creator.
     /// @param urlName The url name used by the frontend, kind of an id of the creator.
     /// @return airdropAddresses The requested array of contract addresses.
-    function getDeployedAirdrops(string calldata urlName) external view returns (address[] memory airdropAddresses) {
+    function getDeployedAirdrops(string calldata urlName) external view returns (DeployData[] memory airdropAddresses) {
         return LibMerkleDistributorFactoryStorage.getStorage().deploys[urlName];
     }
 }
