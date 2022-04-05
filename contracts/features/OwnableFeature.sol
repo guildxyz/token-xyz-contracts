@@ -39,9 +39,9 @@ import "./SimpleFunctionRegistryFeature.sol";
 /// @title Owner management features.
 contract OwnableFeature is IFeature, IOwnableFeature, FixinCommon {
     /// @notice Name of this feature.
-    string public constant override FEATURE_NAME = "Ownable";
+    string public constant FEATURE_NAME = "Ownable";
     /// @notice Version of this feature.
-    uint256 public immutable override FEATURE_VERSION = _encodeVersion(1, 0, 0);
+    uint96 public immutable FEATURE_VERSION = _encodeVersion(1, 0, 0);
 
     /// @notice Initializes this feature. The intial owner will be set to this (TokenXyz)
     ///      to allow the bootstrappers to call `extend()`. Ownership should be

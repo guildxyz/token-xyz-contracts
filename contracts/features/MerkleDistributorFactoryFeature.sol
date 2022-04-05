@@ -11,9 +11,9 @@ import "./interfaces/IFeature.sol";
 /// @title A contract that deploys token airdrop contracts for anyone.
 contract MerkleDistributorFactoryFeature is IFeature, IMerkleDistributorFactoryFeature, FixinCommon {
     /// @notice Name of this feature.
-    string public constant override FEATURE_NAME = "MerkleDistributorFactory";
+    string public constant FEATURE_NAME = "MerkleDistributorFactory";
     /// @notice Version of this feature.
-    uint256 public immutable override FEATURE_VERSION = _encodeVersion(1, 0, 0);
+    uint96 public immutable FEATURE_VERSION = _encodeVersion(1, 0, 0);
 
     /// @notice Initialize and register this feature.
     ///      Should be delegatecalled by `Migrate.migrate()`.

@@ -36,5 +36,5 @@ interface IFeature {
     function FEATURE_NAME() external view returns (string memory name);
 
     /// @notice The version of this feature set.
-    function FEATURE_VERSION() external view returns (uint256 version);
+    function FEATURE_VERSION() external view returns (uint96 version);
 }

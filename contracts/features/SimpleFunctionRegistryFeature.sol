@@ -38,9 +38,9 @@ import "./interfaces/ISimpleFunctionRegistryFeature.sol";
 /// @title Basic registry management features.
 contract SimpleFunctionRegistryFeature is IFeature, ISimpleFunctionRegistryFeature, FixinCommon {
     /// @notice Name of this feature.
-    string public constant override FEATURE_NAME = "SimpleFunctionRegistry";
+    string public constant FEATURE_NAME = "SimpleFunctionRegistry";
     /// @notice Version of this feature.
-    uint256 public immutable override FEATURE_VERSION = _encodeVersion(1, 0, 0);
+    uint96 public immutable FEATURE_VERSION = _encodeVersion(1, 0, 0);
 
     /// @notice Initializes this feature, registering its own functions.
     /// @return success Magic bytes if successful.

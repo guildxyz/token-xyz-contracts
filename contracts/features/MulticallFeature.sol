@@ -9,9 +9,9 @@ import "@openzeppelin/contracts/utils/Multicall.sol";
 /// @title Provides a function to batch together multiple calls in a single external call.
 contract MulticallFeature is IFeature, FixinCommon, Multicall {
     /// @notice Name of this feature.
-    string public constant override FEATURE_NAME = "Multicall";
+    string public constant FEATURE_NAME = "Multicall";
     /// @notice Version of this feature.
-    uint256 public immutable override FEATURE_VERSION = _encodeVersion(1, 0, 0);
+    uint96 public immutable FEATURE_VERSION = _encodeVersion(1, 0, 0);
 
     /// @notice Initialize and register this feature.
     ///      Should be delegatecalled by `Migrate.migrate()`.
