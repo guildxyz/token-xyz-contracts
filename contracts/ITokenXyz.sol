@@ -3,7 +3,6 @@
 /*
 
     The file was modified by Agora.
-
     2022 agora.xyz
 
 */
@@ -36,7 +35,7 @@ import "./features/interfaces/ITokenWithRolesFactoryFeature.sol";
 import "./features/interfaces/IMerkleDistributorFactoryFeature.sol";
 import "./features/interfaces/IMerkleVestingFactoryFeature.sol";
 
-/// @title Interface for a fully featured token.xyz Proxy.
+/// @title Interface for a fully featured token.xyz proxy.
 interface ITokenXyz is
     IOwnableFeature,
     ISimpleFunctionRegistryFeature,

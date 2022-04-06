@@ -1,4 +1,12 @@
 // SPDX-License-Identifier: GPL-3.0-or-later
+
+/*
+
+    The file was modified by Agora.
+    2022 agora.xyz
+
+*/
+
 pragma solidity ^0.8.0;
 
 /// @title Allows anyone to claim a token if they exist in a merkle root.
