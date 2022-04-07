@@ -42,7 +42,7 @@ const runOptions = [
   }
 ];
 
-runOptions.forEach(function (runOption) {
+for (const runOption of runOptions) {
   contract(runOption.contract, function (accounts) {
     const [wallet0, wallet1] = accounts;
     let tokenXyz;
@@ -270,4 +270,4 @@ runOptions.forEach(function (runOption) {
       });
     });
   });
-});
+}

@@ -61,7 +61,7 @@ contract("Token contracts", function (accounts) {
     });
   });
 
-  runOptions.forEach(function (runOption) {
+  for (const runOption of runOptions) {
     context(runOption.context, function () {
       before("create a token", async function () {
         token = await runOption.ERC20Mintable.new(tokenName, tokenSymbol, tokenDecimals, wallet0, initialSupply);
@@ -176,5 +176,5 @@ contract("Token contracts", function (accounts) {
         await expectRevert.unspecified(token.mint(wallet1, mintableAmount.add(new BN(1))));
       });
     });
-  });
+  }
 });
