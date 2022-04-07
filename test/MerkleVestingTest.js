@@ -407,7 +407,7 @@ contract("MerkleVesting", function (accounts) {
     it("transfers tokens to the recipient", async function () {
       const vesting = await Vesting.new(token.address, wallet0);
       await vesting.addCohort(randomRoot0, distributionDuration, randomVestingPeriod, randomCliff);
-      await setBalance(token, vesting.address, new BN("101"));
+      await setBalance(token, vesting.address, new BN(101));
       await time.increase(distributionDuration + 1);
       const oldBalance = await token.balanceOf(vesting.address);
       await vesting.withdraw(wallet0);
@@ -419,7 +419,7 @@ contract("MerkleVesting", function (accounts) {
     it("emits Withdrawn event", async function () {
       const vesting = await Vesting.new(token.address, wallet0);
       await vesting.addCohort(randomRoot0, distributionDuration, randomVestingPeriod, randomCliff);
-      await setBalance(token, vesting.address, new BN("101"));
+      await setBalance(token, vesting.address, new BN(101));
       await time.increase(distributionDuration + 1);
       const result0 = await vesting.withdraw(wallet0);
       await expectEvent(result0, "Withdrawn", { account: wallet0, amount: "101" });

@@ -312,7 +312,7 @@ contract("MerkleDistributor", function (accounts) {
 
     it("transfers tokens to the recipient", async function () {
       const distributor = await Distributor.new(token.address, constants.HashZero, distributionDuration, wallet0);
-      await setBalance(token, distributor.address, new BN("101"));
+      await setBalance(token, distributor.address, new BN(101));
       await time.increase(distributionDuration + 1);
       const oldBalance = await token.balanceOf(distributor.address);
       await distributor.withdraw(wallet0);
@@ -323,7 +323,7 @@ contract("MerkleDistributor", function (accounts) {
 
     it("emits Withdrawn event", async function () {
       const distributor = await Distributor.new(token.address, constants.HashZero, distributionDuration, wallet0);
-      await setBalance(token, distributor.address, new BN("101"));
+      await setBalance(token, distributor.address, new BN(101));
       await time.increase(distributionDuration + 1);
       const result = await distributor.withdraw(wallet0);
       await expectEvent(result, "Withdrawn", { account: wallet0, amount: "101" });
