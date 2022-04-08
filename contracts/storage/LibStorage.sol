@@ -41,7 +41,8 @@ library LibStorage {
         Ownable,
         TokenFactory,
         MerkleDistributorFactory,
-        MerkleVestingFactory
+        MerkleVestingFactory,
+        MerkleNFTMinterFactory
     }
 
     /// @notice Get the storage slot given a storage ID. We assign unique, well-spaced
