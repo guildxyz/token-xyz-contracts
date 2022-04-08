@@ -379,8 +379,13 @@ contract("MerkleVesting", function (accounts) {
   });
 
   context("#withdraw", async function () {
+    let vesting;
+
+    beforeEach("deploy contract", async function () {
+      vesting = await Vesting.new(token.address, wallet0);
+    });
+
     it("fails if not called by owner", async function () {
-      const vesting = await Vesting.new(token.address, wallet0);
       await vesting.addCohort(randomRoot0, distributionDuration, randomVestingPeriod, randomCliff);
       await vesting.transferOwnership(wallet1);
       expect(await vesting.owner()).to.eq(wallet1);
@@ -388,14 +393,12 @@ contract("MerkleVesting", function (accounts) {
     });
 
     it("fails if distribution period has not ended yet", async function () {
-      const vesting = await Vesting.new(token.address, wallet0);
       await vesting.addCohort(randomRoot0, distributionDuration, randomVestingPeriod, randomCliff);
       // error DistributionOngoing(uint256 current, uint256 end);
       await expectRevert.unspecified(vesting.withdraw(wallet0));
     });
 
     it("fails if there's nothing to withdraw", async function () {
-      const vesting = await Vesting.new(token.address, wallet0);
       await vesting.addCohort(randomRoot0, distributionDuration, randomVestingPeriod, randomCliff);
       await time.increase(distributionDuration + 1);
       const balance = await token.balanceOf(vesting.address);
@@ -405,7 +408,6 @@ contract("MerkleVesting", function (accounts) {
     });
 
     it("transfers tokens to the recipient", async function () {
-      const vesting = await Vesting.new(token.address, wallet0);
       await vesting.addCohort(randomRoot0, distributionDuration, randomVestingPeriod, randomCliff);
       await setBalance(token, vesting.address, new BN(101));
       await time.increase(distributionDuration + 1);
@@ -417,7 +419,6 @@ contract("MerkleVesting", function (accounts) {
     });
 
     it("emits Withdrawn event", async function () {
-      const vesting = await Vesting.new(token.address, wallet0);
       await vesting.addCohort(randomRoot0, distributionDuration, randomVestingPeriod, randomCliff);
       await setBalance(token, vesting.address, new BN(101));
       await time.increase(distributionDuration + 1);

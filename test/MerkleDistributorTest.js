@@ -137,7 +137,6 @@ contract("MerkleDistributor", function (accounts) {
       it("cannot claim more than once: 0 and then 1", async function () {
         await distributor.claim(0, wallet0, 100, tree.getProof(0, wallet0, BigNumber.from(100)));
         await distributor.claim(1, wallet1, 101, tree.getProof(1, wallet1, BigNumber.from(101)));
-
         // error DropClaimed();
         await expectRevert.unspecified(
           distributor.claim(0, wallet0, 100, tree.getProof(0, wallet0, BigNumber.from(100)))
@@ -147,7 +146,6 @@ contract("MerkleDistributor", function (accounts) {
       it("cannot claim more than once: 1 and then 0", async function () {
         await distributor.claim(1, wallet1, 101, tree.getProof(1, wallet1, BigNumber.from(101)));
         await distributor.claim(0, wallet0, 100, tree.getProof(0, wallet0, BigNumber.from(100)));
-
         // error DropClaimed();
         await expectRevert.unspecified(
           distributor.claim(1, wallet1, 101, tree.getProof(1, wallet1, BigNumber.from(101)))
@@ -287,7 +285,7 @@ contract("MerkleDistributor", function (accounts) {
         for (let i = 0; i < 25; i += Math.floor(Math.random() * (NUM_LEAVES / NUM_SAMPLES))) {
           const proof = tree.getProof(i, wallet0, BigNumber.from(100));
           await distributor.claim(i, wallet0, 100, proof);
-          // error InvalidProof();
+          // error DropClaimed();
           await expectRevert.unspecified(distributor.claim(i, wallet0, 100, proof));
         }
       });
@@ -295,14 +293,22 @@ contract("MerkleDistributor", function (accounts) {
   });
 
   context("#withdraw", async function () {
+    let distributor;
+
+    beforeEach("deploy contract", async function () {
+      distributor = await Distributor.new(token.address, constants.HashZero, distributionDuration, wallet0);
+    });
+
+    it("fails if not called by the owner", async function () {
+      await expectRevert(distributor.withdraw(wallet0, { from: wallet1 }), "Ownable: caller is not the owner");
+    });
+
     it("fails if distribution period has not ended yet", async function () {
-      const distributor = await Distributor.new(token.address, constants.HashZero, distributionDuration, wallet0);
       // error DistributionOngoing(uint256 current, uint256 end);
       await expectRevert.unspecified(distributor.withdraw(wallet0));
     });
 
     it("fails if there's nothing to withdraw", async function () {
-      const distributor = await Distributor.new(token.address, constants.HashZero, distributionDuration, wallet0);
       await time.increase(distributionDuration + 1);
       const balance = await token.balanceOf(distributor.address);
       expect(balance).to.bignumber.eq("0");
@@ -311,7 +317,6 @@ contract("MerkleDistributor", function (accounts) {
     });
 
     it("transfers tokens to the recipient", async function () {
-      const distributor = await Distributor.new(token.address, constants.HashZero, distributionDuration, wallet0);
       await setBalance(token, distributor.address, new BN(101));
       await time.increase(distributionDuration + 1);
       const oldBalance = await token.balanceOf(distributor.address);
@@ -322,7 +327,6 @@ contract("MerkleDistributor", function (accounts) {
     });
 
     it("emits Withdrawn event", async function () {
-      const distributor = await Distributor.new(token.address, constants.HashZero, distributionDuration, wallet0);
       await setBalance(token, distributor.address, new BN(101));
       await time.increase(distributionDuration + 1);
       const result = await distributor.withdraw(wallet0);
