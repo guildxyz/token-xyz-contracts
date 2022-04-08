@@ -84,7 +84,6 @@ contract("MerkleNFTMinterFactory", function (accounts) {
     expect(await minterBob0.owner()).to.eq(wallet1);
   });
 
-  // TODO: test for autoId type (safeMint params)
   it("passes correct parameters for NFT creation", async function () {
     const minterAddressesAlice = await tokenXyz.getDeployedNFTMinters("Alice");
     const minterAddressesBob = await tokenXyz.getDeployedNFTMinters("Bob");
