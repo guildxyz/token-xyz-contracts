@@ -20,7 +20,7 @@ const runOptions = [
   }
 ];
 
-contract("Token contracts", function (accounts) {
+contract("ERC721 contracts", function (accounts) {
   const [wallet0, wallet1] = accounts;
 
   for (const runOption of runOptions) {

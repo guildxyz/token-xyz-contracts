@@ -28,7 +28,7 @@ const runOptions = [
   }
 ];
 
-contract("Token contracts", function (accounts) {
+contract("ERC20 contracts", function (accounts) {
   const [wallet0, wallet1] = accounts;
 
   context("fixed supply tokens", function () {
