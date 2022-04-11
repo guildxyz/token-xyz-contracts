@@ -50,6 +50,8 @@ If you are adding a new feature contract, ensure you have completed all these st
 - created a new library for accessing it's storage in the _storage_ folder. It's contents should be analogous to the other contracts' files
 - created the contract's interface in _features/interfaces_
 - imported the interface in ITokenXyz.sol and made it inherit from that
+- updated the FullMigration contract to really be full again
+- made sure there is a Truffle migration script that would deploy it
 - the new feature:
   - extends IFeature, FixinCommon and it's own interface
   - implements a migrate() function that registers it's function selectors and returns LibMigrate.MIGRATE_SUCCESS
