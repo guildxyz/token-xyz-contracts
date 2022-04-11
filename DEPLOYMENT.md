@@ -67,10 +67,10 @@ If you are updating an already deployed feature, ensure you have done these step
 
 To extend the contracts with a new feature contract, deploy it first.
 
-Let's say we want to add a new feature called TestFeature and added a 7th migration script for it:
+Let's say we want to add a new feature called TestFeature and added migration script number 42 for it:
 
 ```sh
-truffle migrate --network goerli -f 7 --to 7
+truffle migrate --network goerli -f 42 --to 42
 ```
 
 As a last step, call migrate() on TokenXyz. Simple node.js code to demonstrate this:
