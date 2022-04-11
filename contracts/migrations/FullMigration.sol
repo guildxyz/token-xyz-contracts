@@ -48,7 +48,7 @@ contract FullMigration {
         TokenWithRolesFactoryFeature tokenWithRolesFactory;
         MerkleDistributorFactoryFeature merkleDistributorFactory;
         MerkleVestingFactoryFeature merkleVestingFactory;
-        MerkleNFTMinterFactoryFeature merkleNftMinterFactory;
+        MerkleNFTMinterFactoryFeature merkleNFTMinterFactory;
     }
 
     /// @notice The allowed caller of `initializeTokenXyz()`.
@@ -168,7 +168,7 @@ contract FullMigration {
         {
             // Register the feature.
             ownable.migrate(
-                address(features.merkleNftMinterFactory),
+                address(features.merkleNFTMinterFactory),
                 abi.encodeWithSelector(MerkleNFTMinterFactoryFeature.migrate.selector),
                 address(this)
             );

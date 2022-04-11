@@ -12,6 +12,7 @@ const TokenFactoryFeature = artifacts.require("TokenFactoryFeature");
 const TokenWithRolesFactoryFeature = artifacts.require("TokenWithRolesFactoryFeature");
 const MerkleDistributorFactoryFeature = artifacts.require("MerkleDistributorFactoryFeature");
 const MerkleVestingFactoryFeature = artifacts.require("MerkleVestingFactoryFeature");
+const MerkleNFTMinterFactoryFeature = artifacts.require("MerkleNFTMinterFactoryFeature");
 
 const tokenxyzInterface = new utils.Interface(ITokenXyz.abi);
 const randomRoot = "0xf7f77ea15719ea30bd2a584962ab273b1116f0e70fe80bbb0b30557d0addb7f3";
@@ -19,6 +20,7 @@ const randomRoot = "0xf7f77ea15719ea30bd2a584962ab273b1116f0e70fe80bbb0b30557d0a
 contract("FullMigration", function (accounts) {
   const [wallet0, wallet1] = accounts;
   let fullMigration;
+  let tokenXyzWithOwnAbi;
   let tokenXyz;
   let features;
   let functionRegistry;
@@ -28,11 +30,12 @@ contract("FullMigration", function (accounts) {
   let tokenWithRolesFactory;
   let merkleDistributorFactory;
   let merkleVestingFactory;
+  let merkleNFTMinterFactory;
 
   beforeEach("deploy contracts", async function () {
     fullMigration = await FullMigration.new(wallet0);
-    tokenXyz = await TokenXyz.new(await fullMigration.getBootstrapper());
-    tokenXyz = await ITokenXyz.at(tokenXyz.address);
+    tokenXyzWithOwnAbi = await TokenXyz.new(await fullMigration.getBootstrapper());
+    tokenXyz = await ITokenXyz.at(tokenXyzWithOwnAbi.address);
     functionRegistry = await SimpleFunctionRegistryFeature.new();
     ownable = await OwnableFeature.new();
     multicall = await MulticallFeature.new();
@@ -40,6 +43,7 @@ contract("FullMigration", function (accounts) {
     tokenWithRolesFactory = await TokenWithRolesFactoryFeature.new();
     merkleDistributorFactory = await MerkleDistributorFactoryFeature.new();
     merkleVestingFactory = await MerkleVestingFactoryFeature.new();
+    merkleNFTMinterFactory = await MerkleNFTMinterFactoryFeature.new();
     features = {
       registry: functionRegistry.address,
       ownable: ownable.address,
@@ -47,7 +51,8 @@ contract("FullMigration", function (accounts) {
       tokenFactory: tokenFactory.address,
       tokenWithRolesFactory: tokenWithRolesFactory.address,
       merkleDistributorFactory: merkleDistributorFactory.address,
-      merkleVestingFactory: merkleVestingFactory.address
+      merkleVestingFactory: merkleVestingFactory.address,
+      merkleNFTMinterFactory: merkleNFTMinterFactory.address
     };
   });
 
@@ -77,7 +82,6 @@ contract("FullMigration", function (accounts) {
       await fullMigration.migrateTokenXyz(wallet0, tokenXyz.address, features);
       const interface = new utils.Interface(SimpleFunctionRegistryFeature.abi);
       const selector = interface.getSighash("_extendSelf");
-      const tokenXyzWithOwnAbi = await TokenXyz.at(tokenXyz.address);
       expect(await tokenXyzWithOwnAbi.getFunctionImplementation(selector)).to.eq(constants.AddressZero);
     });
   });
@@ -89,7 +93,6 @@ contract("FullMigration", function (accounts) {
 
     it("token factory is available", async function () {
       const selector = tokenxyzInterface.getSighash("createToken");
-      const tokenXyzWithOwnAbi = await TokenXyz.at(tokenXyz.address);
       expect(await tokenXyzWithOwnAbi.getFunctionImplementation(selector)).to.eq(tokenFactory.address);
       const result = await tokenXyz.createToken("Test", "OwoToken", "OWO", 18, 10, 10, wallet0);
       expect(result.receipt.status).to.be.true;
@@ -97,7 +100,6 @@ contract("FullMigration", function (accounts) {
 
     it("accesscontrolled token factory is available", async function () {
       const selector = tokenxyzInterface.getSighash("createTokenWithRoles");
-      const tokenXyzWithOwnAbi = await TokenXyz.at(tokenXyz.address);
       expect(await tokenXyzWithOwnAbi.getFunctionImplementation(selector)).to.eq(tokenWithRolesFactory.address);
       const result = await tokenXyz.createTokenWithRoles("Test", "OwoToken", "OWO", 18, 10, 10, wallet0);
       expect(result.receipt.status).to.be.true;
@@ -105,7 +107,6 @@ contract("FullMigration", function (accounts) {
 
     it("airdrop factory is available", async function () {
       const selector = tokenxyzInterface.getSighash("createAirdrop");
-      const tokenXyzWithOwnAbi = await TokenXyz.at(tokenXyz.address);
       expect(await tokenXyzWithOwnAbi.getFunctionImplementation(selector)).to.eq(merkleDistributorFactory.address);
       const result = await tokenXyz.createAirdrop("Test", wallet0, randomRoot, 420, wallet0);
       expect(result.receipt.status).to.be.true;
@@ -113,9 +114,22 @@ contract("FullMigration", function (accounts) {
 
     it("vesting factory is available", async function () {
       const selector = tokenxyzInterface.getSighash("createVesting");
-      const tokenXyzWithOwnAbi = await TokenXyz.at(tokenXyz.address);
       expect(await tokenXyzWithOwnAbi.getFunctionImplementation(selector)).to.eq(merkleVestingFactory.address);
       const result = await tokenXyz.createVesting("Test", wallet0, wallet0);
+      expect(result.receipt.status).to.be.true;
+    });
+
+    it("NFT minter factory is available", async function () {
+      const selector = tokenxyzInterface.getSighash("createNFTMinter");
+      expect(await tokenXyzWithOwnAbi.getFunctionImplementation(selector)).to.eq(merkleNFTMinterFactory.address);
+      const result = await tokenXyz.createNFTMinter(
+        "Test",
+        randomRoot,
+        86400,
+        { name: "name", symbol: "sym", ipfsHash: "cid", maxSupply: 1 },
+        true,
+        wallet0
+      );
       expect(result.receipt.status).to.be.true;
     });
 
