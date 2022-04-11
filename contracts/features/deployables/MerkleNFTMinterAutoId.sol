@@ -65,9 +65,14 @@ contract MerkleNFTMinterAutoId is IMerkleNFTMinter, Ownable {
         bytes32 node = keccak256(abi.encodePacked(index, account, amount));
         if (!MerkleProof.verify(merkleProof, merkleRoot, node)) revert InvalidProof();
 
-        // Mark it claimed and mint the token.
+        // Mark it claimed and mint the token(s).
         _setClaimed(index);
-        ERC721MintableAutoId(token).safeMint(account);
+        for (uint256 i = 1; i <= amount; ) {
+            ERC721MintableAutoId(token).safeMint(account);
+            unchecked {
+                ++i;
+            }
+        }
 
         emit Claimed(index, account);
     }
