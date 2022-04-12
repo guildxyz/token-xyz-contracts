@@ -67,12 +67,7 @@ contract MerkleNFTMinterAutoId is IMerkleNFTMinter, Ownable {
 
         // Mark it claimed and mint the token(s).
         _setClaimed(index);
-        for (uint256 i = 1; i <= amount; ) {
-            ERC721MintableAutoId(token).safeMint(account);
-            unchecked {
-                ++i;
-            }
-        }
+        ERC721MintableAutoId(token).safeBatchMint(account, amount);
 
         emit Claimed(index, account);
     }
