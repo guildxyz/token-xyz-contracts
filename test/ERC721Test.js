@@ -91,6 +91,18 @@ contract("ERC721 contracts", function (accounts) {
           await expectRevert.unspecified(token.safeMint(wallet0));
         } else await expectRevert.unspecified(token.safeMint(wallet0, 3));
       });
+
+      if (runOption.context.includes("auto-incremented IDs")) {
+        it("should batch transfer tokens", async function () {
+          const amountToMint = new BN(2);
+          const oldBalance = await token.balanceOf(wallet0);
+          await token.safeBatchMint(wallet0, amountToMint);
+          const newBalance = await token.balanceOf(wallet0);
+          expect(newBalance).to.bignumber.eq(oldBalance.add(amountToMint));
+          expect(await token.ownerOf(0)).to.eq(wallet0);
+          expect(await token.ownerOf(1)).to.eq(wallet0);
+        });
+      }
     });
   }
 });

@@ -34,6 +34,19 @@ contract ERC721MintableAutoId is ERC721, Ownable {
         _safeMint(to, tokenId);
     }
 
+    function safeBatchMint(address to, uint256 amount) public onlyOwner {
+        uint256 tokenId = tokenIdCounter.current();
+        uint256 lastTokenId = tokenId + amount - 1;
+        if (lastTokenId >= maxSupply) revert TokenIdOutOfBounds();
+        for (; tokenId <= lastTokenId; ) {
+            tokenIdCounter.increment();
+            _safeMint(to, tokenId);
+            unchecked {
+                ++tokenId;
+            }
+        }
+    }
+
     function tokenURI(uint256 tokenId) public view override returns (string memory) {
         if (!_exists(tokenId)) revert NonExistentToken(tokenId);
         return string(abi.encodePacked("ipfs://", cid, "/", tokenId.toString(), ".json"));
