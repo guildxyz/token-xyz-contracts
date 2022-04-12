@@ -7,7 +7,7 @@ const ERC721MintableAutoId = artifacts.require("ERC721MintableAutoId");
 const tokenName = "OwoNFT";
 const tokenSymbol = "OFT";
 const tokenCid = "QmPaZD7i8TpLEeGjHtGoXe4mPKbRNNt8YTHH5nrKoqz9wJ";
-const tokenMaxSupply = "42";
+const tokenMaxSupply = "3";
 
 const runOptions = [
   {
@@ -27,7 +27,7 @@ contract("ERC721 contracts", function (accounts) {
     context(runOption.context, function () {
       let token;
 
-      before("create a token", async function () {
+      beforeEach("create a token", async function () {
         token = await runOption.ERC721.new(tokenName, tokenSymbol, tokenCid, tokenMaxSupply);
       });
 
@@ -49,7 +49,7 @@ contract("ERC721 contracts", function (accounts) {
 
       it("should return the correct tokenURI", async function () {
         if (runOption.context.includes("auto-incremented IDs")) await token.safeMint(wallet1);
-        else await token.safeMint(wallet1, "0");
+        else await token.safeMint(wallet1, 0);
         const regex = new RegExp(`ipfs:\/\/${tokenCid}\/0.json`);
         expect(regex.test(await token.tokenURI(0))).to.be.true;
       });
@@ -62,7 +62,7 @@ contract("ERC721 contracts", function (accounts) {
       it("should really be mintable", async function () {
         const oldBalance = await token.balanceOf(wallet1);
         if (runOption.context.includes("auto-incremented IDs")) await token.safeMint(wallet1);
-        else await token.safeMint(wallet1, "1");
+        else await token.safeMint(wallet1, 0);
         const newBalance = await token.balanceOf(wallet1);
         expect(newBalance).to.bignumber.eq(oldBalance.add(new BN(1)));
       });
@@ -70,26 +70,26 @@ contract("ERC721 contracts", function (accounts) {
       it("should not be possible to mint a token with the same ID twice", async function () {
         if (runOption.context.includes("auto-incremented IDs")) expect(true).to.be.true; // trivial
         else {
-          await token.safeMint(wallet0, "2");
-          await expectRevert(token.safeMint(wallet0, "2"), "ERC721: token already minted");
+          await token.safeMint(wallet0, 0);
+          await expectRevert(token.safeMint(wallet0, 0), "ERC721: token already minted");
         }
       });
 
       it("minting increases totalSupply", async function () {
         const totalSupply = await token.totalSupply();
         if (runOption.context.includes("auto-incremented IDs")) await token.safeMint(wallet0);
-        else await token.safeMint(wallet0, "3");
+        else await token.safeMint(wallet0, 0);
         expect(await token.totalSupply()).to.bignumber.eq(totalSupply.add(new BN(1)));
       });
 
       it("should fail to mint above maxSupply", async function () {
-        const lowSupplyToken = await runOption.ERC721.new(tokenName, tokenSymbol, tokenCid, 2);
         // error TokenIdOutOfBounds();
         if (runOption.context.includes("auto-incremented IDs")) {
-          await lowSupplyToken.safeMint(wallet0);
-          await lowSupplyToken.safeMint(wallet0);
-          await expectRevert.unspecified(lowSupplyToken.safeMint(wallet0));
-        } else await expectRevert.unspecified(lowSupplyToken.safeMint(wallet0, "2"));
+          await token.safeMint(wallet0);
+          await token.safeMint(wallet0);
+          await token.safeMint(wallet0);
+          await expectRevert.unspecified(token.safeMint(wallet0));
+        } else await expectRevert.unspecified(token.safeMint(wallet0, 3));
       });
     });
   }
