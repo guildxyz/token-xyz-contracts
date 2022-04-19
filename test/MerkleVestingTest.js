@@ -143,8 +143,7 @@ contract("MerkleVesting", function (accounts) {
     });
 
     it("fails if not called by owner", async function () {
-      const vestingFromAnotherAccount = await Vesting.new(token.address, wallet1);
-      await expectRevert(vestingFromAnotherAccount.setDisabled(randomRoot0, 0), "Ownable: caller is not the owner");
+      await expectRevert(vesting.setDisabled(randomRoot0, 0, { from: wallet1 }), "Ownable: caller is not the owner");
     });
 
     it("sets and gets the disabled state correctly", async function () {
@@ -387,9 +386,7 @@ contract("MerkleVesting", function (accounts) {
 
     it("fails if not called by owner", async function () {
       await vesting.addCohort(randomRoot0, distributionDuration, randomVestingPeriod, randomCliff);
-      await vesting.transferOwnership(wallet1);
-      expect(await vesting.owner()).to.eq(wallet1);
-      await expectRevert(vesting.withdraw(wallet0), "Ownable: caller is not the owner");
+      await expectRevert(vesting.withdraw(wallet0, { from: wallet1 }), "Ownable: caller is not the owner");
     });
 
     it("fails if distribution period has not ended yet", async function () {
