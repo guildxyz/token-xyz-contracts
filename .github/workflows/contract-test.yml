@@ -23,7 +23,7 @@ jobs:
         run: npm ci
 
       - name: Install Truffle
-        run: npm install -g truffle
+        run: npm install -g truffle ganache
 
       - name: Run tests
         run: npm test
