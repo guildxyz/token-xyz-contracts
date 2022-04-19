@@ -15,6 +15,7 @@ import "@openzeppelin/contracts/token/ERC20/IERC20.sol";
 import "@openzeppelin/contracts/utils/cryptography/MerkleProof.sol";
 import "@openzeppelin/contracts/utils/Multicall.sol";
 
+/// @title Allows anyone to claim a token if they exist in a Merkle root, but only over time.
 contract MerkleVesting is IMerkleVesting, Multicall, Ownable {
     address public immutable token;
     bytes32 public lastEndingCohort;
@@ -106,7 +107,7 @@ contract MerkleVesting is IMerkleVesting, Multicall, Ownable {
         uint256 distributionEndLocal = cohort.data.distributionEnd;
         if (block.timestamp > distributionEndLocal) revert DistributionEnded(block.timestamp, distributionEndLocal);
 
-        // Verify the merkle proof.
+        // Verify the Merkle proof.
         bytes32 node = keccak256(abi.encodePacked(index, account, amount));
         if (!MerkleProof.verify(merkleProof, cohort.data.merkleRoot, node)) revert InvalidProof();
 

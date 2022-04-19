@@ -9,7 +9,7 @@
 
 pragma solidity ^0.8.0;
 
-/// @title Allows anyone to claim a token if they exist in a merkle root, but only over time.
+/// @title Allows anyone to claim a token if they exist in a Merkle root, but only over time.
 interface IMerkleVesting {
     /// @notice The struct holding a specific cohort's data and the individual claim statuses.
     /// @param data The struct holding a specific cohort's data.
@@ -22,7 +22,7 @@ interface IMerkleVesting {
     }
 
     /// @notice The struct holding a specific cohort's data.
-    /// @param merkleRoot The merkle root of the merkle tree containing account balances available to claim.
+    /// @param merkleRoot The Merkle root of the Merkle tree containing account balances available to claim.
     /// @param distributionEnd The unix timestamp that marks the end of the token distribution.
     /// @param vestingEnd The unix timestamp that marks the end of the vesting period.
     /// @param vestingPeriod The length of the vesting period in seconds.
@@ -150,7 +150,7 @@ interface IMerkleVesting {
     /// @notice Error thrown when a function receives invalid parameters.
     error InvalidParameters();
 
-    /// @notice Error thrown when a cohort with an already existing merkle tree is attempted to be added.
+    /// @notice Error thrown when a cohort with an already existing Merkle tree is attempted to be added.
     error MerkleRootCollision();
 
     /// @notice Error thrown when the input address has been excluded from the vesting.

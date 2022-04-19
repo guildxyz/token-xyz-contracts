@@ -8,7 +8,7 @@ import "./IFactoryFeature.sol";
 interface IMerkleNFTMinterFactoryFeature is IFactoryFeature {
     /// @notice Deploys a new NFT Minter contract.
     /// @param urlName The url name used by the frontend, kind of an id of the creator.
-    /// @param merkleRoot The root of the merkle tree generated from the distribution list.
+    /// @param merkleRoot The root of the Merkle tree generated from the distribution list.
     /// @param distributionDuration The time interval while the distribution lasts in seconds.
     /// @param nftMetadata The basic metadata of the NFT that will be created.
     /// @param specificIds If true: the tokenIds, else: the amount of tokens per user will be specified.

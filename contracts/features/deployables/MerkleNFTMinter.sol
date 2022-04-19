@@ -13,6 +13,7 @@ import "./MerkleNFTMinterBase.sol";
 import "./token/ERC721/ERC721Mintable.sol";
 import "@openzeppelin/contracts/utils/cryptography/MerkleProof.sol";
 
+/// @title Allows anyone to mint a non-fungible token with a specific ID if they exist in a Merkle root.
 contract MerkleNFTMinter is MerkleNFTMinterBase {
     constructor(
         bytes32 merkleRoot_,
@@ -39,7 +40,7 @@ contract MerkleNFTMinter is MerkleNFTMinterBase {
         if (block.timestamp > distributionEnd) revert DistributionEnded(block.timestamp, distributionEnd);
         if (isClaimed(index)) revert DropClaimed();
 
-        // Verify the merkle proof.
+        // Verify the Merkle proof.
         bytes32 node = keccak256(abi.encodePacked(index, account, tokenId));
         if (!MerkleProof.verify(merkleProof, merkleRoot, node)) revert InvalidProof();
 

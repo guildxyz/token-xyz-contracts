@@ -13,6 +13,7 @@ import "./interfaces/IMerkleNFTMinter.sol";
 import "./token/ERC721/IERC721MintableCappedSupply.sol";
 import "@openzeppelin/contracts/access/Ownable.sol";
 
+/// @title Base for a contract that allows anyone to mint a non-fungible token if they exist in a Merkle root.
 abstract contract MerkleNFTMinterBase is IMerkleNFTMinter, Ownable {
     address public immutable token;
     bytes32 public immutable merkleRoot;

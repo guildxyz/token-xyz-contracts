@@ -46,7 +46,7 @@ contract("MerkleDistributor", function (accounts) {
   });
 
   context("#merkleRoot", function () {
-    it("returns the zero merkle root", async function () {
+    it("returns the zero Merkle root", async function () {
       const distributor = await Distributor.new(token.address, constants.HashZero, distributionDuration, wallet0);
       expect(await distributor.merkleRoot()).to.eq(constants.HashZero);
     });

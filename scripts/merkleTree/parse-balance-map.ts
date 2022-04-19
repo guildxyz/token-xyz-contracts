@@ -4,7 +4,7 @@ import BalanceTree from './balance-tree'
 const { isAddress, getAddress } = utils
 
 // This is the blob that gets distributed and pinned to IPFS.
-// It is completely sufficient for recreating the entire merkle tree.
+// It is completely sufficient for recreating the entire Merkle tree.
 // Anyone can verify that all air drops are included in the tree,
 // and the tree has no additional distributions.
 interface MerkleDistributorInfo {

@@ -57,7 +57,7 @@ contract("MerkleNFTMinter", function (accounts) {
       });
 
       context("#merkleRoot", function () {
-        it("returns the zero merkle root", async function () {
+        it("returns the zero Merkle root", async function () {
           const minter = await runOption.Minter.new(constants.HashZero, distributionDuration, nftMetadata0, wallet0);
           expect(await minter.merkleRoot()).to.eq(constants.HashZero);
         });

@@ -14,6 +14,7 @@ import "@openzeppelin/contracts/access/Ownable.sol";
 import "@openzeppelin/contracts/token/ERC20/IERC20.sol";
 import "@openzeppelin/contracts/utils/cryptography/MerkleProof.sol";
 
+/// @title Allows anyone to claim a token if they exist in a Merkle root.
 contract MerkleDistributor is IMerkleDistributor, Ownable {
     address public immutable token;
     bytes32 public immutable merkleRoot;
@@ -57,7 +58,7 @@ contract MerkleDistributor is IMerkleDistributor, Ownable {
         if (block.timestamp > distributionEnd) revert DistributionEnded(block.timestamp, distributionEnd);
         if (isClaimed(index)) revert DropClaimed();
 
-        // Verify the merkle proof.
+        // Verify the Merkle proof.
         bytes32 node = keccak256(abi.encodePacked(index, account, amount));
         if (!MerkleProof.verify(merkleProof, merkleRoot, node)) revert InvalidProof();
 
