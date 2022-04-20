@@ -14,6 +14,7 @@
  *
  */
 const HDWalletProvider = require("@truffle/hdwallet-provider");
+const Web3 = require("web3");
 require("dotenv").config();
 
 module.exports = {
@@ -33,6 +34,7 @@ module.exports = {
     // tab if you use this network and you must also set the `host`, `port` and `network_id`
     // options below to some value.
     development: {
+      provider: () => new Web3.providers.HttpProvider("http://127.0.0.1:8545"),
       host: "127.0.0.1", // Localhost (default: none)
       port: 8545, // Standard port (default: none)
       network_id: "*" // Any network (default: none)
