@@ -23,14 +23,14 @@ interface IMerkleVesting {
 
     /// @notice The struct holding a specific cohort's data.
     /// @param merkleRoot The Merkle root of the Merkle tree containing account balances available to claim.
+    /// @param distributionStart The unix timestamp that marks the start of the token distribution.
     /// @param distributionEnd The unix timestamp that marks the end of the token distribution.
-    /// @param vestingEnd The unix timestamp that marks the end of the vesting period.
     /// @param vestingPeriod The length of the vesting period in seconds.
     /// @param cliffPeriod The length of the cliff period in seconds.
     struct CohortData {
         bytes32 merkleRoot;
+        uint64 distributionStart;
         uint64 distributionEnd;
-        uint64 vestingEnd;
         uint64 vestingPeriod;
         uint64 cliffPeriod;
     }
@@ -74,12 +74,14 @@ interface IMerkleVesting {
 
     /// @notice Allows the owner to add a new cohort.
     /// @param merkleRoot The Merkle root of the cohort. It will also serve as the cohort's ID.
+    /// @param distributionStart The unix timestamp that marks the start of the token distribution. Current time if 0.
     /// @param distributionDuration The length of the token distribtion period in seconds.
     /// @param vestingPeriod The length of the vesting period of the tokens in seconds.
     /// @param cliffPeriod The length of the cliff period in seconds.
     function addCohort(
         bytes32 merkleRoot,
-        uint256 distributionDuration,
+        uint64 distributionStart,
+        uint64 distributionDuration,
         uint64 vestingPeriod,
         uint64 cliffPeriod
     ) external;
