@@ -125,6 +125,11 @@ interface IMerkleVesting {
     /// @notice Error thrown when a cohort with the provided id does not exist.
     error CohortDoesNotExist();
 
+    /// @notice Error thrown when the distribution period has not started yet.
+    /// @param current The current timestamp.
+    /// @param start The time when the distribution is starting.
+    error DistributionNotStarted(uint256 current, uint256 start);
+
     /// @notice Error thrown when the distribution period ended.
     /// @param current The current timestamp.
     /// @param end The time when the distribution ended.

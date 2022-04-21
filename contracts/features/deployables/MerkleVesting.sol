@@ -111,7 +111,10 @@ contract MerkleVesting is IMerkleVesting, Multicall, Ownable {
         if (cohorts[cohortId].data.merkleRoot == bytes32(0)) revert CohortDoesNotExist();
         Cohort storage cohort = cohorts[cohortId];
         uint256 distributionEndLocal = cohort.data.distributionEnd;
+
         if (block.timestamp > distributionEndLocal) revert DistributionEnded(block.timestamp, distributionEndLocal);
+        if (block.timestamp < cohort.data.distributionStart)
+            revert DistributionNotStarted(block.timestamp, cohort.data.distributionStart);
 
         // Verify the Merkle proof.
         bytes32 node = keccak256(abi.encodePacked(index, account, amount));

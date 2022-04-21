@@ -191,6 +191,20 @@ contract("MerkleVesting", function (accounts) {
       await expectRevert.unspecified(vesting.claim(randomRoot0, 0, wallet0, 10, []));
     });
 
+    it("fails if distribution has not started yet", async function () {
+      const vesting = await Vesting.new(token.address, wallet0);
+      const timestamp = await time.latest();
+      await vesting.addCohort(
+        randomRoot0,
+        timestamp.add(new BN(120)),
+        distributionDuration,
+        randomVestingPeriod,
+        randomCliff
+      );
+      // error DistributionNotStarted(uint256 current, uint256 start);
+      await expectRevert.unspecified(vesting.claim(randomRoot0, 0, wallet0, 10, []));
+    });
+
     context("two account tree", function () {
       let vesting;
       let tree;
