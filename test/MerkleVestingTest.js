@@ -126,11 +126,11 @@ contract("MerkleVesting", function (accounts) {
       const timestamp = await time.latest();
       await vesting.addCohort(randomRoot0, timestamp, distributionDuration, randomVestingPeriod, randomCliff);
       const cohort = await vesting.getCohort(randomRoot0);
-      expect(await cohort.merkleRoot).to.eq(randomRoot0);
-      expect(await cohort.distributionStart).to.bignumber.eq(timestamp);
-      expect(await cohort.distributionEnd).to.bignumber.eq(timestamp.add(new BN(distributionDuration)));
-      expect(await cohort.vestingPeriod).to.bignumber.eq(randomVestingPeriod.toString());
-      expect(await cohort.cliffPeriod).to.bignumber.eq(randomCliff.toString());
+      expect(cohort.merkleRoot).to.eq(randomRoot0);
+      expect(cohort.distributionStart).to.bignumber.eq(timestamp);
+      expect(cohort.distributionEnd).to.bignumber.eq(timestamp.add(new BN(distributionDuration)));
+      expect(cohort.vestingPeriod).to.bignumber.eq(randomVestingPeriod.toString());
+      expect(cohort.cliffPeriod).to.bignumber.eq(randomCliff.toString());
     });
 
     it("emits CohortAdded event", async function () {
