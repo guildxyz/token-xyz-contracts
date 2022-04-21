@@ -404,21 +404,19 @@ contract("MerkleVesting", function (accounts) {
 
     beforeEach("deploy contract", async function () {
       vesting = await Vesting.new(token.address, wallet0);
+      await vesting.addCohort(randomRoot0, 0, distributionDuration, randomVestingPeriod, randomCliff);
     });
 
     it("fails if not called by owner", async function () {
-      await vesting.addCohort(randomRoot0, 0, distributionDuration, randomVestingPeriod, randomCliff);
       await expectRevert(vesting.withdraw(wallet0, { from: wallet1 }), "Ownable: caller is not the owner");
     });
 
     it("fails if distribution period has not ended yet", async function () {
-      await vesting.addCohort(randomRoot0, 0, distributionDuration, randomVestingPeriod, randomCliff);
       // error DistributionOngoing(uint256 current, uint256 end);
       await expectRevert.unspecified(vesting.withdraw(wallet0));
     });
 
     it("fails if there's nothing to withdraw", async function () {
-      await vesting.addCohort(randomRoot0, 0, distributionDuration, randomVestingPeriod, randomCliff);
       await time.increase(distributionDuration + 1);
       const balance = await token.balanceOf(vesting.address);
       expect(balance).to.bignumber.eq("0");
@@ -427,7 +425,6 @@ contract("MerkleVesting", function (accounts) {
     });
 
     it("transfers tokens to the recipient", async function () {
-      await vesting.addCohort(randomRoot0, 0, distributionDuration, randomVestingPeriod, randomCliff);
       await setBalance(token, vesting.address, new BN(101));
       await time.increase(distributionDuration + 1);
       const oldBalance = await token.balanceOf(vesting.address);
@@ -438,7 +435,6 @@ contract("MerkleVesting", function (accounts) {
     });
 
     it("emits Withdrawn event", async function () {
-      await vesting.addCohort(randomRoot0, 0, distributionDuration, randomVestingPeriod, randomCliff);
       await setBalance(token, vesting.address, new BN(101));
       await time.increase(distributionDuration + 1);
       const result0 = await vesting.withdraw(wallet0);
