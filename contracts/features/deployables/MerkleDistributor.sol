@@ -18,7 +18,7 @@ import "@openzeppelin/contracts/utils/cryptography/MerkleProof.sol";
 contract MerkleDistributor is IMerkleDistributor, Ownable {
     address public immutable token;
     bytes32 public immutable merkleRoot;
-    uint256 public immutable distributionEnd;
+    uint256 public distributionEnd;
 
     // This is a packed array of booleans.
     mapping(uint256 => uint256) private claimedBitMap;
@@ -69,7 +69,12 @@ contract MerkleDistributor is IMerkleDistributor, Ownable {
         emit Claimed(index, account, amount);
     }
 
-    // Allows the owner to reclaim the tokens deposited in this contract.
+    function prolongDistributionPeriod(uint256 additionalSeconds) external onlyOwner {
+        uint256 newDistributionEnd = distributionEnd + additionalSeconds;
+        distributionEnd = newDistributionEnd;
+        emit DistributionProlonged(newDistributionEnd);
+    }
+
     function withdraw(address recipient) external onlyOwner {
         if (block.timestamp <= distributionEnd) revert DistributionOngoing(block.timestamp, distributionEnd);
         uint256 balance = IERC20(token).balanceOf(address(this));
