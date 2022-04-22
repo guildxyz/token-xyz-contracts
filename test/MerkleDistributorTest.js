@@ -307,6 +307,13 @@ contract("MerkleDistributor", function (accounts) {
       distributor = await Distributor.new(token.address, tree.getHexRoot(), distributionDuration, wallet0);
     });
 
+    it("fails if not called by the owner", async function () {
+      await expectRevert(
+        distributor.prolongDistributionPeriod(990, { from: wallet1 }),
+        "Ownable: caller is not the owner"
+      );
+    });
+
     it("sets a new, higher distibution end", async function () {
       const addition = new BN(distributionDuration);
       const oldPeriod = await distributor.distributionEnd();
@@ -319,9 +326,9 @@ contract("MerkleDistributor", function (accounts) {
       await setBalance(token, distributor.address, new BN(101));
       const proof0 = tree.getProof(0, wallet0, BigNumber.from(100));
       await time.increase(new BN(distributionDuration).add(new BN(120)));
-      // error DistributionOngoing(uint256 current, uint256 end);
+      // error DistributionEnded(uint256 current, uint256 end);
       await expectRevert.unspecified(distributor.claim(0, wallet0, 100, proof0));
-      await distributor.prolongDistributionPeriod(new BN(990));
+      await distributor.prolongDistributionPeriod(990);
       const res = await distributor.claim(0, wallet0, 100, proof0);
       expect(res.receipt.status).to.be.true;
     });
@@ -329,7 +336,6 @@ contract("MerkleDistributor", function (accounts) {
     it("emits DistributionProlonged event", async function () {
       const addition = new BN(99);
       const result = await distributor.prolongDistributionPeriod(addition);
-      const timestamp = await time.latest();
       await expectEvent(result, "DistributionProlonged", { newDistributionEnd: await distributor.distributionEnd() });
     });
   });
