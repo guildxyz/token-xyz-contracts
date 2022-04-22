@@ -167,7 +167,7 @@ contract("MerkleDistributor", function (accounts) {
       it("gas", async function () {
         const proof = tree.getProof(0, wallet0, BigNumber.from(100));
         const tx = await distributor.claim(0, wallet0, 100, proof);
-        expect(tx.receipt.gasUsed).to.closeTo(81139, gasEps);
+        expect(tx.receipt.gasUsed).to.closeTo(83246, gasEps);
       });
     });
 
@@ -203,13 +203,13 @@ contract("MerkleDistributor", function (accounts) {
       it("gas", async function () {
         const proof = tree.getProof(9, accounts[9], BigNumber.from(10));
         const tx = await distributor.claim(9, accounts[9], 10, proof);
-        expect(tx.receipt.gasUsed).to.closeTo(83554, gasEps);
+        expect(tx.receipt.gasUsed).to.closeTo(85643, gasEps);
       });
 
       it("gas second down about 15k", async function () {
         await distributor.claim(0, wallet0, 1, tree.getProof(0, wallet0, BigNumber.from(1)));
         const tx = await distributor.claim(1, wallet1, 2, tree.getProof(1, wallet1, BigNumber.from(2)));
-        expect(tx.receipt.gasUsed).to.closeTo(65830, gasEps);
+        expect(tx.receipt.gasUsed).to.closeTo(68553, gasEps);
       });
     });
 
@@ -245,13 +245,13 @@ contract("MerkleDistributor", function (accounts) {
       it("gas", async function () {
         const proof = tree.getProof(50000, wallet0, BigNumber.from(100));
         const tx = await distributor.claim(50000, wallet0, 100, proof);
-        expect(tx.receipt.gasUsed).to.closeTo(93992, gasEps);
+        expect(tx.receipt.gasUsed).to.closeTo(96003, gasEps);
       });
 
       it("gas deeper node", async function () {
         const proof = tree.getProof(90000, wallet0, BigNumber.from(100));
         const tx = await distributor.claim(90000, wallet0, 100, proof);
-        expect(tx.receipt.gasUsed).to.closeTo(94090, gasEps);
+        expect(tx.receipt.gasUsed).to.closeTo(96101, gasEps);
       });
 
       it("gas average random distribution", async function () {
@@ -264,7 +264,7 @@ contract("MerkleDistributor", function (accounts) {
           count++;
         }
         const average = total.div(count);
-        expect(average.toNumber()).to.closeTo(77617, gasEps);
+        expect(average.toNumber()).to.closeTo(79628, gasEps);
       });
 
       // this is what we gas golfed by packing the bitmap
@@ -278,7 +278,7 @@ contract("MerkleDistributor", function (accounts) {
           count++;
         }
         const average = total.div(count);
-        expect(average.toNumber()).to.closeTo(61186, gasEps);
+        expect(average.toNumber()).to.closeTo(63197, gasEps);
       });
 
       it("no double claims in random distribution", async function () {
@@ -289,6 +289,54 @@ contract("MerkleDistributor", function (accounts) {
           await expectRevert.unspecified(distributor.claim(i, wallet0, 100, proof));
         }
       });
+    });
+  });
+
+  context("#prolongDistributionPeriod", async function () {
+    let distributor;
+    let tree;
+
+    before("create tree", function () {
+      tree = new BalanceTree.default([
+        { account: wallet0, amount: BigNumber.from(100) },
+        { account: wallet1, amount: BigNumber.from(101) }
+      ]);
+    });
+
+    beforeEach("deploy contract", async function () {
+      distributor = await Distributor.new(token.address, tree.getHexRoot(), distributionDuration, wallet0);
+    });
+
+    it("fails if not called by the owner", async function () {
+      await expectRevert(
+        distributor.prolongDistributionPeriod(990, { from: wallet1 }),
+        "Ownable: caller is not the owner"
+      );
+    });
+
+    it("sets a new, higher distibution end", async function () {
+      const addition = new BN(distributionDuration);
+      const oldPeriod = await distributor.distributionEnd();
+      await distributor.prolongDistributionPeriod(addition);
+      const newPeriod = await distributor.distributionEnd();
+      expect(newPeriod).to.bignumber.eq(oldPeriod.add(addition));
+    });
+
+    it("allows claiming with a new distribution period", async function () {
+      await setBalance(token, distributor.address, new BN(101));
+      const proof0 = tree.getProof(0, wallet0, BigNumber.from(100));
+      await time.increase(new BN(distributionDuration).add(new BN(120)));
+      // error DistributionEnded(uint256 current, uint256 end);
+      await expectRevert.unspecified(distributor.claim(0, wallet0, 100, proof0));
+      await distributor.prolongDistributionPeriod(990);
+      const res = await distributor.claim(0, wallet0, 100, proof0);
+      expect(res.receipt.status).to.be.true;
+    });
+
+    it("emits DistributionProlonged event", async function () {
+      const addition = new BN(99);
+      const result = await distributor.prolongDistributionPeriod(addition);
+      await expectEvent(result, "DistributionProlonged", { newDistributionEnd: await distributor.distributionEnd() });
     });
   });
 

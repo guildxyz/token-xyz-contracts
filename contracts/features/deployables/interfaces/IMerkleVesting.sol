@@ -23,14 +23,14 @@ interface IMerkleVesting {
 
     /// @notice The struct holding a specific cohort's data.
     /// @param merkleRoot The Merkle root of the Merkle tree containing account balances available to claim.
+    /// @param distributionStart The unix timestamp that marks the start of the token distribution.
     /// @param distributionEnd The unix timestamp that marks the end of the token distribution.
-    /// @param vestingEnd The unix timestamp that marks the end of the vesting period.
     /// @param vestingPeriod The length of the vesting period in seconds.
     /// @param cliffPeriod The length of the cliff period in seconds.
     struct CohortData {
         bytes32 merkleRoot;
+        uint64 distributionStart;
         uint64 distributionEnd;
-        uint64 vestingEnd;
         uint64 vestingPeriod;
         uint64 cliffPeriod;
     }
@@ -74,12 +74,14 @@ interface IMerkleVesting {
 
     /// @notice Allows the owner to add a new cohort.
     /// @param merkleRoot The Merkle root of the cohort. It will also serve as the cohort's ID.
+    /// @param distributionStart The unix timestamp that marks the start of the token distribution. Current time if 0.
     /// @param distributionDuration The length of the token distribtion period in seconds.
     /// @param vestingPeriod The length of the vesting period of the tokens in seconds.
     /// @param cliffPeriod The length of the cliff period in seconds.
     function addCohort(
         bytes32 merkleRoot,
-        uint256 distributionDuration,
+        uint64 distributionStart,
+        uint64 distributionDuration,
         uint64 vestingPeriod,
         uint64 cliffPeriod
     ) external;
@@ -98,6 +100,11 @@ interface IMerkleVesting {
         bytes32[] calldata merkleProof
     ) external;
 
+    /// @notice Allows the owner to prolong the distribution period of the tokens.
+    /// @param cohortId The Merkle root of the cohort.
+    /// @param additionalSeconds The seconds to add to the current distributionEnd.
+    function prolongDistributionPeriod(bytes32 cohortId, uint64 additionalSeconds) external;
+
     /// @notice Allows the owner to reclaim the tokens after the distribution has ended.
     /// @param recipient The address receiving the tokens.
     function withdraw(address recipient) external;
@@ -112,6 +119,11 @@ interface IMerkleVesting {
     /// @param amount The amount of tokens the address received.
     event Claimed(bytes32 cohortId, address account, uint256 amount);
 
+    /// @notice This event is triggered whenever a call to #prolongDistributionPeriod succeeds.
+    /// @param cohortId The Merkle root of the cohort.
+    /// @param newDistributionEnd The time when the distribution ends.
+    event DistributionProlonged(bytes32 cohortId, uint256 newDistributionEnd);
+
     /// @notice This event is triggered whenever a call to #withdraw succeeds.
     /// @param account The address that received the tokens.
     /// @param amount The amount of tokens the address received.
@@ -122,6 +134,11 @@ interface IMerkleVesting {
 
     /// @notice Error thrown when a cohort with the provided id does not exist.
     error CohortDoesNotExist();
+
+    /// @notice Error thrown when the distribution period has not started yet.
+    /// @param current The current timestamp.
+    /// @param start The time when the distribution is starting.
+    error DistributionNotStarted(uint256 current, uint256 start);
 
     /// @notice Error thrown when the distribution period ended.
     /// @param current The current timestamp.

@@ -39,8 +39,8 @@ contract MerkleVesting is IMerkleVesting, Multicall, Ownable {
     ) public view returns (uint256) {
         Cohort storage cohort = cohorts[cohortId];
         uint256 claimedSoFar = cohort.claims[account];
-        uint256 vestingEnd = cohort.data.vestingEnd;
-        uint256 vestingStart = vestingEnd - cohort.data.vestingPeriod;
+        uint256 vestingEnd = cohort.data.distributionStart + cohort.data.vestingPeriod;
+        uint256 vestingStart = cohort.data.distributionStart;
         uint256 cliff = vestingStart + cohort.data.cliffPeriod;
         if (isDisabled(cohortId, index)) revert NotInVesting(cohortId, account);
         if (block.timestamp < cliff) revert CliffNotReached(cliff, block.timestamp);
@@ -69,7 +69,8 @@ contract MerkleVesting is IMerkleVesting, Multicall, Ownable {
 
     function addCohort(
         bytes32 merkleRoot,
-        uint256 distributionDuration,
+        uint64 distributionStart,
+        uint64 distributionDuration,
         uint64 vestingPeriod,
         uint64 cliffPeriod
     ) external onlyOwner {
@@ -83,12 +84,17 @@ contract MerkleVesting is IMerkleVesting, Multicall, Ownable {
         ) revert InvalidParameters();
         if (cohorts[merkleRoot].data.merkleRoot != bytes32(0)) revert MerkleRootCollision();
 
-        uint256 distributionEnd = block.timestamp + distributionDuration;
-        if (distributionEnd > cohorts[lastEndingCohort].data.distributionEnd) lastEndingCohort = merkleRoot;
+        uint64 distributionStartActual;
+        if (distributionStart == 0) distributionStartActual = uint64(block.timestamp);
+        else distributionStartActual = distributionStart;
+
+        uint64 distributionEnd = distributionStartActual + distributionDuration;
+        if (distributionEnd < block.timestamp) revert DistributionEnded(block.timestamp, distributionEnd);
+        updateLastEndingCohort(distributionEnd, merkleRoot);
 
         cohorts[merkleRoot].data.merkleRoot = merkleRoot;
-        cohorts[merkleRoot].data.distributionEnd = uint64(distributionEnd);
-        cohorts[merkleRoot].data.vestingEnd = uint64(block.timestamp + vestingPeriod);
+        cohorts[merkleRoot].data.distributionStart = distributionStartActual;
+        cohorts[merkleRoot].data.distributionEnd = distributionEnd;
         cohorts[merkleRoot].data.vestingPeriod = vestingPeriod;
         cohorts[merkleRoot].data.cliffPeriod = cliffPeriod;
 
@@ -105,7 +111,10 @@ contract MerkleVesting is IMerkleVesting, Multicall, Ownable {
         if (cohorts[cohortId].data.merkleRoot == bytes32(0)) revert CohortDoesNotExist();
         Cohort storage cohort = cohorts[cohortId];
         uint256 distributionEndLocal = cohort.data.distributionEnd;
+
         if (block.timestamp > distributionEndLocal) revert DistributionEnded(block.timestamp, distributionEndLocal);
+        if (block.timestamp < cohort.data.distributionStart)
+            revert DistributionNotStarted(block.timestamp, cohort.data.distributionStart);
 
         // Verify the Merkle proof.
         bytes32 node = keccak256(abi.encodePacked(index, account, amount));
@@ -121,6 +130,14 @@ contract MerkleVesting is IMerkleVesting, Multicall, Ownable {
         emit Claimed(cohortId, account, claimableAmount);
     }
 
+    function prolongDistributionPeriod(bytes32 cohortId, uint64 additionalSeconds) external onlyOwner {
+        CohortData storage cohortData = cohorts[cohortId].data;
+        uint64 newDistributionEnd = cohortData.distributionEnd + additionalSeconds;
+        cohortData.distributionEnd = newDistributionEnd;
+        updateLastEndingCohort(newDistributionEnd, cohortId);
+        emit DistributionProlonged(cohortId, newDistributionEnd);
+    }
+
     function withdraw(address recipient) external onlyOwner {
         uint256 distributionEndLocal = cohorts[lastEndingCohort].data.distributionEnd;
         if (block.timestamp <= distributionEndLocal) revert DistributionOngoing(block.timestamp, distributionEndLocal);
@@ -128,5 +145,10 @@ contract MerkleVesting is IMerkleVesting, Multicall, Ownable {
         if (balance == 0) revert AlreadyWithdrawn();
         if (!IERC20(token).transfer(recipient, balance)) revert TransferFailed(token, address(this), recipient);
         emit Withdrawn(recipient, balance);
+    }
+
+    // Checks if lastEndingCohort should be updated and updates it with the new Merkle root if needed.
+    function updateLastEndingCohort(uint256 distributionEnd, bytes32 merkleRoot) internal {
+        if (distributionEnd > cohorts[lastEndingCohort].data.distributionEnd) lastEndingCohort = merkleRoot;
     }
 }
