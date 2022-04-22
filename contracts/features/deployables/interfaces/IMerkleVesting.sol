@@ -100,6 +100,11 @@ interface IMerkleVesting {
         bytes32[] calldata merkleProof
     ) external;
 
+    /// @notice Allows the owner to prolong the distribution period of the tokens.
+    /// @param cohortId The Merkle root of the cohort.
+    /// @param additionalSeconds The seconds to add to the current distributionEnd.
+    function prolongDistributionPeriod(bytes32 cohortId, uint64 additionalSeconds) external;
+
     /// @notice Allows the owner to reclaim the tokens after the distribution has ended.
     /// @param recipient The address receiving the tokens.
     function withdraw(address recipient) external;
@@ -113,6 +118,11 @@ interface IMerkleVesting {
     /// @param account The address that claimed the tokens.
     /// @param amount The amount of tokens the address received.
     event Claimed(bytes32 cohortId, address account, uint256 amount);
+
+    /// @notice This event is triggered whenever a call to #prolongDistributionPeriod succeeds.
+    /// @param cohortId The Merkle root of the cohort.
+    /// @param newDistributionEnd The time when the distribution ends.
+    event DistributionProlonged(bytes32 cohortId, uint256 newDistributionEnd);
 
     /// @notice This event is triggered whenever a call to #withdraw succeeds.
     /// @param account The address that received the tokens.

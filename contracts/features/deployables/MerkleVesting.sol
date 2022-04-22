@@ -90,7 +90,7 @@ contract MerkleVesting is IMerkleVesting, Multicall, Ownable {
 
         uint64 distributionEnd = distributionStartActual + distributionDuration;
         if (distributionEnd < block.timestamp) revert DistributionEnded(block.timestamp, distributionEnd);
-        if (distributionEnd > cohorts[lastEndingCohort].data.distributionEnd) lastEndingCohort = merkleRoot;
+        updateLastEndingCohort(distributionEnd, merkleRoot);
 
         cohorts[merkleRoot].data.merkleRoot = merkleRoot;
         cohorts[merkleRoot].data.distributionStart = distributionStartActual;
@@ -130,6 +130,14 @@ contract MerkleVesting is IMerkleVesting, Multicall, Ownable {
         emit Claimed(cohortId, account, claimableAmount);
     }
 
+    function prolongDistributionPeriod(bytes32 cohortId, uint64 additionalSeconds) external onlyOwner {
+        CohortData storage cohortData = cohorts[cohortId].data;
+        uint64 newDistributionEnd = cohortData.distributionEnd + additionalSeconds;
+        cohortData.distributionEnd = newDistributionEnd;
+        updateLastEndingCohort(newDistributionEnd, cohortId);
+        emit DistributionProlonged(cohortId, newDistributionEnd);
+    }
+
     function withdraw(address recipient) external onlyOwner {
         uint256 distributionEndLocal = cohorts[lastEndingCohort].data.distributionEnd;
         if (block.timestamp <= distributionEndLocal) revert DistributionOngoing(block.timestamp, distributionEndLocal);
@@ -137,5 +145,10 @@ contract MerkleVesting is IMerkleVesting, Multicall, Ownable {
         if (balance == 0) revert AlreadyWithdrawn();
         if (!IERC20(token).transfer(recipient, balance)) revert TransferFailed(token, address(this), recipient);
         emit Withdrawn(recipient, balance);
+    }
+
+    // Checks if lastEndingCohort should be updated and updates it with the new Merkle root if needed.
+    function updateLastEndingCohort(uint256 distributionEnd, bytes32 merkleRoot) internal {
+        if (distributionEnd > cohorts[lastEndingCohort].data.distributionEnd) lastEndingCohort = merkleRoot;
     }
 }

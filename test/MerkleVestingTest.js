@@ -60,7 +60,7 @@ contract("MerkleVesting", function (accounts) {
   });
 
   context("#addCohort && #getCohort", function () {
-    it("fails if not called by owner", async function () {
+    it("fails if not called by the owner", async function () {
       const vesting = await Vesting.new(token.address, wallet1);
       await expectRevert(
         vesting.addCohort(randomRoot0, 0, distributionDuration, randomVestingPeriod, randomCliff),
@@ -150,7 +150,7 @@ contract("MerkleVesting", function (accounts) {
       await vesting.addCohort(randomRoot0, 0, distributionDuration, randomVestingPeriod, randomCliff);
     });
 
-    it("fails if not called by owner", async function () {
+    it("fails if not called by the owner", async function () {
       await expectRevert(vesting.setDisabled(randomRoot0, 0, { from: wallet1 }), "Ownable: caller is not the owner");
     });
 
@@ -399,6 +399,74 @@ contract("MerkleVesting", function (accounts) {
     });
   });
 
+  context("#prolongDistributionPeriod", async function () {
+    let vesting;
+    let tree;
+    let root;
+
+    before("create tree", function () {
+      tree = new BalanceTree.default([
+        { account: wallet0, amount: BigNumber.from(100) },
+        { account: wallet1, amount: BigNumber.from(101) }
+      ]);
+      root = tree.getHexRoot();
+    });
+
+    beforeEach("deploy contract", async function () {
+      vesting = await Vesting.new(token.address, wallet0);
+      await vesting.addCohort(root, 0, distributionDuration, randomVestingPeriod, randomCliff);
+      await setBalance(token, vesting.address, new BN(101));
+    });
+
+    it("fails if not called by the owner", async function () {
+      await expectRevert(
+        vesting.prolongDistributionPeriod(root, 990, { from: wallet1 }),
+        "Ownable: caller is not the owner"
+      );
+    });
+
+    it("sets a new, higher distibution end", async function () {
+      const addition = new BN(distributionDuration);
+      const oldCohort = await vesting.getCohort(root);
+      const oldPeriod = new BN(oldCohort.distributionEnd);
+      await vesting.prolongDistributionPeriod(root, addition);
+      const newCohort = await vesting.getCohort(root);
+      const newPeriod = newCohort.distributionEnd;
+      expect(newPeriod).to.bignumber.eq(oldPeriod.add(addition));
+    });
+
+    it("allows claiming with a new distribution period", async function () {
+      await setBalance(token, vesting.address, new BN(101));
+      const proof0 = tree.getProof(0, wallet0, BigNumber.from(100));
+      await time.increase(new BN(distributionDuration).add(new BN(120)));
+      // error DistributionEnded(uint256 current, uint256 end);
+      await expectRevert.unspecified(vesting.claim(root, 0, wallet0, 100, proof0));
+      await vesting.prolongDistributionPeriod(root, 990);
+      const res = await vesting.claim(root, 0, wallet0, 100, proof0);
+      expect(res.receipt.status).to.be.true;
+    });
+
+    it("updates lastEndingCohort, but only if needed", async function () {
+      expect(await vesting.lastEndingCohort()).to.eq(root);
+      await vesting.addCohort(randomRoot0, 0, distributionDuration / 2, randomVestingPeriod, randomCliff);
+      expect(await vesting.lastEndingCohort()).to.eq(root);
+      await vesting.prolongDistributionPeriod(randomRoot0, distributionDuration / 3);
+      expect(await vesting.lastEndingCohort()).to.eq(root);
+      await vesting.prolongDistributionPeriod(randomRoot0, distributionDuration);
+      expect(await vesting.lastEndingCohort()).to.eq(randomRoot0);
+    });
+
+    it("emits DistributionProlonged event", async function () {
+      const addition = new BN(99);
+      const result = await vesting.prolongDistributionPeriod(root, addition);
+      const cohort = await vesting.getCohort(root);
+      await expectEvent(result, "DistributionProlonged", {
+        cohortId: root,
+        newDistributionEnd: cohort.distributionEnd
+      });
+    });
+  });
+
   context("#withdraw", async function () {
     let vesting;
 
@@ -407,7 +475,7 @@ contract("MerkleVesting", function (accounts) {
       await vesting.addCohort(randomRoot0, 0, distributionDuration, randomVestingPeriod, randomCliff);
     });
 
-    it("fails if not called by owner", async function () {
+    it("fails if not called by the owner", async function () {
       await expectRevert(vesting.withdraw(wallet0, { from: wallet1 }), "Ownable: caller is not the owner");
     });
 
