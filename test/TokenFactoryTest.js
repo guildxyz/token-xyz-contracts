@@ -47,8 +47,8 @@ contract("TokenFactory", function (accounts) {
   let tokenXyz;
   let tokenFactory;
 
-  for (const runOption of runOptions) {
-    context(runOption.contract, async function () {
+  for (let i = 0; i < runOptions.length; i++) {
+    context(runOptions[i].contract, async function () {
       before("deploy contracts", async function () {
         const initialMigration = await InitialMigration.new(wallet0);
         tokenXyz = await TokenXyz.new(initialMigration.address);
@@ -60,20 +60,36 @@ contract("TokenFactory", function (accounts) {
           ownable: ownable.address
         };
         await initialMigration.initializeTokenXyz(wallet0, tokenXyz.address, features);
-        tokenFactory = await runOption.TokenFactory.new();
+        tokenFactory = await runOptions[i].TokenFactory.new();
         const migrateInterface = new utils.Interface(["function migrate()"]);
         await tokenXyz.migrate(tokenFactory.address, migrateInterface.encodeFunctionData("migrate()"), wallet0);
       });
 
       it("saves deployed tokens' addresses", async function () {
-        await tokenXyz[runOption.createToken]("Alice", "Alice0", tokenSymbol, tokenDecimals, 0, initialSupply, wallet0);
-        await tokenXyz[runOption.createToken]("Alice", "Alice1", tokenSymbol, tokenDecimals, initialSupply, 0, wallet0);
-        await tokenXyz[runOption.createToken]("Bob", "Bob0", tokenSymbol, tokenDecimals, initialSupply, 0, wallet0);
+        await tokenXyz[runOptions[i].createToken](
+          "Alice",
+          "Alice0",
+          tokenSymbol,
+          tokenDecimals,
+          0,
+          initialSupply,
+          wallet0
+        );
+        await tokenXyz[runOptions[i].createToken](
+          "Alice",
+          "Alice1",
+          tokenSymbol,
+          tokenDecimals,
+          initialSupply,
+          0,
+          wallet0
+        );
+        await tokenXyz[runOptions[i].createToken]("Bob", "Bob0", tokenSymbol, tokenDecimals, initialSupply, 0, wallet0);
         const tokenAddressesAlice = await tokenXyz.getDeployedTokens("Alice");
         const tokenAddressesBob = await tokenXyz.getDeployedTokens("Bob");
-        const tokenAlice0 = await runOption.ERC20Mintable.at(tokenAddressesAlice[0].contractAddress);
-        const tokenAlice1 = await runOption.ERC20Mintable.at(tokenAddressesAlice[1].contractAddress);
-        const tokenBob0 = await runOption.ERC20Mintable.at(tokenAddressesBob[0].contractAddress);
+        const tokenAlice0 = await runOptions[i].ERC20Mintable.at(tokenAddressesAlice[0].contractAddress);
+        const tokenAlice1 = await runOptions[i].ERC20Mintable.at(tokenAddressesAlice[1].contractAddress);
+        const tokenBob0 = await runOptions[i].ERC20Mintable.at(tokenAddressesBob[0].contractAddress);
         const factoryVersion = await tokenFactory.FEATURE_VERSION();
         expect(tokenAddressesAlice.length).to.eq(2);
         expect(tokenAddressesBob.length).to.eq(1);
@@ -86,7 +102,7 @@ contract("TokenFactory", function (accounts) {
       });
 
       it("emits TokenDeployed event", async function () {
-        const res0 = await tokenXyz[runOption.createToken](
+        const res0 = await tokenXyz[runOptions[i].createToken](
           "Alice",
           "Alice0",
           tokenSymbol,
@@ -95,7 +111,15 @@ contract("TokenFactory", function (accounts) {
           0,
           wallet0
         );
-        const res1 = await tokenXyz[runOption.createToken]("Bob", "Bob0", tokenSymbol, tokenDecimals, 0, 0, wallet0);
+        const res1 = await tokenXyz[runOptions[i].createToken](
+          "Bob",
+          "Bob0",
+          tokenSymbol,
+          tokenDecimals,
+          0,
+          0,
+          wallet0
+        );
         const tokenAddressesAlice = await tokenXyz.getDeployedTokens("Alice");
         const tokenAddressesBob = await tokenXyz.getDeployedTokens("Bob");
         const factoryVersion = await tokenFactory.FEATURE_VERSION();
@@ -117,7 +141,7 @@ contract("TokenFactory", function (accounts) {
         let tokenAddress;
 
         beforeEach("create a token", async function () {
-          const result = await tokenXyz[runOption.createToken](
+          const result = await tokenXyz[runOptions[i].createToken](
             "Test",
             tokenName,
             tokenSymbol,
@@ -147,14 +171,14 @@ contract("TokenFactory", function (accounts) {
         });
 
         it("should fail to be minted", async function () {
-          const tokenContract = await runOption.ERC20Mintable.at(tokenAddress);
+          const tokenContract = await runOptions[i].ERC20Mintable.at(tokenAddress);
           await expectRevert.unspecified(tokenContract.mint(wallet1, "1"));
         });
       });
 
       context("mintable tokens", function () {
         it("should have correct metadata & owner", async function () {
-          const creation = await tokenXyz[runOption.createToken](
+          const creation = await tokenXyz[runOptions[i].createToken](
             "Test",
             tokenName,
             tokenSymbol,
@@ -163,7 +187,7 @@ contract("TokenFactory", function (accounts) {
             0,
             wallet0
           );
-          const tokenContract = await runOption.ERC20Mintable.at(
+          const tokenContract = await runOptions[i].ERC20Mintable.at(
             getEventArg(creation.receipt.logs, "TokenDeployed", "token")
           );
 
@@ -174,7 +198,7 @@ contract("TokenFactory", function (accounts) {
           expect(symbol).to.eq(tokenSymbol);
           expect(decimals).to.bignumber.eq(tokenDecimals);
 
-          if (runOption.contract === "TokenFactory") {
+          if (runOptions[i].contract === "TokenFactory") {
             const owner = await tokenContract.owner();
             expect(owner).to.eq(wallet0);
           } else {
@@ -192,7 +216,7 @@ contract("TokenFactory", function (accounts) {
         });
 
         it("should really be mintable if initialSupply < maxSupply or either of them is zero", async function () {
-          const creation0 = await tokenXyz[runOption.createToken](
+          const creation0 = await tokenXyz[runOptions[i].createToken](
             "Test",
             tokenName,
             tokenSymbol,
@@ -201,7 +225,7 @@ contract("TokenFactory", function (accounts) {
             initialSupply,
             wallet0
           );
-          const creation1 = await tokenXyz[runOption.createToken](
+          const creation1 = await tokenXyz[runOptions[i].createToken](
             "Test",
             tokenName,
             tokenSymbol,
@@ -210,7 +234,7 @@ contract("TokenFactory", function (accounts) {
             0,
             wallet0
           );
-          const creation2 = await tokenXyz[runOption.createToken](
+          const creation2 = await tokenXyz[runOptions[i].createToken](
             "Test",
             tokenName,
             tokenSymbol,
@@ -220,21 +244,21 @@ contract("TokenFactory", function (accounts) {
             wallet0
           );
           const tokenContracts = [
-            await runOption.ERC20Mintable.at(getEventArg(creation0.receipt.logs, "TokenDeployed", "token")),
-            await runOption.ERC20Mintable.at(getEventArg(creation1.receipt.logs, "TokenDeployed", "token")),
-            await runOption.ERC20Mintable.at(getEventArg(creation2.receipt.logs, "TokenDeployed", "token"))
+            await runOptions[i].ERC20Mintable.at(getEventArg(creation0.receipt.logs, "TokenDeployed", "token")),
+            await runOptions[i].ERC20Mintable.at(getEventArg(creation1.receipt.logs, "TokenDeployed", "token")),
+            await runOptions[i].ERC20Mintable.at(getEventArg(creation2.receipt.logs, "TokenDeployed", "token"))
           ];
-          for (tokenContract of tokenContracts) {
-            const oldBalance = await tokenContract.balanceOf(wallet1);
+          for (let ind = 0; ind < tokenContracts.length; ind++) {
+            const oldBalance = await tokenContracts[ind].balanceOf(wallet1);
             const amountToMint = ether("1");
-            await tokenContract.mint(wallet1, amountToMint);
-            const newBalance = await tokenContract.balanceOf(wallet1);
+            await tokenContracts[ind].mint(wallet1, amountToMint);
+            const newBalance = await tokenContracts[ind].balanceOf(wallet1);
             expect(newBalance).to.bignumber.eq(oldBalance.add(amountToMint));
           }
         });
 
         it("should have max supply if and only if non-zero was set", async function () {
-          const unlimitedCreation = await tokenXyz[runOption.createToken](
+          const unlimitedCreation = await tokenXyz[runOptions[i].createToken](
             "Test",
             tokenName,
             tokenSymbol,
@@ -243,11 +267,11 @@ contract("TokenFactory", function (accounts) {
             0,
             wallet0
           );
-          const unlimitedTokenContract = await runOption.ERC20MintableMaxSupply.at(
+          const unlimitedTokenContract = await runOptions[i].ERC20MintableMaxSupply.at(
             getEventArg(unlimitedCreation.receipt.logs, "TokenDeployed", "token")
           );
           const maxSupply = initialSupply.mul(new BN(2));
-          const maxSupplyCreation = await tokenXyz[runOption.createToken](
+          const maxSupplyCreation = await tokenXyz[runOptions[i].createToken](
             "Test",
             tokenName,
             tokenSymbol,
@@ -256,7 +280,7 @@ contract("TokenFactory", function (accounts) {
             maxSupply,
             wallet0
           );
-          const maxSupplyTokenContract = await runOption.ERC20MintableMaxSupply.at(
+          const maxSupplyTokenContract = await runOptions[i].ERC20MintableMaxSupply.at(
             getEventArg(maxSupplyCreation.receipt.logs, "TokenDeployed", "token")
           );
           expect(await maxSupplyTokenContract.maxSupply()).to.bignumber.eq(maxSupply);
@@ -266,7 +290,7 @@ contract("TokenFactory", function (accounts) {
         it("should revert if max supply is lower than initial supply", async function () {
           // error MaxSupplyTooLow(uint256 maxSupply, uint256 initialSupply);
           await expectRevert.unspecified(
-            tokenXyz[runOption.createToken](
+            tokenXyz[runOptions[i].createToken](
               "Test",
               tokenName,
               tokenSymbol,

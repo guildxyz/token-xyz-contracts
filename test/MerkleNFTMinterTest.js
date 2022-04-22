@@ -47,25 +47,40 @@ contract("MerkleNFTMinter", function (accounts) {
     await importTs();
   });
 
-  for (const runOption of runOptions) {
-    context(runOption.contract, async function () {
+  for (let j = 0; j < runOptions.length; j++) {
+    context(runOptions[j].contract, async function () {
       context("#token", function () {
         it("returns the token address", async function () {
-          const minter = await runOption.Minter.new(constants.HashZero, distributionDuration, nftMetadata0, wallet0);
+          const minter = await runOptions[j].Minter.new(
+            constants.HashZero,
+            distributionDuration,
+            nftMetadata0,
+            wallet0
+          );
           expect(await minter.token()).to.not.eq("0x0000000000000000000000000000000000000000");
         });
       });
 
       context("#merkleRoot", function () {
         it("returns the zero Merkle root", async function () {
-          const minter = await runOption.Minter.new(constants.HashZero, distributionDuration, nftMetadata0, wallet0);
+          const minter = await runOptions[j].Minter.new(
+            constants.HashZero,
+            distributionDuration,
+            nftMetadata0,
+            wallet0
+          );
           expect(await minter.merkleRoot()).to.eq(constants.HashZero);
         });
       });
 
       context("#distributionEnd", function () {
         it("returns the distribution end timestamp", async function () {
-          const minter = await runOption.Minter.new(constants.HashZero, distributionDuration, nftMetadata0, wallet0);
+          const minter = await runOptions[j].Minter.new(
+            constants.HashZero,
+            distributionDuration,
+            nftMetadata0,
+            wallet0
+          );
           const timestamp = await time.latest();
           expect(await minter.distributionEnd()).to.bignumber.eq(timestamp.add(new BN(distributionDuration)));
         });
@@ -73,20 +88,35 @@ contract("MerkleNFTMinter", function (accounts) {
 
       context("#claim", function () {
         it("fails if distribution ended", async function () {
-          const minter = await runOption.Minter.new(constants.HashZero, distributionDuration, nftMetadata0, wallet0);
+          const minter = await runOptions[j].Minter.new(
+            constants.HashZero,
+            distributionDuration,
+            nftMetadata0,
+            wallet0
+          );
           await time.increase(distributionDuration + 1);
           // error DistributionEnded(uint256 current, uint256 end);
           await expectRevert.unspecified(minter.claim(0, wallet0, 10, []));
         });
 
         it("fails for empty proof", async function () {
-          const minter = await runOption.Minter.new(constants.HashZero, distributionDuration, nftMetadata0, wallet0);
+          const minter = await runOptions[j].Minter.new(
+            constants.HashZero,
+            distributionDuration,
+            nftMetadata0,
+            wallet0
+          );
           // error InvalidProof();
           await expectRevert.unspecified(minter.claim(0, wallet0, 10, []));
         });
 
         it("fails for invalid index", async function () {
-          const minter = await runOption.Minter.new(constants.HashZero, distributionDuration, nftMetadata0, wallet0);
+          const minter = await runOptions[j].Minter.new(
+            constants.HashZero,
+            distributionDuration,
+            nftMetadata0,
+            wallet0
+          );
           // error InvalidProof();
           await expectRevert.unspecified(minter.claim(0, wallet0, 10, []));
         });
@@ -104,9 +134,9 @@ contract("MerkleNFTMinter", function (accounts) {
           });
 
           beforeEach("deploy", async function () {
-            minter = await runOption.Minter.new(tree.getHexRoot(), distributionDuration, nftMetadata0, wallet0);
+            minter = await runOptions[j].Minter.new(tree.getHexRoot(), distributionDuration, nftMetadata0, wallet0);
             const tokenAddress = await minter.token();
-            token = await runOption.ERC721.at(tokenAddress);
+            token = await runOptions[j].ERC721.at(tokenAddress);
           });
 
           it("successful claim", async function () {
@@ -120,11 +150,11 @@ contract("MerkleNFTMinter", function (accounts) {
 
           it("transfers the token(s)", async function () {
             const proof0 = tree.getProof(0, wallet0, BigNumber.from(10));
-            const tokenId = runOption.contract === "MerkleNFTMinterAutoId" ? await token.totalSupply() : 10;
+            const tokenId = runOptions[j].contract === "MerkleNFTMinterAutoId" ? await token.totalSupply() : 10;
             expect(await token.balanceOf(wallet0)).to.bignumber.eq("0");
             await expectRevert(token.ownerOf(tokenId), "ERC721: owner query for nonexistent token");
             await minter.claim(0, wallet0, 10, proof0);
-            if (runOption.contract === "MerkleNFTMinterAutoId") {
+            if (runOptions[j].contract === "MerkleNFTMinterAutoId") {
               expect(await token.balanceOf(wallet0)).to.bignumber.eq("10");
               for (let i = 0; i < 10; i++) {
                 expect(await token.ownerOf(i)).to.eq(wallet0);
@@ -191,7 +221,7 @@ contract("MerkleNFTMinter", function (accounts) {
           });
 
           beforeEach("deploy", async function () {
-            minter = await runOption.Minter.new(tree.getHexRoot(), distributionDuration, nftMetadata0, wallet0);
+            minter = await runOptions[j].Minter.new(tree.getHexRoot(), distributionDuration, nftMetadata0, wallet0);
           });
 
           it("claim index 4", async function () {
@@ -231,7 +261,12 @@ contract("MerkleNFTMinter", function (accounts) {
           });
 
           it("no double claims in random distribution", async function () {
-            const minter = await runOption.Minter.new(tree.getHexRoot(), distributionDuration, nftMetadata0, wallet0);
+            const minter = await runOptions[j].Minter.new(
+              tree.getHexRoot(),
+              distributionDuration,
+              nftMetadata0,
+              wallet0
+            );
             for (let i = 0; i < 25; i += Math.floor(Math.random() * (NUM_LEAVES / NUM_SAMPLES))) {
               const proof = tree.getProof(i, wallet0, BigNumber.from(1));
               await minter.claim(i, wallet0, 1, proof);
@@ -247,9 +282,9 @@ contract("MerkleNFTMinter", function (accounts) {
         let token;
 
         beforeEach("deploy contracts", async function () {
-          minter = await runOption.Minter.new(constants.HashZero, distributionDuration, nftMetadata0, wallet0);
+          minter = await runOptions[j].Minter.new(constants.HashZero, distributionDuration, nftMetadata0, wallet0);
           const tokenAddress = await minter.token();
-          token = await runOption.ERC721.at(tokenAddress);
+          token = await runOptions[j].ERC721.at(tokenAddress);
         });
 
         it("fails if not called by the owner", async function () {
@@ -294,9 +329,9 @@ contract("MerkleNFTMinter", function (accounts) {
           });
           expect(tokenTotal).to.eq("0x0a"); // 10
           claims = innerClaims;
-          minter = await runOption.Minter.new(merkleRoot, distributionDuration, nftMetadata0, wallet0);
+          minter = await runOptions[j].Minter.new(merkleRoot, distributionDuration, nftMetadata0, wallet0);
           const tokenAddress = await minter.token();
-          token = await runOption.ERC721.at(tokenAddress);
+          token = await runOptions[j].ERC721.at(tokenAddress);
         });
 
         it("all claims work exactly once", async function () {

@@ -61,10 +61,10 @@ contract("ERC20 contracts", function (accounts) {
     });
   });
 
-  for (const runOption of runOptions) {
-    context(runOption.context, function () {
+  for (let i = 0; i < runOptions.length; i++) {
+    context(runOptions[i].context, function () {
       before("create a token", async function () {
-        token = await runOption.ERC20Mintable.new(tokenName, tokenSymbol, tokenDecimals, wallet0, initialSupply);
+        token = await runOptions[i].ERC20Mintable.new(tokenName, tokenSymbol, tokenDecimals, wallet0, initialSupply);
       });
 
       it("should have correct metadata & owner", async function () {
@@ -74,7 +74,7 @@ contract("ERC20 contracts", function (accounts) {
         expect(name).to.eq(tokenName);
         expect(symbol).to.eq(tokenSymbol);
         expect(decimals).to.bignumber.eq(tokenDecimals);
-        if (runOption.context.includes("own")) {
+        if (runOptions[i].context.includes("own")) {
           const owner = await token.owner();
           expect(owner).to.eq(wallet0);
         } else {
@@ -102,11 +102,11 @@ contract("ERC20 contracts", function (accounts) {
       });
     });
 
-    context(runOption.contextMax, async function () {
+    context(runOptions[i].contextMax, async function () {
       const maxSupply = initialSupply.mul(new BN(2));
 
       before("create a token", async function () {
-        token = await runOption.ERC20MintableMaxSupply.new(
+        token = await runOptions[i].ERC20MintableMaxSupply.new(
           tokenName,
           tokenSymbol,
           tokenDecimals,
@@ -123,7 +123,7 @@ contract("ERC20 contracts", function (accounts) {
         expect(name).to.eq(tokenName);
         expect(symbol).to.eq(tokenSymbol);
         expect(decimals).to.bignumber.eq(tokenDecimals);
-        if (runOption.context.includes("own")) {
+        if (runOptions[i].context.includes("own")) {
           const owner = await token.owner();
           expect(owner).to.eq(wallet0);
         } else {
@@ -157,7 +157,7 @@ contract("ERC20 contracts", function (accounts) {
       it("should revert if max supply is lower than initial supply", async function () {
         // error MaxSupplyTooLow(uint256 maxSupply, uint256 initialSupply);
         await expectRevert(
-          runOption.ERC20MintableMaxSupply.new(
+          runOptions[i].ERC20MintableMaxSupply.new(
             tokenName,
             tokenSymbol,
             tokenDecimals,
