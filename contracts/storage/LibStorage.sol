@@ -2,8 +2,8 @@
 
 /*
 
-    The file was modified by Agora.
-    2022 agora.xyz
+  The file has been modified.
+  2022 token.xyz
 
 */
 
