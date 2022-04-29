@@ -6,13 +6,13 @@ import "@openzeppelin/contracts/access/Ownable.sol";
 import "@openzeppelin/contracts/utils/Counters.sol";
 
 /// @title A mintable NFT with auto-incrementing IDs.
-contract ERC721MintableAutoId is ERC721, Ownable {
+contract ERC721AutoId is ERC721, Ownable {
     using Strings for uint256;
     using Counters for Counters.Counter;
 
     uint256 public immutable maxSupply;
     string internal cid;
-    Counters.Counter private tokenIdCounter;
+    Counters.Counter internal tokenIdCounter;
 
     error NonExistentToken(uint256 tokenId);
     error TokenIdOutOfBounds();
@@ -32,19 +32,6 @@ contract ERC721MintableAutoId is ERC721, Ownable {
         if (tokenId >= maxSupply) revert TokenIdOutOfBounds();
         tokenIdCounter.increment();
         _safeMint(to, tokenId);
-    }
-
-    function safeBatchMint(address to, uint256 amount) public onlyOwner {
-        uint256 tokenId = tokenIdCounter.current();
-        uint256 lastTokenId = tokenId + amount - 1;
-        if (lastTokenId >= maxSupply) revert TokenIdOutOfBounds();
-        for (; tokenId <= lastTokenId; ) {
-            tokenIdCounter.increment();
-            _safeMint(to, tokenId);
-            unchecked {
-                ++tokenId;
-            }
-        }
     }
 
     function tokenURI(uint256 tokenId) public view override returns (string memory) {

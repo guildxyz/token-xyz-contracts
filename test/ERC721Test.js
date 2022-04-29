@@ -1,8 +1,8 @@
 const { BN, expectRevert } = require("@openzeppelin/test-helpers");
 const expect = require("chai").expect;
 
-const ERC721Mintable = artifacts.require("ERC721Mintable");
-const ERC721MintableAutoId = artifacts.require("ERC721MintableAutoId");
+const ERC721 = artifacts.require("ERC721Mintable");
+const ERC721AutoIdBatchMint = artifacts.require("ERC721AutoIdBatchMint");
 
 const tokenName = "OwoNFT";
 const tokenSymbol = "OFT";
@@ -12,11 +12,11 @@ const tokenMaxSupply = "3";
 const runOptions = [
   {
     context: "NFT with auto-incremented IDs",
-    ERC721: ERC721MintableAutoId
+    ERC721: ERC721AutoIdBatchMint
   },
   {
     context: "NFT with arbitrary IDs",
-    ERC721: ERC721Mintable
+    ERC721: ERC721
   }
 ];
 

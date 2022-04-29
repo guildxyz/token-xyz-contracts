@@ -5,8 +5,8 @@ const { tsImport } = require("ts-import");
 
 const MinterSpecific = artifacts.require("MerkleNFTMinter");
 const MinterAuto = artifacts.require("MerkleNFTMinterAutoId");
-const ERC721Mintable = artifacts.require("ERC721Mintable");
-const ERC721MintableAutoId = artifacts.require("ERC721MintableAutoId");
+const ERC721 = artifacts.require("ERC721Mintable");
+const ERC721AutoIdBatchMint = artifacts.require("ERC721AutoIdBatchMint");
 
 // ts imports
 async function importTs() {
@@ -30,12 +30,12 @@ const runOptions = [
   {
     contract: "MerkleNFTMinterAutoId",
     Minter: MinterAuto,
-    ERC721: ERC721MintableAutoId
+    ERC721: ERC721AutoIdBatchMint
   },
   {
     contract: "MerkleNFTMinter",
     Minter: MinterSpecific,
-    ERC721: ERC721Mintable
+    ERC721: ERC721
   }
 ];
 

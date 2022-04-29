@@ -10,7 +10,7 @@
 pragma solidity 0.8.13;
 
 import "./interfaces/IMerkleNFTMinter.sol";
-import "./token/ERC721/IERC721MintableCappedSupply.sol";
+import "./token/ERC721/IERC721CappedSupply.sol";
 import "@openzeppelin/contracts/access/Ownable.sol";
 
 /// @title Base for a contract that allows anyone to mint a non-fungible token if they exist in a Merkle root.
@@ -57,7 +57,7 @@ abstract contract MerkleNFTMinterBase is IMerkleNFTMinter, Ownable {
     ) external virtual;
 
     function withdraw(address newOwner) external onlyOwner {
-        IERC721MintableCappedSupply nft = IERC721MintableCappedSupply(token);
+        IERC721CappedSupply nft = IERC721CappedSupply(token);
         uint256 remainingNfts = nft.maxSupply() - nft.totalSupply();
         if (block.timestamp <= distributionEnd && remainingNfts > 0)
             revert DistributionOngoing(block.timestamp, distributionEnd, remainingNfts);

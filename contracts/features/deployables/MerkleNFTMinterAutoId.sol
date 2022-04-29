@@ -10,7 +10,7 @@
 pragma solidity 0.8.13;
 
 import "./MerkleNFTMinterBase.sol";
-import "./token/ERC721/ERC721MintableAutoId.sol";
+import "./token/ERC721/ERC721AutoIdBatchMint.sol";
 import "@openzeppelin/contracts/utils/cryptography/MerkleProof.sol";
 
 /// @title Allows anyone to mint a certain amount of non-fungible tokens if they exist in a Merkle root.
@@ -25,7 +25,7 @@ contract MerkleNFTMinterAutoId is MerkleNFTMinterBase {
             merkleRoot_,
             distributionDuration,
             address(
-                new ERC721MintableAutoId(
+                new ERC721AutoIdBatchMint(
                     nftMetadata.name,
                     nftMetadata.symbol,
                     nftMetadata.ipfsHash,
@@ -51,7 +51,7 @@ contract MerkleNFTMinterAutoId is MerkleNFTMinterBase {
 
         // Mark it claimed and mint the token(s).
         _setClaimed(index);
-        ERC721MintableAutoId(token).safeBatchMint(account, amount);
+        ERC721AutoIdBatchMint(token).safeBatchMint(account, amount);
 
         emit Claimed(index, account);
     }

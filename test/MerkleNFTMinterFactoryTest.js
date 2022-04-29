@@ -10,8 +10,8 @@ const OwnableFeature = artifacts.require("OwnableFeature");
 const MerkleNFTMinterFactoryFeature = artifacts.require("MerkleNFTMinterFactoryFeature");
 const MerkleNFTMinter = artifacts.require("MerkleNFTMinter");
 const MerkleNFTMinterAutoId = artifacts.require("MerkleNFTMinterAutoId");
-const ERC721Mintable = artifacts.require("ERC721Mintable");
-const ERC721MintableAutoId = artifacts.require("ERC721MintableAutoId");
+const ERC721 = artifacts.require("ERC721Mintable");
+const ERC721AutoIdBatchMint = artifacts.require("ERC721AutoIdBatchMint");
 
 const randomRoot = "0xf7f77ea15719ea30bd2a584962ab273b1116f0e70fe80bbb0b30557d0addb7f3";
 const nftMetadata0 = {
@@ -90,9 +90,9 @@ contract("MerkleNFTMinterFactory", function (accounts) {
     const minterAlice0 = await MerkleNFTMinter.at(minterAddressesAlice[0].contractAddress);
     const minterAlice1 = await MerkleNFTMinter.at(minterAddressesAlice[1].contractAddress);
     const minterBob0 = await MerkleNFTMinter.at(minterAddressesBob[0].contractAddress);
-    const nftAlice0 = await ERC721Mintable.at(await minterAlice0.token());
-    const nftAlice1 = await ERC721MintableAutoId.at(await minterAlice1.token());
-    const nftBob0 = await ERC721MintableAutoId.at(await minterBob0.token());
+    const nftAlice0 = await ERC721.at(await minterAlice0.token());
+    const nftAlice1 = await ERC721AutoIdBatchMint.at(await minterAlice1.token());
+    const nftBob0 = await ERC721AutoIdBatchMint.at(await minterBob0.token());
     expect(await nftAlice0.name()).to.eq(nftMetadata0.name);
     expect(await nftAlice0.symbol()).to.eq(nftMetadata0.symbol);
     expect(await nftAlice0.maxSupply()).to.bignumber.eq(nftMetadata0.maxSupply);
@@ -117,10 +117,10 @@ contract("MerkleNFTMinterFactory", function (accounts) {
     const addressNftAliceSpecific = await minterAliceSpecific.token();
     const addressNftAliceAuto = await minterAliceAuto.token();
     // create artifacts with the right and the other interface too
-    const nftAliceSpecific = await ERC721Mintable.at(addressNftAliceSpecific);
-    const nftAliceSpecificWrong = await ERC721MintableAutoId.at(addressNftAliceSpecific);
-    const nftAliceAuto = await ERC721MintableAutoId.at(addressNftAliceAuto);
-    const nftAliceAutoWrong = await ERC721Mintable.at(addressNftAliceAuto);
+    const nftAliceSpecific = await ERC721.at(addressNftAliceSpecific);
+    const nftAliceSpecificWrong = await ERC721AutoIdBatchMint.at(addressNftAliceSpecific);
+    const nftAliceAuto = await ERC721AutoIdBatchMint.at(addressNftAliceAuto);
+    const nftAliceAutoWrong = await ERC721.at(addressNftAliceAuto);
     await expectRevert(nftAliceSpecific.safeMint(wallet0, "0"), "Ownable: caller is not the owner");
     await expectRevert(nftAliceAuto.safeMint(wallet0), "Ownable: caller is not the owner");
     await expectRevert.unspecified(nftAliceSpecificWrong.safeMint(wallet0));
