@@ -43,7 +43,7 @@ contract MerkleVesting is IMerkleVesting, Multicall, Ownable {
         uint256 vestingStart = cohort.data.distributionStart;
         uint256 cliff = vestingStart + cohort.data.cliffPeriod;
         if (isDisabled(cohortId, index)) revert NotInVesting(cohortId, account);
-        if (block.timestamp < cliff) revert CliffNotReached(cliff, block.timestamp);
+        if (block.timestamp < cliff) revert CliffNotReached(block.timestamp, cliff);
         else if (block.timestamp < vestingEnd)
             return (fullAmount * (block.timestamp - vestingStart)) / cohort.data.vestingPeriod - claimedSoFar;
         else return fullAmount - claimedSoFar;

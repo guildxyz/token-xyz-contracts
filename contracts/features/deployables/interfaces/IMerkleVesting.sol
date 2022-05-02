@@ -146,9 +146,9 @@ interface IMerkleVesting {
     error DistributionEnded(uint256 current, uint256 end);
 
     /// @notice Error thrown when the cliff period is not over yet.
-    /// @param cliff The time when the cliff period ends.
     /// @param timestamp The current timestamp.
-    error CliffNotReached(uint256 cliff, uint256 timestamp);
+    /// @param cliff The time when the cliff period ends.
+    error CliffNotReached(uint256 timestamp, uint256 cliff);
 
     /// @notice Error thrown when the distribution period did not end yet.
     /// @param current The current timestamp.

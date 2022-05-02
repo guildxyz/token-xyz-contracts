@@ -236,7 +236,7 @@ contract("MerkleVesting", function (accounts) {
 
       it("fails when trying to claim before the cliff", async function () {
         const proof0 = tree.getProof(0, wallet0, BigNumber.from(100));
-        // error CliffNotReached(uint256 cliff, uint256 timestamp);
+        // error CliffNotReached(uint256 timestamp, uint256 cliff);
         await expectRevert.unspecified(vesting.claim(root, 0, wallet0, 100, proof0));
       });
 
