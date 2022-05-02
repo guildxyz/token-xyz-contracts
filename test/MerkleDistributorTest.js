@@ -18,6 +18,7 @@ let BalanceTree;
 let parseBalanceMap;
 
 const gasEps = 1000;
+const randomRoot = "0xf7f77ea15719ea30bd2a584962ab273b1116f0e70fe80bbb0b30557d0addb7f3";
 
 async function setBalance(token, to, amount) {
   const old = await token.balanceOf(to);
@@ -38,23 +39,35 @@ contract("MerkleDistributor", function (accounts) {
     token = await ERC20MintableBurnable.new("OwoToken", "OWO", 18, wallet0, 0);
   });
 
-  context("#token", function () {
+  context("#constructor", function () {
+    it("fails if called with invalid parameters", async function () {
+      // error InvalidParameters();
+      await expectRevert(
+        Distributor.new(token.address, randomRoot, distributionDuration, constants.AddressZero),
+        "Custom error (could not decode)"
+      );
+      await expectRevert(
+        Distributor.new(constants.AddressZero, randomRoot, distributionDuration, wallet0),
+        "Custom error (could not decode)"
+      );
+      await expectRevert(
+        Distributor.new(token.address, constants.HashZero, distributionDuration, wallet0),
+        "Custom error (could not decode)"
+      );
+    });
+
     it("returns the token address", async function () {
-      const distributor = await Distributor.new(token.address, constants.HashZero, distributionDuration, wallet0);
+      const distributor = await Distributor.new(token.address, randomRoot, distributionDuration, wallet0);
       expect(await distributor.token()).to.eq(token.address);
     });
-  });
 
-  context("#merkleRoot", function () {
-    it("returns the zero Merkle root", async function () {
-      const distributor = await Distributor.new(token.address, constants.HashZero, distributionDuration, wallet0);
-      expect(await distributor.merkleRoot()).to.eq(constants.HashZero);
+    it("returns the Merkle root", async function () {
+      const distributor = await Distributor.new(token.address, randomRoot, distributionDuration, wallet0);
+      expect(await distributor.merkleRoot()).to.eq(randomRoot);
     });
-  });
 
-  context("#distributionEnd", function () {
     it("returns the distribution end timestamp", async function () {
-      const distributor = await Distributor.new(token.address, constants.HashZero, distributionDuration, wallet0);
+      const distributor = await Distributor.new(token.address, randomRoot, distributionDuration, wallet0);
       const timestamp = await time.latest();
       expect(await distributor.distributionEnd()).to.bignumber.eq(timestamp.add(new BN(distributionDuration)));
     });
@@ -62,20 +75,20 @@ contract("MerkleDistributor", function (accounts) {
 
   context("#claim", function () {
     it("fails if distribution ended", async function () {
-      const distributor = await Distributor.new(token.address, constants.HashZero, distributionDuration, wallet0);
+      const distributor = await Distributor.new(token.address, randomRoot, distributionDuration, wallet0);
       await time.increase(distributionDuration + 1);
       // error DistributionEnded(uint256 current, uint256 end);
       await expectRevert.unspecified(distributor.claim(0, wallet0, 10, []));
     });
 
     it("fails for empty proof", async function () {
-      const distributor = await Distributor.new(token.address, constants.HashZero, distributionDuration, wallet0);
+      const distributor = await Distributor.new(token.address, randomRoot, distributionDuration, wallet0);
       // error InvalidProof();
       await expectRevert.unspecified(distributor.claim(0, wallet0, 10, []));
     });
 
     it("fails for invalid index", async function () {
-      const distributor = await Distributor.new(token.address, constants.HashZero, distributionDuration, wallet0);
+      const distributor = await Distributor.new(token.address, randomRoot, distributionDuration, wallet0);
       // error InvalidProof();
       await expectRevert.unspecified(distributor.claim(0, wallet0, 10, []));
     });
@@ -344,7 +357,7 @@ contract("MerkleDistributor", function (accounts) {
     let distributor;
 
     beforeEach("deploy contract", async function () {
-      distributor = await Distributor.new(token.address, constants.HashZero, distributionDuration, wallet0);
+      distributor = await Distributor.new(token.address, randomRoot, distributionDuration, wallet0);
     });
 
     it("fails if not called by the owner", async function () {

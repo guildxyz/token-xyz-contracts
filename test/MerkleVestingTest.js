@@ -52,7 +52,13 @@ contract("MerkleVesting", function (accounts) {
     token = await ERC20MintableBurnable.new("OwoToken", "OWO", 18, wallet0, 0);
   });
 
-  context("#token", function () {
+  context("#constructor", function () {
+    it("fails if called with invalid parameters", async function () {
+      // error InvalidParameters();
+      await expectRevert(Vesting.new(token.address, constants.AddressZero), "Custom error (could not decode)");
+      await expectRevert(Vesting.new(constants.AddressZero, wallet0), "Custom error (could not decode)");
+    });
+
     it("returns the token address", async function () {
       const vesting = await Vesting.new(token.address, wallet0);
       expect(await vesting.token()).to.eq(token.address);
