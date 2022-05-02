@@ -31,7 +31,6 @@ abstract contract MerkleNFTMinterBase is IMerkleNFTMinter, Ownable {
         merkleRoot = merkleRoot_;
         distributionEnd = block.timestamp + distributionDuration;
         token = tokenAddress;
-
         transferOwnership(owner);
     }
 
@@ -61,7 +60,7 @@ abstract contract MerkleNFTMinterBase is IMerkleNFTMinter, Ownable {
         uint256 remainingNfts = nft.maxSupply() - nft.totalSupply();
         if (block.timestamp <= distributionEnd && remainingNfts > 0)
             revert DistributionOngoing(block.timestamp, distributionEnd, remainingNfts);
-        nft.transferOwnership(newOwner);
+        Ownable(token).transferOwnership(newOwner);
         emit Withdrawn(token, newOwner);
     }
 }

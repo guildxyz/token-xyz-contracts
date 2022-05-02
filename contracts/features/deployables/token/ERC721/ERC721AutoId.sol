@@ -1,21 +1,19 @@
 // SPDX-License-Identifier: MIT
 pragma solidity 0.8.13;
 
+import "./IERC721CappedSupply.sol";
 import "@openzeppelin/contracts/token/ERC721/ERC721.sol";
 import "@openzeppelin/contracts/access/Ownable.sol";
 import "@openzeppelin/contracts/utils/Counters.sol";
 
 /// @title A mintable NFT with auto-incrementing IDs.
-contract ERC721AutoId is ERC721, Ownable {
+contract ERC721AutoId is ERC721, IERC721CappedSupply, Ownable {
     using Strings for uint256;
     using Counters for Counters.Counter;
 
     uint256 public immutable maxSupply;
     string internal cid;
     Counters.Counter internal tokenIdCounter;
-
-    error NonExistentToken(uint256 tokenId);
-    error TokenIdOutOfBounds();
 
     constructor(
         string memory name,
@@ -34,7 +32,7 @@ contract ERC721AutoId is ERC721, Ownable {
         _safeMint(to, tokenId);
     }
 
-    function tokenURI(uint256 tokenId) public view override returns (string memory) {
+    function tokenURI(uint256 tokenId) public view override(ERC721, IERC721Metadata) returns (string memory) {
         if (!_exists(tokenId)) revert NonExistentToken(tokenId);
         return string(abi.encodePacked("ipfs://", cid, "/", tokenId.toString(), ".json"));
     }
