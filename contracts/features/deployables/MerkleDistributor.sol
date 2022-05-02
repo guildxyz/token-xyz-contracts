@@ -29,10 +29,11 @@ contract MerkleDistributor is IMerkleDistributor, Ownable {
         uint256 distributionDuration,
         address owner
     ) {
+        if (owner == address(0) || token_ == address(0) || merkleRoot_ == bytes32(0)) revert InvalidParameters();
         token = token_;
         merkleRoot = merkleRoot_;
         distributionEnd = block.timestamp + distributionDuration;
-        transferOwnership(owner);
+        _transferOwnership(owner);
     }
 
     function isClaimed(uint256 index) public view returns (bool) {

@@ -28,10 +28,11 @@ abstract contract MerkleNFTMinterBase is IMerkleNFTMinter, Ownable {
         address tokenAddress,
         address owner
     ) {
+        if (owner == address(0) || tokenAddress == address(0) || merkleRoot_ == bytes32(0)) revert InvalidParameters();
         merkleRoot = merkleRoot_;
         distributionEnd = block.timestamp + distributionDuration;
         token = tokenAddress;
-        transferOwnership(owner);
+        _transferOwnership(owner);
     }
 
     function isClaimed(uint256 index) public view returns (bool) {

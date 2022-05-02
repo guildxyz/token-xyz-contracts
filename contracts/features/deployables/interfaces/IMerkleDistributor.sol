@@ -75,6 +75,9 @@ interface IMerkleDistributor {
     /// @notice Error thrown when the drop is already claimed.
     error DropClaimed();
 
+    /// @notice Error thrown when a function receives invalid parameters.
+    error InvalidParameters();
+
     /// @notice Error thrown when the Merkle proof is invalid.
     error InvalidProof();
 

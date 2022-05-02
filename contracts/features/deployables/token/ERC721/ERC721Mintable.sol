@@ -19,6 +19,7 @@ contract ERC721Mintable is ERC721, IERC721CappedSupply, Ownable {
         string memory cid_,
         uint256 maxSupply_
     ) ERC721(name, symbol) {
+        if (maxSupply_ == 0) revert MaxSupplyZero();
         cid = cid_;
         maxSupply = maxSupply_;
     }

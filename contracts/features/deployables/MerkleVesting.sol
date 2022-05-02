@@ -23,8 +23,9 @@ contract MerkleVesting is IMerkleVesting, Multicall, Ownable {
     mapping(bytes32 => Cohort) internal cohorts;
 
     constructor(address token_, address owner) {
+        if (owner == address(0) || token_ == address(0)) revert InvalidParameters();
         token = token_;
-        transferOwnership(owner);
+        _transferOwnership(owner);
     }
 
     function getCohort(bytes32 cohortId) external view returns (CohortData memory) {

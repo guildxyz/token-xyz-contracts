@@ -11,6 +11,9 @@ interface IERC721CappedSupply is IERC721Metadata {
     /// @notice The total amount of tokens stored by the contract.
     function totalSupply() external view returns (uint256);
 
+    /// @notice Error thrown when the maximum supply attempted to be set is zero.
+    error MaxSupplyZero();
+
     /// @notice Error thrown when trying to query info about a token that's not (yet) minted.
     /// @param tokenId The queried id.
     error NonExistentToken(uint256 tokenId);
