@@ -13,6 +13,7 @@ const TokenWithRolesFactoryFeature = artifacts.require("TokenWithRolesFactoryFea
 const MerkleDistributorFactoryFeature = artifacts.require("MerkleDistributorFactoryFeature");
 const MerkleVestingFactoryFeature = artifacts.require("MerkleVestingFactoryFeature");
 const MerkleNFTMinterFactoryFeature = artifacts.require("MerkleNFTMinterFactoryFeature");
+const ERC721CurveFactoryFeature = artifacts.require("ERC721CurveFactoryFeature");
 
 const tokenxyzInterface = new utils.Interface(ITokenXyz.abi);
 const randomRoot = "0xf7f77ea15719ea30bd2a584962ab273b1116f0e70fe80bbb0b30557d0addb7f3";
@@ -31,6 +32,7 @@ contract("FullMigration", function (accounts) {
   let merkleDistributorFactory;
   let merkleVestingFactory;
   let merkleNFTMinterFactory;
+  let erc721CurveFactory;
 
   beforeEach("deploy contracts", async function () {
     fullMigration = await FullMigration.new(wallet0);
@@ -44,6 +46,7 @@ contract("FullMigration", function (accounts) {
     merkleDistributorFactory = await MerkleDistributorFactoryFeature.new();
     merkleVestingFactory = await MerkleVestingFactoryFeature.new();
     merkleNFTMinterFactory = await MerkleNFTMinterFactoryFeature.new();
+    erc721CurveFactory = await ERC721CurveFactoryFeature.new();
     features = {
       registry: functionRegistry.address,
       ownable: ownable.address,
@@ -52,7 +55,8 @@ contract("FullMigration", function (accounts) {
       tokenWithRolesFactory: tokenWithRolesFactory.address,
       merkleDistributorFactory: merkleDistributorFactory.address,
       merkleVestingFactory: merkleVestingFactory.address,
-      merkleNFTMinterFactory: merkleNFTMinterFactory.address
+      merkleNFTMinterFactory: merkleNFTMinterFactory.address,
+      erc721CurveFactory: erc721CurveFactory.address
     };
   });
 
@@ -128,6 +132,18 @@ contract("FullMigration", function (accounts) {
         86400,
         { name: "name", symbol: "sym", ipfsHash: "cid", maxSupply: 1 },
         true,
+        wallet0
+      );
+      expect(result.receipt.status).to.be.true;
+    });
+
+    it("ERC721 Curve factory is available", async function () {
+      const selector = tokenxyzInterface.getSighash("createNFTWithCurve");
+      expect(await tokenXyzWithOwnAbi.getFunctionImplementation(selector)).to.eq(erc721CurveFactory.address);
+      const result = await tokenXyz.createNFTWithCurve(
+        "Test",
+        { name: "name", symbol: "sym", ipfsHash: "cid", maxSupply: 1 },
+        420,
         wallet0
       );
       expect(result.receipt.status).to.be.true;
