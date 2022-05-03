@@ -9,7 +9,7 @@ import "../features/interfaces/IFactoryFeature.sol";
 library LibTokenFactoryStorage {
     /// @notice Storage bucket for this feature.
     struct Storage {
-        // The data of deployments by entities
+        // The data of deployments by entities.
         mapping(string => IFactoryFeature.DeployData[]) deploys;
     }
 
