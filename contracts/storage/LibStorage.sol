@@ -42,7 +42,8 @@ library LibStorage {
         TokenFactory,
         MerkleDistributorFactory,
         MerkleVestingFactory,
-        MerkleNFTMinterFactory
+        MerkleNFTMinterFactory,
+        ERC721CurveFactory
     }
 
     /// @notice Get the storage slot given a storage ID. We assign unique, well-spaced

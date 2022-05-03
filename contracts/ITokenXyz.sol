@@ -35,6 +35,7 @@ import "./features/interfaces/ITokenWithRolesFactoryFeature.sol";
 import "./features/interfaces/IMerkleDistributorFactoryFeature.sol";
 import "./features/interfaces/IMerkleVestingFactoryFeature.sol";
 import "./features/interfaces/IMerkleNFTMinterFactoryFeature.sol";
+import "./features/interfaces/IERC721CurveFactoryFeature.sol";
 
 /// @title Interface for a fully featured token.xyz proxy.
 interface ITokenXyz is
@@ -45,7 +46,8 @@ interface ITokenXyz is
     ITokenWithRolesFactoryFeature,
     IMerkleDistributorFactoryFeature,
     IMerkleVestingFactoryFeature,
-    IMerkleNFTMinterFactoryFeature
+    IMerkleNFTMinterFactoryFeature,
+    IERC721CurveFactoryFeature
 {
     /// @notice Error thrown when the requested function is not found in any features.
     /// @param selector The function's selector that was attempted to be called.
