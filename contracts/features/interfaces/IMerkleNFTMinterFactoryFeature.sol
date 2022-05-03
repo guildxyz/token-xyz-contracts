@@ -10,7 +10,7 @@ interface IMerkleNFTMinterFactoryFeature is IFactoryFeature {
     /// @param urlName The url name used by the frontend, kind of an id of the creator.
     /// @param merkleRoot The root of the Merkle tree generated from the distribution list.
     /// @param distributionDuration The time interval while the distribution lasts in seconds.
-    /// @param nftMetadata The basic metadata of the NFT that will be created.
+    /// @param nftMetadata The basic metadata of the NFT that will be created (name, symbol, ipfsHash, maxSupply).
     /// @param specificIds If true: the tokenIds, else: the amount of tokens per user will be specified.
     /// @param owner The owner address of the contract to be deployed. Will have special access to some functions.
     function createNFTMinter(
