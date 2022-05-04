@@ -47,24 +47,16 @@ contract("ERC721 contracts", function (accounts) {
         expect(totalSupply).to.bignumber.eq("0");
       });
 
-      it("should return the correct tokenURI", async function () {
-        if (runOption.context.includes("auto-incremented IDs")) await token.safeMint(wallet1);
-        else await token.safeMint(wallet1, 0);
-        const regex = new RegExp(`ipfs:\/\/${tokenCid}\/0.json`);
-        expect(regex.test(await token.tokenURI(0))).to.be.true;
-      });
-
       it("should revert when trying to get the tokenURI for a non-existent token", async function () {
         // error NonExistentToken(uint256 tokenId);
         expectRevert.unspecified(token.tokenURI(84));
       });
 
-      it("should really be mintable", async function () {
-        const oldBalance = await token.balanceOf(wallet1);
+      it("should return the correct tokenURI", async function () {
         if (runOption.context.includes("auto-incremented IDs")) await token.safeMint(wallet1);
         else await token.safeMint(wallet1, 0);
-        const newBalance = await token.balanceOf(wallet1);
-        expect(newBalance).to.bignumber.eq(oldBalance.add(new BN(1)));
+        const regex = new RegExp(`ipfs:\/\/${tokenCid}\/0.json`);
+        expect(regex.test(await token.tokenURI(0))).to.be.true;
       });
 
       it("should not be possible to mint a token with the same ID twice", async function () {
@@ -75,13 +67,6 @@ contract("ERC721 contracts", function (accounts) {
         }
       });
 
-      it("minting increases totalSupply", async function () {
-        const totalSupply = await token.totalSupply();
-        if (runOption.context.includes("auto-incremented IDs")) await token.safeMint(wallet0);
-        else await token.safeMint(wallet0, 0);
-        expect(await token.totalSupply()).to.bignumber.eq(totalSupply.add(new BN(1)));
-      });
-
       it("should fail to mint above maxSupply", async function () {
         // error TokenIdOutOfBounds();
         if (runOption.context.includes("auto-incremented IDs")) {
@@ -90,6 +75,21 @@ contract("ERC721 contracts", function (accounts) {
           await token.safeMint(wallet0);
           await expectRevert.unspecified(token.safeMint(wallet0));
         } else await expectRevert.unspecified(token.safeMint(wallet0, 3));
+      });
+
+      it("minting increases totalSupply", async function () {
+        const totalSupply = await token.totalSupply();
+        if (runOption.context.includes("auto-incremented IDs")) await token.safeMint(wallet0);
+        else await token.safeMint(wallet0, 0);
+        expect(await token.totalSupply()).to.bignumber.eq(totalSupply.add(new BN(1)));
+      });
+
+      it("should really be mintable", async function () {
+        const oldBalance = await token.balanceOf(wallet1);
+        if (runOption.context.includes("auto-incremented IDs")) await token.safeMint(wallet1);
+        else await token.safeMint(wallet1, 0);
+        const newBalance = await token.balanceOf(wallet1);
+        expect(newBalance).to.bignumber.eq(oldBalance.add(new BN(1)));
       });
 
       if (runOption.context.includes("auto-incremented IDs")) {
