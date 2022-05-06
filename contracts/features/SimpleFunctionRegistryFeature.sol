@@ -55,8 +55,7 @@ contract SimpleFunctionRegistryFeature is IFeature, ISimpleFunctionRegistryFeatu
         return LibBootstrap.BOOTSTRAP_SUCCESS;
     }
 
-    /// @notice Roll back to a prior implementation of a function.
-    ///      Only directly callable by an authority.
+    /// @notice Roll back to a prior implementation of a function. Only directly callable by an authority.
     /// @param selector The function selector.
     /// @param targetImpl The address of an older implementation of the function.
     function rollback(bytes4 selector, address targetImpl) external override onlyOwner {
@@ -85,8 +84,7 @@ contract SimpleFunctionRegistryFeature is IFeature, ISimpleFunctionRegistryFeatu
         emit ProxyFunctionUpdated(selector, currentImpl, targetImpl);
     }
 
-    /// @notice Register or replace a function.
-    ///      Only directly callable by an authority.
+    /// @notice Register or replace a function. Only directly callable by an authority.
     /// @param selector The function selector.
     /// @param impl The implementation contract for the function.
     function extend(bytes4 selector, address impl) external override onlyOwner {
@@ -94,10 +92,10 @@ contract SimpleFunctionRegistryFeature is IFeature, ISimpleFunctionRegistryFeatu
     }
 
     /// @notice Register or replace a function.
-    ///      Only callable from within.
-    ///      This function is only used during the bootstrap process and
-    ///      should be deregistered by the deployer after bootstrapping is
-    ///      complete.
+    ///         Only callable from within.
+    ///         This function is only used during the bootstrap process and
+    ///         should be deregistered by the deployer after bootstrapping is
+    ///         complete.
     /// @param selector The function selector.
     /// @param impl The implementation contract for the function.
     function _extendSelf(bytes4 selector, address impl) external onlySelf {
@@ -106,8 +104,7 @@ contract SimpleFunctionRegistryFeature is IFeature, ISimpleFunctionRegistryFeatu
 
     /// @notice Retrieve the length of the rollback history for a function.
     /// @param selector The function selector.
-    /// @return rollbackLength The number of items in the rollback history for
-    ///         the function.
+    /// @return rollbackLength The number of items in the rollback history for the function.
     function getRollbackLength(bytes4 selector) external view override returns (uint256 rollbackLength) {
         return LibSimpleFunctionRegistryStorage.getStorage().implHistory[selector].length;
     }
@@ -115,8 +112,7 @@ contract SimpleFunctionRegistryFeature is IFeature, ISimpleFunctionRegistryFeatu
     /// @notice Retrieve an entry in the rollback history for a function.
     /// @param selector The function selector.
     /// @param idx The index in the rollback history.
-    /// @return impl An implementation address for the function at
-    ///         index `idx`.
+    /// @return impl An implementation address for the function at index `idx`.
     function getRollbackEntryAtIndex(bytes4 selector, uint256 idx) external view override returns (address impl) {
         return LibSimpleFunctionRegistryStorage.getStorage().implHistory[selector][idx];
     }

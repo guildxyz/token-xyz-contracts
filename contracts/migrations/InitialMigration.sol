@@ -41,14 +41,12 @@ contract InitialMigration {
         OwnableFeature ownable;
     }
 
-    /// @notice The allowed caller of `initializeTokenXyz()`. In production, this would be
-    ///      the governor.
+    /// @notice The allowed caller of `initializeTokenXyz()`. In production, this would be the governor.
     address public immutable initializeCaller;
     /// @notice The real address of this contract.
     address private immutable _implementation;
 
-    /// @notice Instantiate this contract and set the allowed caller of `initializeTokenXyz()`
-    ///      to `initializeCaller_`.
+    /// @notice Instantiate this contract and set the allowed caller of `initializeTokenXyz()` to `initializeCaller_`.
     /// @param initializeCaller_ The allowed caller of `initializeTokenXyz()`.
     constructor(address initializeCaller_) {
         initializeCaller = initializeCaller_;
@@ -62,8 +60,8 @@ contract InitialMigration {
     }
 
     /// @notice Initialize the `TokenXyz` contract with the minimum feature set,
-    ///      transfers ownership to `owner`, then self-destructs.
-    ///      Only callable by `initializeCaller` set in the contstructor.
+    ///         transfers ownership to `owner`, then self-destructs.
+    ///         Only callable by `initializeCaller` set in the contstructor.
     /// @param owner The owner of the contract.
     /// @param tokenXyz The instance of the TokenXyz contract. TokenXyz should
     ///        been constructed with this contract as the bootstrapper.
@@ -91,7 +89,7 @@ contract InitialMigration {
     }
 
     /// @notice Sets up the initial state of the `TokenXyz` contract.
-    ///      The `TokenXyz` contract will delegatecall into this function.
+    ///         The `TokenXyz` contract will delegatecall into this function.
     /// @param owner The new owner of the TokenXyz contract.
     /// @param features Features to bootstrap into the proxy.
     /// @return success Magic bytes if successful.

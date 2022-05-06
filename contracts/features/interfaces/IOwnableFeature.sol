@@ -54,10 +54,10 @@ interface IOwnableFeature is IOwnableV06 {
     error TransferOwnerToZero();
 
     /// @notice Execute a migration function in the context of the TokenXyz contract.
-    ///      The result of the function being called should be the magic bytes
-    ///      0x2c64c5ef (`keccak('MIGRATE_SUCCESS')`). Only callable by the owner.
-    ///      The owner will be temporarily set to `address(this)` inside the call.
-    ///      Before returning, the owner will be set to `newOwner`.
+    ///         The result of the function being called should be the magic bytes
+    ///         0x2c64c5ef (`keccak('MIGRATE_SUCCESS')`). Only callable by the owner.
+    ///         The owner will be temporarily set to `address(this)` inside the call.
+    ///         Before returning, the owner will be set to `newOwner`.
     /// @param target The migrator contract address.
     /// @param newOwner The address of the new owner.
     /// @param data The call data.

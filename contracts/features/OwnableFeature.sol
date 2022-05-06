@@ -43,9 +43,9 @@ contract OwnableFeature is IFeature, IOwnableFeature, FixinCommon {
     uint96 public immutable FEATURE_VERSION = _encodeVersion(1, 0, 0);
 
     /// @notice Initializes this feature. The intial owner will be set to this (TokenXyz)
-    ///      to allow the bootstrappers to call `extend()`. Ownership should be
-    ///      transferred to the real owner by the bootstrapper after
-    ///      bootstrapping is complete.
+    ///         to allow the bootstrappers to call `extend()`. Ownership should be
+    ///         transferred to the real owner by the bootstrapper after
+    ///         bootstrapping is complete.
     /// @return success Magic bytes if successful.
     function bootstrap() external returns (bytes4 success) {
         // Set the owner to ourselves to allow bootstrappers to call `extend()`.
@@ -58,8 +58,7 @@ contract OwnableFeature is IFeature, IOwnableFeature, FixinCommon {
         return LibBootstrap.BOOTSTRAP_SUCCESS;
     }
 
-    /// @notice Change the owner of this contract.
-    ///      Only directly callable by the owner.
+    /// @notice Change the owner of this contract. Only directly callable by the owner.
     /// @param newOwner New owner address.
     function transferOwnership(address newOwner) external override onlyOwner {
         LibOwnableStorage.Storage storage proxyStor = LibOwnableStorage.getStorage();
@@ -73,10 +72,10 @@ contract OwnableFeature is IFeature, IOwnableFeature, FixinCommon {
     }
 
     /// @notice Execute a migration function in the context of the TokenXyz contract.
-    ///      The result of the function being called should be the magic bytes
-    ///      0x2c64c5ef (`keccack('MIGRATE_SUCCESS')`). Only callable by the owner.
-    ///      Temporarily sets the owner to ourselves so we can perform admin functions.
-    ///      Before returning, the owner will be set to `newOwner`.
+    ///         The result of the function being called should be the magic bytes
+    ///         0x2c64c5ef (`keccack('MIGRATE_SUCCESS')`). Only callable by the owner.
+    ///         Temporarily sets the owner to ourselves so we can perform admin functions.
+    ///         Before returning, the owner will be set to `newOwner`.
     /// @param target The migrator contract address.
     /// @param data The call data.
     /// @param newOwner The address of the new owner.

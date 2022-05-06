@@ -65,7 +65,7 @@ abstract contract FixinCommon {
     }
 
     /// @notice Registers a function implemented by this feature at `_implementation`.
-    ///      Can and should only be called within a `migrate()`.
+    ///         Can and should only be called within a `migrate()`.
     /// @param selector The selector of the function whose implementation
     ///        is at `_implementation`.
     function _registerFeatureFunction(bytes4 selector) internal {

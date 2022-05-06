@@ -35,7 +35,6 @@ import "./storage/LibProxyStorage.sol";
 /// @title An extensible proxy contract that serves as a universal entry point for
 ///      interacting with the token.xyz contracts.
 contract TokenXyz {
-    // solhint-disable separate-by-one-line-in-contract,indent,var-name-mixedcase
     using LibBytesV06 for bytes;
 
     /// @notice Error thrown when the requested function is not found in any features.
@@ -43,8 +42,8 @@ contract TokenXyz {
     error NotImplemented(bytes4 selector);
 
     /// @notice Construct this contract and register the `BootstrapFeature` feature.
-    ///      After constructing this contract, `bootstrap()` should be called
-    ///      by `bootstrap()` to seed the initial feature set.
+    ///         After constructing this contract, `bootstrap()` should be called
+    ///         by `bootstrap()` to seed the initial feature set.
     /// @param bootstrapper Who can call `bootstrap()`.
     constructor(address bootstrapper) {
         // Temporarily create and register the bootstrap feature.

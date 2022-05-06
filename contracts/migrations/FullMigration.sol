@@ -58,13 +58,11 @@ contract FullMigration {
     /// @notice The initial migration contract.
     InitialMigration private _initialMigration;
 
-    /// @notice Instantiate this contract and set the allowed caller of `initializeTokenXyz()`
-    ///      to `initializeCaller`.
+    /// @notice Instantiate this contract and set the allowed caller of `initializeTokenXyz()` to `initializeCaller`.
     /// @param initializeCaller_ The allowed caller of `initializeTokenXyz()`.
     constructor(address payable initializeCaller_) {
         initializeCaller = initializeCaller_;
-        // Create an initial migration contract with this contract set to the
-        // allowed `initializeCaller`.
+        // Create an initial migration contract with this contract set to the allowed `initializeCaller`.
         _initialMigration = new InitialMigration(address(this));
     }
 
@@ -75,7 +73,7 @@ contract FullMigration {
     }
 
     /// @notice Initialize the `TokenXyz` contract with the full feature set,
-    ///      transfer ownership to `owner`, then self-destruct.
+    ///         transfer ownership to `owner`, then self-destruct.
     /// @param owner The owner of the contract.
     /// @param tokenXyz The instance of the TokenXyz contract. TokenXyz should
     ///        been constructed with this contract as the bootstrapper.

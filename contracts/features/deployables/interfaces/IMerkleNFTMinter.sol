@@ -43,7 +43,7 @@ interface IMerkleNFTMinter {
         bytes32[] calldata merkleProof
     ) external;
 
-    /// @notice Allows the owner to claim the ownership of the token after the distribution has ended or all tokens are claimed.
+    /// @notice Transfers the token's ownership to the owner after the distribution has ended or all tokens are claimed.
     /// @param recipient The address receiving the tokens.
     function withdraw(address recipient) external;
 

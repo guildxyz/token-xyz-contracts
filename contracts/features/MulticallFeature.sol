@@ -13,8 +13,7 @@ contract MulticallFeature is IFeature, FixinCommon, Multicall {
     /// @notice Version of this feature.
     uint96 public immutable FEATURE_VERSION = _encodeVersion(1, 0, 0);
 
-    /// @notice Initialize and register this feature.
-    ///      Should be delegatecalled by `Migrate.migrate()`.
+    /// @notice Initialize and register this feature. Should be delegatecalled by `Migrate.migrate()`.
     /// @return success `LibMigrate.SUCCESS` on success.
     function migrate() external returns (bytes4 success) {
         _registerFeatureFunction(this.multicall.selector);

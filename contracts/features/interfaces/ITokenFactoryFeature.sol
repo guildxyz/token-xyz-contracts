@@ -12,7 +12,7 @@ interface ITokenFactoryFeature is ITokenFactoryBase {
     /// @param tokenDecimals The token's number of decimals.
     /// @param initialSupply The initial amount of tokens to mint.
     /// @param maxSupply The maximum amount of tokens that can ever be minted. Unlimited if set to zero.
-    /// @param firstOwner The first address to assign ownership/minting rights to (if mintable). The recipient of the initial supply.
+    /// @param firstOwner The address to assign ownership/minter role to (if mintable). Recipient of the initial supply.
     function createToken(
         string calldata urlName,
         string calldata tokenName,

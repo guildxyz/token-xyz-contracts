@@ -29,7 +29,7 @@ pragma solidity 0.8.13;
 
 library LibBootstrap {
     /// @notice Magic bytes returned by the bootstrapper to indicate success.
-    ///      This is `keccack('BOOTSTRAP_SUCCESS')`.
+    ///         This is `keccack('BOOTSTRAP_SUCCESS')`.
     bytes4 internal constant BOOTSTRAP_SUCCESS = 0xd150751b;
 
     /// @notice Error thrown when a delegatecall to a bootstrap function failed.
