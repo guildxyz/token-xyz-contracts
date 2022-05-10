@@ -2,7 +2,7 @@
 pragma solidity 0.8.13;
 
 import "../../lib/LibAddress.sol";
-import "./IERC721Curve.sol";
+import "../../interfaces/IERC721Curve.sol";
 import "@openzeppelin/contracts/token/ERC721/ERC721.sol";
 import "@openzeppelin/contracts/access/Ownable.sol";
 import "@openzeppelin/contracts/utils/Counters.sol";
