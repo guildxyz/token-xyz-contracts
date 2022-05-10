@@ -1,8 +1,8 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.0;
 
-import "../deployables/interfaces/IMerkleNFTMinter.sol";
 import "./IFactoryFeature.sol";
+import "./IERC721FactoryCommon.sol";
 
 /// @title A contract that deploys NFT minter contracts for anyone.
 interface IMerkleNFTMinterFactoryFeature is IFactoryFeature {
@@ -17,7 +17,7 @@ interface IMerkleNFTMinterFactoryFeature is IFactoryFeature {
         string calldata urlName,
         bytes32 merkleRoot,
         uint256 distributionDuration,
-        IMerkleNFTMinter.NftMetadata memory nftMetadata,
+        IERC721FactoryCommon.NftMetadata memory nftMetadata,
         bool specificIds,
         address owner
     ) external;

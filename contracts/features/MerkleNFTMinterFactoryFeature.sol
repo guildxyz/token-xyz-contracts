@@ -2,8 +2,8 @@
 pragma solidity 0.8.13;
 
 import "./interfaces/IMerkleNFTMinterFactoryFeature.sol";
-import "./deployables/MerkleNFTMinter.sol";
-import "./deployables/MerkleNFTMinterAutoId.sol";
+import "./deployables/token/ERC721/ERC721MerkleDrop.sol";
+import "./deployables/token/ERC721/ERC721BatchMerkleDrop.sol";
 import "../fixins/FixinCommon.sol";
 import "../storage/LibMerkleNFTMinterFactoryStorage.sol";
 import "../migrations/LibMigrate.sol";
@@ -35,13 +35,35 @@ contract MerkleNFTMinterFactoryFeature is IFeature, IMerkleNFTMinterFactoryFeatu
         string calldata urlName,
         bytes32 merkleRoot,
         uint256 distributionDuration,
-        IMerkleNFTMinter.NftMetadata memory nftMetadata,
+        IERC721FactoryCommon.NftMetadata memory nftMetadata,
         bool specificIds,
         address owner
     ) external {
         address instance;
-        if (specificIds) instance = address(new MerkleNFTMinter(merkleRoot, distributionDuration, nftMetadata, owner));
-        else instance = address(new MerkleNFTMinterAutoId(merkleRoot, distributionDuration, nftMetadata, owner));
+        if (specificIds)
+            instance = address(
+                new ERC721MerkleDrop(
+                    nftMetadata.name,
+                    nftMetadata.symbol,
+                    nftMetadata.ipfsHash,
+                    nftMetadata.maxSupply,
+                    merkleRoot,
+                    distributionDuration,
+                    owner
+                )
+            );
+        else
+            instance = address(
+                new ERC721BatchMerkleDrop(
+                    nftMetadata.name,
+                    nftMetadata.symbol,
+                    nftMetadata.ipfsHash,
+                    nftMetadata.maxSupply,
+                    merkleRoot,
+                    distributionDuration,
+                    owner
+                )
+            );
         LibMerkleNFTMinterFactoryStorage.getStorage().deploys[urlName].push(
             DeployData({factoryVersion: FEATURE_VERSION, contractAddress: instance})
         );

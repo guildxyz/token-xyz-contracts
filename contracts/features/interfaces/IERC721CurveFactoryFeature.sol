@@ -2,20 +2,10 @@
 pragma solidity ^0.8.0;
 
 import "./IFactoryFeature.sol";
+import "./IERC721FactoryCommon.sol";
 
 /// @title A contract that deploys special ERC721 contracts for anyone.
 interface IERC721CurveFactoryFeature is IFactoryFeature {
-    /// @notice The metadata of the NFT to be created.
-    /// @notice The name of the NFT to be created.
-    /// @notice The symbol of the NFT to be created.
-    /// @notice The maximum number of the tokens that can be created.
-    struct NftMetadata {
-        string name;
-        string symbol;
-        string ipfsHash;
-        uint256 maxSupply;
-    }
-
     /// @notice Deploys a new ERC721Curve contract.
     /// @param urlName The url name used by the frontend, kind of an id of the creator.
     /// @param nftMetadata The basic metadata of the NFT that will be created (name, symbol, ipfsHash, maxSupply).
@@ -23,7 +13,7 @@ interface IERC721CurveFactoryFeature is IFactoryFeature {
     /// @param owner The owner address of the contract to be deployed. Will have special access to some functions.
     function createNFTWithCurve(
         string calldata urlName,
-        NftMetadata calldata nftMetadata,
+        IERC721FactoryCommon.NftMetadata calldata nftMetadata,
         uint256 startingPrice,
         address owner
     ) external;

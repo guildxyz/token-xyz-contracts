@@ -30,7 +30,7 @@ contract ERC721CurveFactoryFeature is IFeature, IERC721CurveFactoryFeature, Fixi
     /// @param owner The owner address of the contract to be deployed. Will have special access to some functions.
     function createNFTWithCurve(
         string calldata urlName,
-        NftMetadata calldata nftMetadata,
+        IERC721FactoryCommon.NftMetadata calldata nftMetadata,
         uint256 startingPrice,
         address owner
     ) external {
