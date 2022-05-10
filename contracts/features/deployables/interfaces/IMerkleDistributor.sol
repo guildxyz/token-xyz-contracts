@@ -73,7 +73,7 @@ interface IMerkleDistributor {
     error DistributionOngoing(uint256 current, uint256 end);
 
     /// @notice Error thrown when the drop is already claimed.
-    error DropClaimed();
+    error AlreadyClaimed();
 
     /// @notice Error thrown when a function receives invalid parameters.
     error InvalidParameters();

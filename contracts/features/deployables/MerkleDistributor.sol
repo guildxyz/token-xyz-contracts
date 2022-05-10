@@ -57,7 +57,7 @@ contract MerkleDistributor is IMerkleDistributor, Ownable {
         bytes32[] calldata merkleProof
     ) external {
         if (block.timestamp > distributionEnd) revert DistributionEnded(block.timestamp, distributionEnd);
-        if (isClaimed(index)) revert DropClaimed();
+        if (isClaimed(index)) revert AlreadyClaimed();
 
         // Verify the Merkle proof.
         bytes32 node = keccak256(abi.encodePacked(index, account, amount));
