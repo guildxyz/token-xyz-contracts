@@ -12,7 +12,7 @@ const TokenFactoryFeature = artifacts.require("TokenFactoryFeature");
 const TokenWithRolesFactoryFeature = artifacts.require("TokenWithRolesFactoryFeature");
 const MerkleDistributorFactoryFeature = artifacts.require("MerkleDistributorFactoryFeature");
 const MerkleVestingFactoryFeature = artifacts.require("MerkleVestingFactoryFeature");
-const MerkleNFTMinterFactoryFeature = artifacts.require("MerkleNFTMinterFactoryFeature");
+const ERC721MerkleDropFactoryFeature = artifacts.require("ERC721MerkleDropFactoryFeature");
 const ERC721CurveFactoryFeature = artifacts.require("ERC721CurveFactoryFeature");
 
 const tokenxyzInterface = new utils.Interface(ITokenXyz.abi);
@@ -31,7 +31,7 @@ contract("FullMigration", function (accounts) {
   let tokenWithRolesFactory;
   let merkleDistributorFactory;
   let merkleVestingFactory;
-  let merkleNFTMinterFactory;
+  let erc721MerkleDropFactory;
   let erc721CurveFactory;
 
   beforeEach("deploy contracts", async function () {
@@ -45,7 +45,7 @@ contract("FullMigration", function (accounts) {
     tokenWithRolesFactory = await TokenWithRolesFactoryFeature.new();
     merkleDistributorFactory = await MerkleDistributorFactoryFeature.new();
     merkleVestingFactory = await MerkleVestingFactoryFeature.new();
-    merkleNFTMinterFactory = await MerkleNFTMinterFactoryFeature.new();
+    erc721MerkleDropFactory = await ERC721MerkleDropFactoryFeature.new();
     erc721CurveFactory = await ERC721CurveFactoryFeature.new();
     features = {
       registry: functionRegistry.address,
@@ -55,7 +55,7 @@ contract("FullMigration", function (accounts) {
       tokenWithRolesFactory: tokenWithRolesFactory.address,
       merkleDistributorFactory: merkleDistributorFactory.address,
       merkleVestingFactory: merkleVestingFactory.address,
-      merkleNFTMinterFactory: merkleNFTMinterFactory.address,
+      erc721MerkleDropFactory: erc721MerkleDropFactory.address,
       erc721CurveFactory: erc721CurveFactory.address
     };
   });
@@ -123,10 +123,10 @@ contract("FullMigration", function (accounts) {
       expect(result.receipt.status).to.be.true;
     });
 
-    it("NFT minter factory is available", async function () {
-      const selector = tokenxyzInterface.getSighash("createNFTMinter");
-      expect(await tokenXyzWithOwnAbi.getFunctionImplementation(selector)).to.eq(merkleNFTMinterFactory.address);
-      const result = await tokenXyz.createNFTMinter(
+    it("ERC721 Merkle Drop factory is available", async function () {
+      const selector = tokenxyzInterface.getSighash("createNFTMerkleDrop");
+      expect(await tokenXyzWithOwnAbi.getFunctionImplementation(selector)).to.eq(erc721MerkleDropFactory.address);
+      const result = await tokenXyz.createNFTMerkleDrop(
         "Test",
         randomRoot,
         86400,

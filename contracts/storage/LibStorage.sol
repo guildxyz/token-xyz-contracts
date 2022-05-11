@@ -42,7 +42,7 @@ library LibStorage {
         TokenFactory,
         MerkleDistributorFactory,
         MerkleVestingFactory,
-        MerkleNFTMinterFactory,
+        ERC721MerkleDropFactory,
         ERC721CurveFactory
     }
 

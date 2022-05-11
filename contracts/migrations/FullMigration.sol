@@ -34,7 +34,7 @@ import "../features/TokenFactoryFeature.sol";
 import "../features/TokenWithRolesFactoryFeature.sol";
 import "../features/MerkleDistributorFactoryFeature.sol";
 import "../features/MerkleVestingFactoryFeature.sol";
-import "../features/MerkleNFTMinterFactoryFeature.sol";
+import "../features/ERC721MerkleDropFactoryFeature.sol";
 import "../features/ERC721CurveFactoryFeature.sol";
 import "./InitialMigration.sol";
 
@@ -49,7 +49,7 @@ contract FullMigration {
         TokenWithRolesFactoryFeature tokenWithRolesFactory;
         MerkleDistributorFactoryFeature merkleDistributorFactory;
         MerkleVestingFactoryFeature merkleVestingFactory;
-        MerkleNFTMinterFactoryFeature merkleNFTMinterFactory;
+        ERC721MerkleDropFactoryFeature erc721MerkleDropFactory;
         ERC721CurveFactoryFeature erc721CurveFactory;
     }
 
@@ -164,12 +164,12 @@ contract FullMigration {
                 address(this)
             );
         }
-        // MerkleNFTMinterFactoryFeature
+        // ERC721MerkleDropFactoryFeature
         {
             // Register the feature.
             ownable.migrate(
-                address(features.merkleNFTMinterFactory),
-                abi.encodeWithSelector(MerkleNFTMinterFactoryFeature.migrate.selector),
+                address(features.erc721MerkleDropFactory),
+                abi.encodeWithSelector(ERC721MerkleDropFactoryFeature.migrate.selector),
                 address(this)
             );
         }
