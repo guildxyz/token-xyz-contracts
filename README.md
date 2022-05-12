@@ -66,6 +66,8 @@ Replace _[start]_ with the number of the first and _[end]_ with the number of th
 - 4 - TokenFactoryFeature & TokenWithRolesFactoryFeature
 - 5 - MerkleDistributorFactoryFeature
 - 6 - MerkleVestingFactoryFeature
+- 7 - ERC721MerkleDropFactoryFeature
+- 8 - ERC721CurveFactoryFeature
 
 ### Extended instructions
 
