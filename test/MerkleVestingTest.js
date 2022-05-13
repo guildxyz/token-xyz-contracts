@@ -52,7 +52,7 @@ contract("MerkleVesting", function (accounts) {
     token = await ERC20MintableBurnable.new("OwoToken", "OWO", 18, wallet0, 0);
   });
 
-  context("#constructor", function () {
+  context("constructor", function () {
     it("fails if called with invalid parameters", async function () {
       // error InvalidParameters();
       await expectRevert(Vesting.new(token.address, constants.AddressZero), "Custom error (could not decode)");
@@ -65,7 +65,7 @@ contract("MerkleVesting", function (accounts) {
     });
   });
 
-  context("#addCohort && #getCohort", function () {
+  context("cohort management", function () {
     it("fails if not called by the owner", async function () {
       const vesting = await Vesting.new(token.address, wallet1);
       await expectRevert(
@@ -82,15 +82,6 @@ contract("MerkleVesting", function (accounts) {
       );
       await expectRevert.unspecified(vesting.addCohort(randomRoot0, 0, 0, randomVestingPeriod, randomCliff));
       await expectRevert.unspecified(vesting.addCohort(randomRoot0, 0, distributionDuration, 0, randomCliff));
-    });
-
-    it("fails when trying to create two cohorts with the same root", async function () {
-      const vesting = await Vesting.new(token.address, wallet0);
-      await vesting.addCohort(randomRoot0, 0, distributionDuration, randomVestingPeriod, randomCliff);
-      // error MerkleRootCollision();
-      await expectRevert.unspecified(
-        vesting.addCohort(randomRoot0, 0, distributionDuration, randomVestingPeriod, randomCliff)
-      );
     });
 
     it("fails when cliff < vesting < distribution is not true", async function () {
@@ -120,18 +111,18 @@ contract("MerkleVesting", function (accounts) {
       const lastEndingCohort0 = await vesting.lastEndingCohort();
       await vesting.addCohort(randomRoot0, 0, distributionDuration, randomVestingPeriod, randomCliff);
       const lastEndingCohort1 = await vesting.lastEndingCohort();
-      await vesting.addCohort(randomRoot1, 0, distributionDuration - 1, randomVestingPeriod, randomCliff);
+      await vesting.addCohort(randomRoot1, 0, distributionDuration + 1, randomVestingPeriod, randomCliff);
       const lastEndingCohort2 = await vesting.lastEndingCohort();
-      expect(lastEndingCohort0).to.eq(constants.HashZero);
-      expect(lastEndingCohort1).to.eq(randomRoot0);
-      expect(lastEndingCohort2).to.eq(randomRoot0);
+      expect(lastEndingCohort0).to.bignumber.eq("0");
+      expect(lastEndingCohort1).to.bignumber.eq("0");
+      expect(lastEndingCohort2).to.bignumber.eq("1");
     });
 
     it("sets the cohort data correctly", async function () {
       const vesting = await Vesting.new(token.address, wallet0);
       const timestamp = await time.latest();
       await vesting.addCohort(randomRoot0, timestamp, distributionDuration, randomVestingPeriod, randomCliff);
-      const cohort = await vesting.getCohort(randomRoot0);
+      const cohort = await vesting.getCohort(0);
       expect(cohort.merkleRoot).to.eq(randomRoot0);
       expect(cohort.distributionStart).to.bignumber.eq(timestamp);
       expect(cohort.distributionEnd).to.bignumber.eq(timestamp.add(new BN(distributionDuration)));
@@ -142,9 +133,19 @@ contract("MerkleVesting", function (accounts) {
     it("emits CohortAdded event", async function () {
       const vesting = await Vesting.new(token.address, wallet0);
       const result0 = await vesting.addCohort(randomRoot0, 0, distributionDuration, randomVestingPeriod, randomCliff);
-      await expectEvent(result0, "CohortAdded", { cohortId: randomRoot0 });
+      await expectEvent(result0, "CohortAdded", { cohortId: "0" });
       const result1 = await vesting.addCohort(randomRoot1, 0, distributionDuration, randomVestingPeriod, randomCliff);
-      await expectEvent(result1, "CohortAdded", { cohortId: randomRoot1 });
+      await expectEvent(result1, "CohortAdded", { cohortId: "1" });
+    });
+
+    it("returns the number of created cohorts", async function () {
+      const vesting = await Vesting.new(token.address, wallet0);
+      await vesting.addCohort(randomRoot0, 0, distributionDuration, randomVestingPeriod, randomCliff);
+      expect(await vesting.getCohortsLength()).to.bignumber.eq("1");
+      await vesting.addCohort(randomRoot0, 0, distributionDuration, randomVestingPeriod, randomCliff);
+      expect(await vesting.getCohortsLength()).to.bignumber.eq("2");
+      await vesting.addCohort(randomRoot0, 0, distributionDuration, randomVestingPeriod, randomCliff);
+      expect(await vesting.getCohortsLength()).to.bignumber.eq("3");
     });
   });
 
@@ -157,20 +158,20 @@ contract("MerkleVesting", function (accounts) {
     });
 
     it("fails if not called by the owner", async function () {
-      await expectRevert(vesting.setDisabled(randomRoot0, 0, { from: wallet1 }), "Ownable: caller is not the owner");
+      await expectRevert(vesting.setDisabled(0, 0, { from: wallet1 }), "Ownable: caller is not the owner");
     });
 
     it("sets and gets the disabled state correctly", async function () {
-      const old0 = await vesting.isDisabled(randomRoot0, 0);
-      const old1 = await vesting.isDisabled(randomRoot0, 240);
-      const old2 = await vesting.isDisabled(randomRoot0, 260);
-      const old3 = await vesting.isDisabled(randomRoot0, 285);
-      await vesting.setDisabled(randomRoot0, 0); // 0
-      await vesting.setDisabled(randomRoot0, 260); // 2
-      const new0 = await vesting.isDisabled(randomRoot0, 0);
-      const new1 = await vesting.isDisabled(randomRoot0, 240);
-      const new2 = await vesting.isDisabled(randomRoot0, 260);
-      const new3 = await vesting.isDisabled(randomRoot0, 285);
+      const old0 = await vesting.isDisabled(0, 0);
+      const old1 = await vesting.isDisabled(0, 240);
+      const old2 = await vesting.isDisabled(0, 260);
+      const old3 = await vesting.isDisabled(0, 285);
+      await vesting.setDisabled(0, 0); // 0
+      await vesting.setDisabled(0, 260); // 2
+      const new0 = await vesting.isDisabled(0, 0);
+      const new1 = await vesting.isDisabled(0, 240);
+      const new2 = await vesting.isDisabled(0, 260);
+      const new3 = await vesting.isDisabled(0, 285);
       expect(old0).to.be.false;
       expect(new0).to.be.true;
       expect(new1).to.eq(old1);
@@ -185,8 +186,7 @@ contract("MerkleVesting", function (accounts) {
       const vesting = await Vesting.new(token.address, wallet0);
       await vesting.addCohort(randomRoot0, 0, distributionDuration, randomVestingPeriod, randomCliff);
       // error CohortDoesNotExist();
-      await expectRevert.unspecified(vesting.claim(constants.HashZero, 0, wallet0, 10, []));
-      await expectRevert.unspecified(vesting.claim(randomRoot1, 0, wallet0, 10, []));
+      await expectRevert.unspecified(vesting.claim(42, 0, wallet0, 10, []));
     });
 
     it("fails if distribution ended", async function () {
@@ -194,7 +194,7 @@ contract("MerkleVesting", function (accounts) {
       await vesting.addCohort(randomRoot0, 0, distributionDuration, randomVestingPeriod, randomCliff);
       await time.increase(distributionDuration + 1);
       // error DistributionEnded(uint256 current, uint256 end);
-      await expectRevert.unspecified(vesting.claim(randomRoot0, 0, wallet0, 10, []));
+      await expectRevert.unspecified(vesting.claim(0, 0, wallet0, 10, []));
     });
 
     it("fails if distribution has not started yet", async function () {
@@ -208,73 +208,71 @@ contract("MerkleVesting", function (accounts) {
         randomCliff
       );
       // error DistributionNotStarted(uint256 current, uint256 start);
-      await expectRevert.unspecified(vesting.claim(randomRoot0, 0, wallet0, 10, []));
+      await expectRevert.unspecified(vesting.claim(0, 0, wallet0, 10, []));
     });
 
     context("two account tree", function () {
       let vesting;
       let tree;
-      let root;
 
       before("create tree", function () {
         tree = new BalanceTree.default([
           { account: wallet0, amount: BigNumber.from(100) },
           { account: wallet1, amount: BigNumber.from(101) }
         ]);
-        root = tree.getHexRoot();
       });
 
       beforeEach("deploy", async function () {
         vesting = await Vesting.new(token.address, wallet0);
-        await vesting.addCohort(root, 0, distributionDuration, randomVestingPeriod, randomCliff);
+        await vesting.addCohort(tree.getHexRoot(), 0, distributionDuration, randomVestingPeriod, randomCliff);
         await setBalance(token, vesting.address, new BN(201));
       });
 
       it("fails for empty proof", async function () {
         // error InvalidProof();
-        await expectRevert.unspecified(vesting.claim(root, 0, wallet0, 10, []));
+        await expectRevert.unspecified(vesting.claim(0, 0, wallet0, 10, []));
       });
 
       it("fails for invalid index", async function () {
         // error InvalidProof();
-        await expectRevert.unspecified(vesting.claim(root, 0, wallet0, 10, []));
+        await expectRevert.unspecified(vesting.claim(0, 0, wallet0, 10, []));
       });
 
       it("fails when trying to claim before the cliff", async function () {
         const proof0 = tree.getProof(0, wallet0, BigNumber.from(100));
         // error CliffNotReached(uint256 timestamp, uint256 cliff);
-        await expectRevert.unspecified(vesting.claim(root, 0, wallet0, 100, proof0));
+        await expectRevert.unspecified(vesting.claim(0, 0, wallet0, 100, proof0));
       });
 
       it("fails if the address is disabled", async function () {
         const proof0 = tree.getProof(0, wallet0, BigNumber.from(100));
         await time.increase(randomCliff + 1);
-        await vesting.setDisabled(root, 0);
-        // error NotInVesting(bytes32 cohortId, address account);
-        await expectRevert.unspecified(vesting.claim(root, 0, wallet0, 100, proof0));
+        await vesting.setDisabled(0, 0);
+        // error NotInVesting(uint256 cohortId, address account);
+        await expectRevert.unspecified(vesting.claim(0, 0, wallet0, 100, proof0));
       });
 
       it("correctly calculates the claimable amount", async function () {
         const fullAmount = new BN(100);
         await time.increase(randomCliff + randomVestingPeriod / 2);
         const proof0 = tree.getProof(0, wallet0, BigNumber.from(fullAmount.toString()));
-        expect(await vesting.getClaimableAmount(root, 0, wallet0, fullAmount)).to.bignumber.eq(
-          await getClaimableAmount(vesting, root, wallet0, fullAmount)
+        expect(await vesting.getClaimableAmount(0, 0, wallet0, fullAmount)).to.bignumber.eq(
+          await getClaimableAmount(vesting, 0, wallet0, fullAmount)
         );
-        await vesting.claim(root, 0, wallet0, 100, proof0);
-        expect(await vesting.getClaimableAmount(root, 0, wallet0, fullAmount)).to.bignumber.eq("0");
+        await vesting.claim(0, 0, wallet0, 100, proof0);
+        expect(await vesting.getClaimableAmount(0, 0, wallet0, fullAmount)).to.bignumber.eq("0");
       });
 
       it("successful claim", async function () {
         await time.increase(randomCliff + 1);
         const proof0 = tree.getProof(0, wallet0, BigNumber.from(100));
-        const claimableAmount0 = await getClaimableAmount(vesting, root, wallet0, new BN(100));
-        const result0 = await vesting.claim(root, 0, wallet0, 100, proof0);
-        await expectEvent(result0, "Claimed", { cohortId: root, account: wallet0, amount: claimableAmount0 });
+        const claimableAmount0 = await getClaimableAmount(vesting, 0, wallet0, new BN(100));
+        const result0 = await vesting.claim(0, 0, wallet0, 100, proof0);
+        await expectEvent(result0, "Claimed", { cohortId: "0", account: wallet0, amount: claimableAmount0 });
         const proof1 = tree.getProof(1, wallet1, BigNumber.from(101));
-        const claimableAmount1 = await getClaimableAmount(vesting, root, wallet1, new BN(101));
-        const result1 = await vesting.claim(root, 1, wallet1, 101, proof1);
-        await expectEvent(result1, "Claimed", { cohortId: root, account: wallet1, amount: claimableAmount1 });
+        const claimableAmount1 = await getClaimableAmount(vesting, 0, wallet1, new BN(101));
+        const result1 = await vesting.claim(0, 1, wallet1, 101, proof1);
+        await expectEvent(result1, "Claimed", { cohortId: "0", account: wallet1, amount: claimableAmount1 });
       });
 
       it("transfers the token", async function () {
@@ -282,7 +280,7 @@ contract("MerkleVesting", function (accounts) {
         const proof0 = tree.getProof(0, wallet0, BigNumber.from(100));
         expect(await token.balanceOf(wallet0)).to.bignumber.eq("0");
         await time.increase(randomVestingPeriod + 1);
-        await vesting.claim(root, 0, wallet0, 100, proof0);
+        await vesting.claim(0, 0, wallet0, 100, proof0);
         expect(await token.balanceOf(wallet0)).to.bignumber.eq("100");
       });
 
@@ -291,26 +289,26 @@ contract("MerkleVesting", function (accounts) {
         const proof0 = tree.getProof(0, wallet0, BigNumber.from(100));
         await setBalance(token, vesting.address, new BN(1));
         await time.increase(randomVestingPeriod);
-        await expectRevert(vesting.claim(root, 0, wallet0, 100, proof0), "ERC20: transfer amount exceeds balance");
+        await expectRevert(vesting.claim(0, 0, wallet0, 100, proof0), "ERC20: transfer amount exceeds balance");
       });
 
       it("sets #getClaimed", async function () {
         await time.increase(randomCliff + 1);
-        await vesting.addCohort(randomRoot0, 0, distributionDuration, randomVestingPeriod, randomCliff); // second cohort
+        await vesting.addCohort(randomRoot0, 0, distributionDuration, randomVestingPeriod, randomCliff); // cohort id 1
         const proof0 = tree.getProof(0, wallet0, BigNumber.from(100));
-        expect(await vesting.getClaimed(root, wallet0)).to.bignumber.eq("0");
-        expect(await vesting.getClaimed(randomRoot0, wallet0)).to.bignumber.eq("0");
+        expect(await vesting.getClaimed(0, wallet0)).to.bignumber.eq("0");
+        expect(await vesting.getClaimed(1, wallet0)).to.bignumber.eq("0");
         await time.increase(randomVestingPeriod + 1);
-        await vesting.claim(root, 0, wallet0, 100, proof0);
-        expect(await vesting.getClaimed(root, wallet0)).to.bignumber.eq("100");
-        expect(await vesting.getClaimed(randomRoot0, wallet0)).to.bignumber.eq("0");
+        await vesting.claim(0, 0, wallet0, 100, proof0);
+        expect(await vesting.getClaimed(0, wallet0)).to.bignumber.eq("100");
+        expect(await vesting.getClaimed(1, wallet0)).to.bignumber.eq("0");
       });
 
       it("does allow subsequent claims", async function () {
         await time.increase(randomCliff + 1);
         const proof0 = tree.getProof(0, wallet0, BigNumber.from(100));
-        const res0 = await vesting.claim(root, 0, wallet0, 100, proof0);
-        const res1 = await vesting.claim(root, 0, wallet0, 100, proof0);
+        const res0 = await vesting.claim(0, 0, wallet0, 100, proof0);
+        const res1 = await vesting.claim(0, 0, wallet0, 100, proof0);
         expect(res0.receipt.status).to.eq(true);
         expect(res1.receipt.status).to.eq(true);
       });
@@ -319,21 +317,20 @@ contract("MerkleVesting", function (accounts) {
         await time.increase(randomCliff + 1);
         const proof0 = tree.getProof(0, wallet0, BigNumber.from(100));
         // error InvalidProof();
-        await expectRevert.unspecified(vesting.claim(root, 1, wallet1, 101, proof0));
+        await expectRevert.unspecified(vesting.claim(0, 1, wallet1, 101, proof0));
       });
 
       it("cannot claim more with one proof", async function () {
         await time.increase(randomCliff + 1);
         const proof0 = tree.getProof(0, wallet0, BigNumber.from(100));
         // error InvalidProof();
-        await expectRevert.unspecified(vesting.claim(root, 0, wallet0, 101, proof0));
+        await expectRevert.unspecified(vesting.claim(0, 0, wallet0, 101, proof0));
       });
     });
 
     context("larger tree", function () {
       let vesting;
       let tree;
-      let root;
 
       before("create tree", function () {
         tree = new BalanceTree.default(
@@ -341,27 +338,26 @@ contract("MerkleVesting", function (accounts) {
             return { account: wallet, amount: BigNumber.from(ix + 1) };
           })
         );
-        root = tree.getHexRoot();
       });
 
       beforeEach("deploy", async function () {
         vesting = await Vesting.new(token.address, wallet0);
-        await vesting.addCohort(root, 0, distributionDuration, randomVestingPeriod, 0);
+        await vesting.addCohort(tree.getHexRoot(), 0, distributionDuration, randomVestingPeriod, 0);
         await setBalance(token, vesting.address, new BN(201));
       });
 
       it("claim index 4", async function () {
         const proof = tree.getProof(4, accounts[4], BigNumber.from(5));
-        const claimableAmount = await getClaimableAmount(vesting, root, accounts[4], new BN(5));
-        const result = await vesting.claim(root, 4, accounts[4], 5, proof);
-        await expectEvent(result, "Claimed", { cohortId: root, account: accounts[4], amount: claimableAmount });
+        const claimableAmount = await getClaimableAmount(vesting, 0, accounts[4], new BN(5));
+        const result = await vesting.claim(0, 4, accounts[4], 5, proof);
+        await expectEvent(result, "Claimed", { cohortId: "0", account: accounts[4], amount: claimableAmount });
       });
 
       it("claim index 9", async function () {
         const proof = tree.getProof(9, accounts[9], BigNumber.from(10));
-        const claimableAmount = await getClaimableAmount(vesting, root, accounts[9], new BN(10));
-        const result = await vesting.claim(root, 9, accounts[9], 10, proof);
-        await expectEvent(result, "Claimed", { cohortId: root, account: accounts[9], amount: claimableAmount });
+        const claimableAmount = await getClaimableAmount(vesting, 0, accounts[9], new BN(10));
+        const result = await vesting.claim(0, 9, accounts[9], 10, proof);
+        await expectEvent(result, "Claimed", { cohortId: "0", account: accounts[9], amount: claimableAmount });
       });
     });
 
@@ -396,8 +392,8 @@ contract("MerkleVesting", function (accounts) {
         await setBalance(token, vesting.address, new BN(100000000));
         for (let i = 0; i < 25; i += Math.floor(Math.random() * (NUM_LEAVES / NUM_SAMPLES))) {
           const proof = tree.getProof(i, wallet0, BigNumber.from(100));
-          const res0 = await vesting.claim(root, i, wallet0, 100, proof);
-          const res1 = await vesting.claim(root, i, wallet0, 100, proof);
+          const res0 = await vesting.claim(0, i, wallet0, 100, proof);
+          const res1 = await vesting.claim(0, i, wallet0, 100, proof);
           expect(res0.receipt.status).to.eq(true);
           expect(res1.receipt.status).to.eq(true);
         }
@@ -408,35 +404,33 @@ contract("MerkleVesting", function (accounts) {
   context("#prolongDistributionPeriod", async function () {
     let vesting;
     let tree;
-    let root;
 
     before("create tree", function () {
       tree = new BalanceTree.default([
         { account: wallet0, amount: BigNumber.from(100) },
         { account: wallet1, amount: BigNumber.from(101) }
       ]);
-      root = tree.getHexRoot();
     });
 
     beforeEach("deploy contract", async function () {
       vesting = await Vesting.new(token.address, wallet0);
-      await vesting.addCohort(root, 0, distributionDuration, randomVestingPeriod, randomCliff);
+      await vesting.addCohort(tree.getHexRoot(), 0, distributionDuration, randomVestingPeriod, randomCliff);
       await setBalance(token, vesting.address, new BN(101));
     });
 
     it("fails if not called by the owner", async function () {
       await expectRevert(
-        vesting.prolongDistributionPeriod(root, 990, { from: wallet1 }),
+        vesting.prolongDistributionPeriod(0, 990, { from: wallet1 }),
         "Ownable: caller is not the owner"
       );
     });
 
     it("sets a new, higher distibution end", async function () {
       const addition = new BN(distributionDuration);
-      const oldCohort = await vesting.getCohort(root);
+      const oldCohort = await vesting.getCohort(0);
       const oldPeriod = new BN(oldCohort.distributionEnd);
-      await vesting.prolongDistributionPeriod(root, addition);
-      const newCohort = await vesting.getCohort(root);
+      await vesting.prolongDistributionPeriod(0, addition);
+      const newCohort = await vesting.getCohort(0);
       const newPeriod = newCohort.distributionEnd;
       expect(newPeriod).to.bignumber.eq(oldPeriod.add(addition));
     });
@@ -446,28 +440,28 @@ contract("MerkleVesting", function (accounts) {
       const proof0 = tree.getProof(0, wallet0, BigNumber.from(100));
       await time.increase(new BN(distributionDuration).add(new BN(120)));
       // error DistributionEnded(uint256 current, uint256 end);
-      await expectRevert.unspecified(vesting.claim(root, 0, wallet0, 100, proof0));
-      await vesting.prolongDistributionPeriod(root, 990);
-      const res = await vesting.claim(root, 0, wallet0, 100, proof0);
+      await expectRevert.unspecified(vesting.claim(0, 0, wallet0, 100, proof0));
+      await vesting.prolongDistributionPeriod(0, 990);
+      const res = await vesting.claim(0, 0, wallet0, 100, proof0);
       expect(res.receipt.status).to.be.true;
     });
 
     it("updates lastEndingCohort, but only if needed", async function () {
-      expect(await vesting.lastEndingCohort()).to.eq(root);
+      expect(await vesting.lastEndingCohort()).to.bignumber.eq("0");
       await vesting.addCohort(randomRoot0, 0, distributionDuration / 2, randomVestingPeriod, randomCliff);
-      expect(await vesting.lastEndingCohort()).to.eq(root);
-      await vesting.prolongDistributionPeriod(randomRoot0, distributionDuration / 3);
-      expect(await vesting.lastEndingCohort()).to.eq(root);
-      await vesting.prolongDistributionPeriod(randomRoot0, distributionDuration);
-      expect(await vesting.lastEndingCohort()).to.eq(randomRoot0);
+      expect(await vesting.lastEndingCohort()).to.bignumber.eq("0");
+      await vesting.prolongDistributionPeriod(1, distributionDuration / 3);
+      expect(await vesting.lastEndingCohort()).to.bignumber.eq("0");
+      await vesting.prolongDistributionPeriod(1, distributionDuration);
+      expect(await vesting.lastEndingCohort()).to.bignumber.eq("1");
     });
 
     it("emits DistributionProlonged event", async function () {
       const addition = new BN(99);
-      const result = await vesting.prolongDistributionPeriod(root, addition);
-      const cohort = await vesting.getCohort(root);
+      const result = await vesting.prolongDistributionPeriod(0, addition);
+      const cohort = await vesting.getCohort(0);
       await expectEvent(result, "DistributionProlonged", {
-        cohortId: root,
+        cohortId: "0",
         newDistributionEnd: cohort.distributionEnd
       });
     });
