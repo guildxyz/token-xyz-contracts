@@ -18,9 +18,9 @@ import "@openzeppelin/contracts/utils/Multicall.sol";
 /// @title Allows anyone to claim a token if they exist in a Merkle root, but only over time.
 contract MerkleVesting is IMerkleVesting, Multicall, Ownable {
     address public immutable token;
-    bytes32 public lastEndingCohort;
+    uint256 public lastEndingCohort;
 
-    mapping(bytes32 => Cohort) internal cohorts;
+    Cohort[] internal cohorts;
 
     constructor(address token_, address owner) {
         if (owner == address(0) || token_ == address(0)) revert InvalidParameters();
@@ -28,12 +28,16 @@ contract MerkleVesting is IMerkleVesting, Multicall, Ownable {
         _transferOwnership(owner);
     }
 
-    function getCohort(bytes32 cohortId) external view returns (CohortData memory) {
+    function getCohort(uint256 cohortId) external view returns (CohortData memory) {
         return cohorts[cohortId].data;
     }
 
+    function getCohortsLength() external view returns (uint256) {
+        return cohorts.length;
+    }
+
     function getClaimableAmount(
-        bytes32 cohortId,
+        uint256 cohortId,
         uint256 index,
         address account,
         uint256 fullAmount
@@ -50,11 +54,11 @@ contract MerkleVesting is IMerkleVesting, Multicall, Ownable {
         else return fullAmount - claimedSoFar;
     }
 
-    function getClaimed(bytes32 cohortId, address account) public view returns (uint256) {
+    function getClaimed(uint256 cohortId, address account) public view returns (uint256) {
         return cohorts[cohortId].claims[account];
     }
 
-    function isDisabled(bytes32 cohortId, uint256 index) public view returns (bool) {
+    function isDisabled(uint256 cohortId, uint256 index) public view returns (bool) {
         uint256 wordIndex = index / 256;
         uint256 bitIndex = index % 256;
         uint256 word = cohorts[cohortId].disabledState[wordIndex];
@@ -62,7 +66,7 @@ contract MerkleVesting is IMerkleVesting, Multicall, Ownable {
         return word & mask == mask;
     }
 
-    function setDisabled(bytes32 cohortId, uint256 index) external onlyOwner {
+    function setDisabled(uint256 cohortId, uint256 index) external onlyOwner {
         uint256 wordIndex = index / 256;
         uint256 bitIndex = index % 256;
         cohorts[cohortId].disabledState[wordIndex] = cohorts[cohortId].disabledState[wordIndex] | (1 << bitIndex);
@@ -83,7 +87,9 @@ contract MerkleVesting is IMerkleVesting, Multicall, Ownable {
             distributionDuration < cliffPeriod ||
             vestingPeriod < cliffPeriod
         ) revert InvalidParameters();
-        if (cohorts[merkleRoot].data.merkleRoot != bytes32(0)) revert MerkleRootCollision();
+
+        uint256 cohortId = cohorts.length;
+        Cohort storage newCohort = cohorts.push();
 
         uint64 distributionStartActual;
         if (distributionStart == 0) distributionStartActual = uint64(block.timestamp);
@@ -91,19 +97,19 @@ contract MerkleVesting is IMerkleVesting, Multicall, Ownable {
 
         uint64 distributionEnd = distributionStartActual + distributionDuration;
         if (distributionEnd < block.timestamp) revert DistributionEnded(block.timestamp, distributionEnd);
-        updateLastEndingCohort(distributionEnd, merkleRoot);
+        updateLastEndingCohort(distributionEnd, cohortId);
 
-        cohorts[merkleRoot].data.merkleRoot = merkleRoot;
-        cohorts[merkleRoot].data.distributionStart = distributionStartActual;
-        cohorts[merkleRoot].data.distributionEnd = distributionEnd;
-        cohorts[merkleRoot].data.vestingPeriod = vestingPeriod;
-        cohorts[merkleRoot].data.cliffPeriod = cliffPeriod;
+        newCohort.data.merkleRoot = merkleRoot;
+        newCohort.data.distributionStart = distributionStartActual;
+        newCohort.data.distributionEnd = distributionEnd;
+        newCohort.data.vestingPeriod = vestingPeriod;
+        newCohort.data.cliffPeriod = cliffPeriod;
 
-        emit CohortAdded(merkleRoot);
+        emit CohortAdded(cohortId);
     }
 
     function claim(
-        bytes32 cohortId,
+        uint256 cohortId,
         uint256 index,
         address account,
         uint256 amount,
@@ -131,7 +137,7 @@ contract MerkleVesting is IMerkleVesting, Multicall, Ownable {
         emit Claimed(cohortId, account, claimableAmount);
     }
 
-    function prolongDistributionPeriod(bytes32 cohortId, uint64 additionalSeconds) external onlyOwner {
+    function prolongDistributionPeriod(uint256 cohortId, uint64 additionalSeconds) external onlyOwner {
         CohortData storage cohortData = cohorts[cohortId].data;
         uint64 newDistributionEnd = cohortData.distributionEnd + additionalSeconds;
         cohortData.distributionEnd = newDistributionEnd;
@@ -148,8 +154,8 @@ contract MerkleVesting is IMerkleVesting, Multicall, Ownable {
         emit Withdrawn(recipient, balance);
     }
 
-    // Checks if lastEndingCohort should be updated and updates it with the new Merkle root if needed.
-    function updateLastEndingCohort(uint256 distributionEnd, bytes32 merkleRoot) internal {
-        if (distributionEnd > cohorts[lastEndingCohort].data.distributionEnd) lastEndingCohort = merkleRoot;
+    // Checks if lastEndingCohort should be updated and updates it with the cohort id if needed.
+    function updateLastEndingCohort(uint256 distributionEnd, uint256 cohortId) internal {
+        if (distributionEnd > cohorts[lastEndingCohort].data.distributionEnd) lastEndingCohort = cohortId;
     }
 }
