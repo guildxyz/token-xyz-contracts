@@ -2,22 +2,12 @@
 pragma solidity 0.8.13;
 
 import "./ERC20InitialSupply.sol";
+import "./IERC20MaxSupply.sol";
 import "@openzeppelin/contracts/access/Ownable.sol";
 
 /// @title A mintable ERC20 token.
-contract ERC20MintableOwnedMaxSupply is ERC20InitialSupply, Ownable {
+contract ERC20MintableOwnedMaxSupply is IERC20MaxSupply, ERC20InitialSupply, Ownable {
     uint256 public immutable maxSupply;
-
-    /// @notice Error thrown when the max supply is attempted to be set lower than the initial supply.
-    /// @param maxSupply The desired max supply.
-    /// @param initialSupply The desired initial supply, that cannot be higher than the max.
-    error MaxSupplyTooLow(uint256 maxSupply, uint256 initialSupply);
-
-    /// @notice Error thrown when more tokens are attempted to be minted than the max supply.
-    /// @param amount The amount of tokens attempted to be minted.
-    /// @param currentSupply The current supply of the token.
-    /// @param maxSupply The max supply of the token.
-    error MaxSupplyExceeded(uint256 amount, uint256 currentSupply, uint256 maxSupply);
 
     constructor(
         string memory name,

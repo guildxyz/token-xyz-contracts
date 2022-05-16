@@ -189,7 +189,7 @@ contract("MerkleVesting", function (accounts) {
     it("fails for invalid cohortId", async function () {
       const vesting = await Vesting.new(token.address, wallet0);
       await vesting.addCohort(randomRoot0, 0, distributionDuration, randomVestingPeriod, randomCliff);
-      // error CohortDoesNotExist();
+      // error CohortDoesNotExist(uint256 cohortId);
       await expectRevert.unspecified(vesting.claim(42, 0, wallet0, 10, []));
     });
 

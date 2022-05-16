@@ -36,7 +36,7 @@ contract ERC721Curve is IERC721Curve, ERC721, Ownable {
     }
 
     function getPriceOf(uint256 tokenId) public view returns (uint256) {
-        if (tokenId >= maxSupply) revert TokenIdOutOfBounds();
+        if (tokenId >= maxSupply) revert TokenIdOutOfBounds(tokenId, maxSupply);
         return (startingPrice * maxSupply**2) / ((maxSupply - tokenId)**2);
     }
 

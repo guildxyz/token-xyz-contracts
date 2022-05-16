@@ -59,7 +59,7 @@ contract ERC721MerkleDrop is ERC721, IERC721MerkleDrop, Ownable {
     }
 
     function _safeMint(address to, uint256 tokenId) internal override {
-        if (tokenId >= maxSupply) revert TokenIdOutOfBounds();
+        if (tokenId >= maxSupply) revert TokenIdOutOfBounds(tokenId, maxSupply);
         totalSupply++;
         super._safeMint(to, tokenId);
     }

@@ -136,7 +136,8 @@ interface IMerkleVesting {
     error AlreadyWithdrawn();
 
     /// @notice Error thrown when a cohort with the provided id does not exist.
-    error CohortDoesNotExist();
+    /// @param cohortId The cohort id that does not exist.
+    error CohortDoesNotExist(uint256 cohortId);
 
     /// @notice Error thrown when the distribution period has not started yet.
     /// @param current The current timestamp.

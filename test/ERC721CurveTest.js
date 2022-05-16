@@ -59,7 +59,7 @@ contract("ERC721 with curve", function (accounts) {
   });
 
   it("should fail to calculate the price of a token that will never exist", async function () {
-    // error TokenIdOutOfBounds();
+    // error TokenIdOutOfBounds(uint256 tokenId, uint256 maxSupply);
     await expectRevert.unspecified(token.getPriceOf(tokenMaxSupply));
   });
 
@@ -85,7 +85,7 @@ contract("ERC721 with curve", function (accounts) {
       await token.claim(wallet0, { value: tokenStartingPrice });
       await token.claim(wallet0, { value: getTokenPrice(1) });
       await token.claim(wallet0, { value: getTokenPrice(2) });
-      // error TokenIdOutOfBounds();
+      // error TokenIdOutOfBounds(uint256 tokenId, uint256 maxSupply);
       await expectRevert.unspecified(token.claim(wallet0, { value: ether("100") }));
     });
 

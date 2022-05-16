@@ -62,7 +62,7 @@ contract ERC721BatchMerkleDrop is ERC721, IERC721MerkleDrop, Ownable {
     function safeMint(address to) external onlyOwner {
         if (block.timestamp <= distributionEnd) revert DistributionOngoing(block.timestamp, distributionEnd);
         uint256 tokenId = tokenIdCounter.current();
-        if (tokenId >= maxSupply) revert TokenIdOutOfBounds();
+        if (tokenId >= maxSupply) revert TokenIdOutOfBounds(tokenId, maxSupply);
         tokenIdCounter.increment();
         _safeMint(to, tokenId);
     }
@@ -78,7 +78,7 @@ contract ERC721BatchMerkleDrop is ERC721, IERC721MerkleDrop, Ownable {
     function _safeBatchMint(address to, uint256 amount) internal {
         uint256 tokenId = tokenIdCounter.current();
         uint256 lastTokenId = tokenId + amount - 1;
-        if (lastTokenId >= maxSupply) revert TokenIdOutOfBounds();
+        if (lastTokenId >= maxSupply) revert TokenIdOutOfBounds(lastTokenId, maxSupply);
         for (; tokenId <= lastTokenId; ) {
             tokenIdCounter.increment();
             _safeMint(to, tokenId);

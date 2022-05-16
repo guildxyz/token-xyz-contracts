@@ -56,5 +56,7 @@ interface IERC721MerkleDrop is IERC721Metadata {
     error NonExistentToken(uint256 tokenId);
 
     /// @notice Error thrown when the tokenId is higher the maximum supply.
-    error TokenIdOutOfBounds();
+    /// @param tokenId The id that was attempted to be used.
+    /// @param maxSupply The maximum supply of the token.
+    error TokenIdOutOfBounds(uint256 tokenId, uint256 maxSupply);
 }

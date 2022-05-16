@@ -115,7 +115,7 @@ contract MerkleVesting is IMerkleVesting, Multicall, Ownable {
         uint256 amount,
         bytes32[] calldata merkleProof
     ) external {
-        if (cohorts[cohortId].data.merkleRoot == bytes32(0)) revert CohortDoesNotExist();
+        if (cohorts[cohortId].data.merkleRoot == bytes32(0)) revert CohortDoesNotExist(cohortId);
         Cohort storage cohort = cohorts[cohortId];
         uint256 distributionEndLocal = cohort.data.distributionEnd;
 

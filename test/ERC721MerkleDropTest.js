@@ -426,7 +426,7 @@ contract("ERC721MerkleDrop", function (accounts) {
 
     it("fails to mint above maxSupply", async function () {
       await time.increase(distributionDuration + 1);
-      // error TokenIdOutOfBounds();
+      // error TokenIdOutOfBounds(uint256 tokenId, uint256 maxSupply);
       await expectRevert.unspecified(token.safeMint(wallet0, tokenMaxSupply + 1));
     });
 
