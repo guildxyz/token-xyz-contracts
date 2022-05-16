@@ -18,7 +18,7 @@ import "@openzeppelin/contracts/utils/Multicall.sol";
 /// @title Allows anyone to claim a token if they exist in a Merkle root, but only over time.
 contract MerkleVesting is IMerkleVesting, Multicall, Ownable {
     address public immutable token;
-    uint256 public lastEndingCohort;
+    uint256 public allCohortsEnd;
 
     Cohort[] internal cohorts;
 
@@ -97,7 +97,7 @@ contract MerkleVesting is IMerkleVesting, Multicall, Ownable {
 
         uint64 distributionEnd = distributionStartActual + distributionDuration;
         if (distributionEnd < block.timestamp) revert DistributionEnded(block.timestamp, distributionEnd);
-        updateLastEndingCohort(distributionEnd, cohortId);
+        updateAllCohortsEnd(distributionEnd);
 
         newCohort.data.merkleRoot = merkleRoot;
         newCohort.data.distributionStart = distributionStartActual;
@@ -141,21 +141,20 @@ contract MerkleVesting is IMerkleVesting, Multicall, Ownable {
         CohortData storage cohortData = cohorts[cohortId].data;
         uint64 newDistributionEnd = cohortData.distributionEnd + additionalSeconds;
         cohortData.distributionEnd = newDistributionEnd;
-        updateLastEndingCohort(newDistributionEnd, cohortId);
+        updateAllCohortsEnd(newDistributionEnd);
         emit DistributionProlonged(cohortId, newDistributionEnd);
     }
 
     function withdraw(address recipient) external onlyOwner {
-        uint256 distributionEndLocal = cohorts[lastEndingCohort].data.distributionEnd;
-        if (block.timestamp <= distributionEndLocal) revert DistributionOngoing(block.timestamp, distributionEndLocal);
+        if (block.timestamp <= allCohortsEnd) revert DistributionOngoing(block.timestamp, allCohortsEnd);
         uint256 balance = IERC20(token).balanceOf(address(this));
         if (balance == 0) revert AlreadyWithdrawn();
         if (!IERC20(token).transfer(recipient, balance)) revert TransferFailed(token, address(this), recipient);
         emit Withdrawn(recipient, balance);
     }
 
-    // Checks if lastEndingCohort should be updated and updates it with the cohort id if needed.
-    function updateLastEndingCohort(uint256 distributionEnd, uint256 cohortId) internal {
-        if (distributionEnd > cohorts[lastEndingCohort].data.distributionEnd) lastEndingCohort = cohortId;
+    // Checks if allCohortsEnd should be updated and updates it with the new timestamp.
+    function updateAllCohortsEnd(uint256 distributionEnd) internal {
+        if (distributionEnd > allCohortsEnd) allCohortsEnd = distributionEnd;
     }
 }

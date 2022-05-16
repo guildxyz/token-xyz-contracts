@@ -38,8 +38,8 @@ interface IMerkleVesting {
     /// @notice Returns the address of the token distributed by this contract.
     function token() external view returns (address);
 
-    /// @notice Returns the id of the cohort ending at the latest.
-    function lastEndingCohort() external view returns (uint256);
+    /// @notice Returns the timestamp when all cohorts' distribution period ends.
+    function allCohortsEnd() external view returns (uint256);
 
     /// @notice Returns the parameters of a specific cohort.
     /// @param cohortId The id of the cohort.

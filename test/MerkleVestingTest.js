@@ -106,16 +106,20 @@ contract("MerkleVesting", function (accounts) {
       );
     });
 
-    it("updates lastEndingCohort if needed", async function () {
+    it("updates allCohortsEnd if needed", async function () {
       const vesting = await Vesting.new(token.address, wallet0);
-      const lastEndingCohort0 = await vesting.lastEndingCohort();
+      const allCohortsEndInit = await vesting.allCohortsEnd();
+      expect(allCohortsEndInit).to.bignumber.eq("0");
+
       await vesting.addCohort(randomRoot0, 0, distributionDuration, randomVestingPeriod, randomCliff);
-      const lastEndingCohort1 = await vesting.lastEndingCohort();
+      const cohort0End = (await vesting.getCohort(0)).distributionEnd;
+      const allCohortsEnd0 = await vesting.allCohortsEnd();
+      expect(allCohortsEnd0).to.bignumber.eq(cohort0End);
+
       await vesting.addCohort(randomRoot1, 0, distributionDuration + 1, randomVestingPeriod, randomCliff);
-      const lastEndingCohort2 = await vesting.lastEndingCohort();
-      expect(lastEndingCohort0).to.bignumber.eq("0");
-      expect(lastEndingCohort1).to.bignumber.eq("0");
-      expect(lastEndingCohort2).to.bignumber.eq("1");
+      const cohort1End = (await vesting.getCohort(1)).distributionEnd;
+      const allCohortsEnd1 = await vesting.allCohortsEnd();
+      expect(allCohortsEnd1).to.bignumber.eq(cohort1End);
     });
 
     it("sets the cohort data correctly", async function () {
@@ -446,14 +450,21 @@ contract("MerkleVesting", function (accounts) {
       expect(res.receipt.status).to.be.true;
     });
 
-    it("updates lastEndingCohort, but only if needed", async function () {
-      expect(await vesting.lastEndingCohort()).to.bignumber.eq("0");
+    it("updates allCohortsEnd if needed", async function () {
+      const otherCohortEnd = (await vesting.getCohort(0)).distributionEnd;
       await vesting.addCohort(randomRoot0, 0, distributionDuration / 2, randomVestingPeriod, randomCliff);
-      expect(await vesting.lastEndingCohort()).to.bignumber.eq("0");
+      const cohortEnd0 = (await vesting.getCohort(1)).distributionEnd;
+      expect(await vesting.allCohortsEnd()).to.bignumber.eq(otherCohortEnd);
+      expect(cohortEnd0).to.bignumber.not.eq(otherCohortEnd);
+
       await vesting.prolongDistributionPeriod(1, distributionDuration / 3);
-      expect(await vesting.lastEndingCohort()).to.bignumber.eq("0");
+      const cohortEnd1 = (await vesting.getCohort(1)).distributionEnd;
+      expect(await vesting.allCohortsEnd()).to.bignumber.eq(otherCohortEnd);
+      expect(cohortEnd1).to.bignumber.not.eq(cohortEnd0);
+
       await vesting.prolongDistributionPeriod(1, distributionDuration);
-      expect(await vesting.lastEndingCohort()).to.bignumber.eq("1");
+      const cohortEnd2 = (await vesting.getCohort(1)).distributionEnd;
+      expect(await vesting.allCohortsEnd()).to.bignumber.eq(cohortEnd2);
     });
 
     it("emits DistributionProlonged event", async function () {
