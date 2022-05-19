@@ -1,5 +1,5 @@
 const { utils } = require("ethers");
-const { BN, ether, expectEvent, expectRevert } = require("@openzeppelin/test-helpers");
+const { BN, constants, ether, expectEvent, expectRevert } = require("@openzeppelin/test-helpers");
 const expect = require("chai").expect;
 
 const InitialMigration = artifacts.require("InitialMigration");
@@ -85,7 +85,7 @@ contract("TokenFactory", function (accounts) {
         expect(tokenAddressesBob[0].factoryVersion).to.bignumber.eq(factoryVersion);
       });
 
-      it("emits TokenDeployed event", async function () {
+      it("emits TokenAdded event", async function () {
         const res0 = await tokenXyz[runOption.createToken](
           "Alice",
           "Alice0",
@@ -99,19 +99,50 @@ contract("TokenFactory", function (accounts) {
         const tokenAddressesAlice = await tokenXyz.getDeployedTokens("Alice");
         const tokenAddressesBob = await tokenXyz.getDeployedTokens("Bob");
         const factoryVersion = await tokenFactory.FEATURE_VERSION();
-        await expectEvent(res0.receipt, "TokenDeployed", {
+        await expectEvent(res0.receipt, "TokenAdded", {
           deployer: wallet0,
           urlName: "Alice",
           token: tokenAddressesAlice[tokenAddressesAlice.length - 1].contractAddress,
           factoryVersion: factoryVersion
         });
-        await expectEvent(res1.receipt, "TokenDeployed", {
+        await expectEvent(res1.receipt, "TokenAdded", {
           deployer: wallet0,
           urlName: "Bob",
           token: tokenAddressesBob[tokenAddressesBob.length - 1].contractAddress,
           factoryVersion: factoryVersion
         });
       });
+
+      if (runOption.contract === "TokenFactory")
+        context("manually adding tokens", function () {
+          it("fails if not called by the owner", async function () {
+            // error OnlyOwner(address caller, address owner);
+            await expectRevert.unspecified(tokenXyz.addToken("Stranger", constants.ZERO_ADDRESS, { from: wallet1 }));
+          });
+
+          it("saves token addresses", async function () {
+            const tokenAddress = (await tokenXyz.getDeployedTokens("Alice"))[0].contractAddress;
+            const tokensOld = await tokenXyz.getDeployedTokens("Stranger");
+            await tokenXyz.addToken("Stranger", tokenAddress);
+            const tokensNew = await tokenXyz.getDeployedTokens("Stranger");
+            expect(tokensOld.length).to.eq(0);
+            expect(tokensNew.length).to.eq(1);
+            expect(tokensNew[0].factoryVersion).to.bignumber.eq("0");
+            expect(tokensNew[0].contractAddress).to.bignumber.eq(tokenAddress);
+          });
+
+          it("emits TokenAdded event", async function () {
+            const tokenAddress = (await tokenXyz.getDeployedTokens("Alice"))[0].contractAddress;
+            const res = await tokenXyz.addToken("Stranger", tokenAddress);
+            const tokenAddresses = await tokenXyz.getDeployedTokens("Stranger");
+            await expectEvent(res.receipt, "TokenAdded", {
+              deployer: constants.ZERO_ADDRESS,
+              urlName: "Stranger",
+              token: tokenAddresses[tokenAddresses.length - 1].contractAddress,
+              factoryVersion: "0"
+            });
+          });
+        });
 
       context("fixed supply tokens", function () {
         let tokenAddress;
@@ -127,7 +158,7 @@ contract("TokenFactory", function (accounts) {
             wallet0
           );
           // get deployed token from events
-          tokenAddress = getEventArg(result.receipt.logs, "TokenDeployed", "token");
+          tokenAddress = getEventArg(result.receipt.logs, "TokenAdded", "token");
         });
 
         it("should have correct metadata", async function () {
@@ -164,7 +195,7 @@ contract("TokenFactory", function (accounts) {
             wallet0
           );
           const tokenContract = await runOption.ERC20Mintable.at(
-            getEventArg(creation.receipt.logs, "TokenDeployed", "token")
+            getEventArg(creation.receipt.logs, "TokenAdded", "token")
           );
 
           const name = await tokenContract.name();
@@ -220,9 +251,9 @@ contract("TokenFactory", function (accounts) {
             wallet0
           );
           const tokenContracts = [
-            await runOption.ERC20Mintable.at(getEventArg(creation0.receipt.logs, "TokenDeployed", "token")),
-            await runOption.ERC20Mintable.at(getEventArg(creation1.receipt.logs, "TokenDeployed", "token")),
-            await runOption.ERC20Mintable.at(getEventArg(creation2.receipt.logs, "TokenDeployed", "token"))
+            await runOption.ERC20Mintable.at(getEventArg(creation0.receipt.logs, "TokenAdded", "token")),
+            await runOption.ERC20Mintable.at(getEventArg(creation1.receipt.logs, "TokenAdded", "token")),
+            await runOption.ERC20Mintable.at(getEventArg(creation2.receipt.logs, "TokenAdded", "token"))
           ];
           for (tokenContract of tokenContracts) {
             const oldBalance = await tokenContract.balanceOf(wallet1);
@@ -244,7 +275,7 @@ contract("TokenFactory", function (accounts) {
             wallet0
           );
           const unlimitedTokenContract = await runOption.ERC20MintableMaxSupply.at(
-            getEventArg(unlimitedCreation.receipt.logs, "TokenDeployed", "token")
+            getEventArg(unlimitedCreation.receipt.logs, "TokenAdded", "token")
           );
           const maxSupply = initialSupply.mul(new BN(2));
           const maxSupplyCreation = await tokenXyz[runOption.createToken](
@@ -257,7 +288,7 @@ contract("TokenFactory", function (accounts) {
             wallet0
           );
           const maxSupplyTokenContract = await runOption.ERC20MintableMaxSupply.at(
-            getEventArg(maxSupplyCreation.receipt.logs, "TokenDeployed", "token")
+            getEventArg(maxSupplyCreation.receipt.logs, "TokenAdded", "token")
           );
           expect(await maxSupplyTokenContract.maxSupply()).to.bignumber.eq(maxSupply);
           await expectRevert.unspecified(unlimitedTokenContract.maxSupply());
