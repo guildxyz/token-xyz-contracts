@@ -20,6 +20,7 @@ contract TokenFactoryFeature is IFeature, ITokenFactoryFeature, FixinCommon {
     /// @return success `LibMigrate.SUCCESS` on success.
     function migrate() external returns (bytes4 success) {
         _registerFeatureFunction(this.createToken.selector);
+        _registerFeatureFunction(this.addToken.selector);
         _registerFeatureFunction(this.getDeployedTokens.selector);
         return LibMigrate.MIGRATE_SUCCESS;
     }
@@ -85,7 +86,17 @@ contract TokenFactoryFeature is IFeature, ITokenFactoryFeature, FixinCommon {
         LibTokenFactoryStorage.getStorage().deploys[urlName].push(
             DeployData({factoryVersion: FEATURE_VERSION, contractAddress: token})
         );
-        emit TokenDeployed(msg.sender, urlName, token, FEATURE_VERSION);
+        emit TokenAdded(msg.sender, urlName, token, FEATURE_VERSION);
+    }
+
+    /// @notice Adds a token to the contract's storage.
+    /// @param urlName The url name used by the frontend, kind of an id of the creator.
+    /// @param tokenAddress The address of the token to add.
+    function addToken(string calldata urlName, address tokenAddress) external onlyOwner {
+        LibTokenFactoryStorage.getStorage().deploys[urlName].push(
+            DeployData({factoryVersion: 0, contractAddress: tokenAddress})
+        );
+        emit TokenAdded(address(0), urlName, tokenAddress, 0);
     }
 
     /// @notice Returns all the deployed token addresses by a specific creator.

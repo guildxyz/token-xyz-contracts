@@ -22,4 +22,9 @@ interface ITokenFactoryFeature is ITokenFactoryBase {
         uint256 maxSupply,
         address firstOwner
     ) external;
+
+    /// @notice Adds a token to the contract's storage.
+    /// @param urlName The url name used by the frontend, kind of an id of the creator.
+    /// @param tokenAddress The address of the token to add.
+    function addToken(string calldata urlName, address tokenAddress) external;
 }

@@ -85,7 +85,7 @@ contract TokenWithRolesFactoryFeature is IFeature, ITokenWithRolesFactoryFeature
         LibTokenFactoryStorage.getStorage().deploys[urlName].push(
             DeployData({factoryVersion: FEATURE_VERSION, contractAddress: token})
         );
-        emit TokenDeployed(msg.sender, urlName, token, FEATURE_VERSION);
+        emit TokenAdded(msg.sender, urlName, token, FEATURE_VERSION);
     }
 
     /// @notice Returns all the deployed token addresses by a specific creator.
