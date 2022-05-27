@@ -53,11 +53,13 @@ contract TokenXyz {
     }
 
     /// @notice Forwards calls to the appropriate implementation contract.
+    // solhint-disable-next-line no-complex-fallback
     fallback() external payable {
         bytes4 selector = msg.data.readBytes4(0);
         address impl = getFunctionImplementation(selector);
         if (impl == address(0)) revert NotImplemented(selector);
 
+        // solhint-disable-next-line avoid-low-level-calls
         (bool success, bytes memory resultData) = impl.delegatecall(msg.data);
         if (!success) {
             _revertWithData(resultData);
@@ -66,6 +68,7 @@ contract TokenXyz {
     }
 
     /// @notice Fallback for just receiving ether.
+    // solhint-disable-next-line no-empty-blocks
     receive() external payable {}
 
     /// @notice Get the implementation contract of a registered function.

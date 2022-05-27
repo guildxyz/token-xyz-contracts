@@ -41,6 +41,7 @@ library LibBootstrap {
     /// @param target The call target.
     /// @param data The call data.
     function delegatecallBootstrapFunction(address target, bytes memory data) internal {
+        // solhint-disable-next-line avoid-low-level-calls
         (bool success, bytes memory resultData) = target.delegatecall(data);
         if (!success || resultData.length != 32 || abi.decode(resultData, (bytes4)) != BOOTSTRAP_SUCCESS) {
             revert BootstrapCallFailed(target, resultData);

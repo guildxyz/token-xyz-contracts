@@ -5,6 +5,8 @@ import "../features/deployables/token/ERC20/ERC20MintableOwned.sol";
 
 /// @title A mintable and burnable ERC20 token.
 contract ERC20MintableBurnable is ERC20MintableOwned {
+    // solhint-disable no-empty-blocks
+
     constructor(
         string memory name,
         string memory symbol,

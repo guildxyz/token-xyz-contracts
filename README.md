@@ -81,6 +81,14 @@ For automatic verification you can use [truffle plugin verify](https://github.co
 truffle run verify [contractName] --network [networkName]
 ```
 
+## Linting
+
+The project uses [solhint](https://github.com/protofire/solhint). To run it, simply execute:
+
+```bash
+npm run lint
+```
+
 ## Tests
 
 To run the unit tests written for this project, execute this command in a terminal:
