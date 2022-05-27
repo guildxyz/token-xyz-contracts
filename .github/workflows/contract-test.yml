@@ -1,4 +1,4 @@
-name: Truffle compile and test
+name: Lint, compile and test
 
 on:
   push:
@@ -21,6 +21,9 @@ jobs:
 
       - name: Install dependencies
         run: npm ci
+
+      - name: Lint
+        run: npm run lint
 
       - name: Install Truffle
         run: npm install -g truffle ganache
