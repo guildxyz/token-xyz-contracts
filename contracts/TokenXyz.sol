@@ -25,7 +25,7 @@
 
 */
 
-pragma solidity 0.8.13;
+pragma solidity 0.8.14;
 
 import "./utils/LibBytesV06.sol";
 import "./migrations/LibBootstrap.sol";

@@ -25,7 +25,7 @@
 
 */
 
-pragma solidity 0.8.13;
+pragma solidity 0.8.14;
 
 import "../fixins/FixinCommon.sol";
 import "../storage/LibProxyStorage.sol";

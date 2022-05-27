@@ -1,5 +1,5 @@
 // SPDX-License-Identifier: MIT
-pragma solidity 0.8.13;
+pragma solidity 0.8.14;
 
 import "../../lib/LibAddress.sol";
 import "../../interfaces/IERC721Curve.sol";

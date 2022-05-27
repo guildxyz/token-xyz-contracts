@@ -1,5 +1,5 @@
 // SPDX-License-Identifier: MIT
-pragma solidity 0.8.13;
+pragma solidity 0.8.14;
 
 import "./interfaces/ITokenFactoryFeature.sol";
 import "./deployables/token/ERC20/ERC20MintableOwned.sol";

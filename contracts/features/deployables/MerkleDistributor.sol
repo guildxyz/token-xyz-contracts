@@ -7,7 +7,7 @@
 
 */
 
-pragma solidity 0.8.13;
+pragma solidity 0.8.14;
 
 import "./interfaces/IMerkleDistributor.sol";
 import "@openzeppelin/contracts/access/Ownable.sol";

@@ -1,6 +1,6 @@
 // SPDX-License-Identifier: MIT
 
-pragma solidity 0.8.13;
+pragma solidity 0.8.14;
 
 import "./LibStorage.sol";
 import "../features/interfaces/IFactoryFeature.sol";
@@ -18,7 +18,7 @@ library LibMerkleVestingFactoryStorage {
         uint256 storageSlot = LibStorage.getStorageSlot(LibStorage.StorageId.MerkleVestingFactory);
         // Dip into assembly to change the slot pointed to by the local variable `stor`.
         // solhint-disable-next-line max-line-length
-        // See https://solidity.readthedocs.io/en/v0.8.13/assembly.html?highlight=slot#access-to-external-variables-functions-and-libraries
+        // See https://solidity.readthedocs.io/en/v0.8.14/assembly.html?highlight=slot#access-to-external-variables-functions-and-libraries
         assembly {
             stor.slot := storageSlot
         }

@@ -25,7 +25,7 @@
 
 */
 
-pragma solidity 0.8.13;
+pragma solidity 0.8.14;
 
 /// @title Common storage helpers
 library LibStorage {
@@ -49,7 +49,7 @@ library LibStorage {
     /// @notice Get the storage slot given a storage ID. We assign unique, well-spaced
     ///         slots to storage bucket variables to ensure they do not overlap.
     // solhint-disable-next-line max-line-length
-    /// See: https://solidity.readthedocs.io/en/v0.8.13/assembly.html#access-to-external-variables-functions-and-libraries
+    /// See: https://solidity.readthedocs.io/en/v0.8.14/assembly.html#access-to-external-variables-functions-and-libraries
     /// @param storageId An entry in `StorageId`
     /// @return slot The storage slot.
     function getStorageSlot(StorageId storageId) internal pure returns (uint256 slot) {
