@@ -170,7 +170,7 @@ contract("ERC721 auction", function (accounts) {
       await expectRevert(token.setStartingPrice(42, { from: wallet1 }), "Ownable: caller is not the owner");
     });
 
-    it.only("should fail to update startingPrice to zero", async function () {
+    it("should fail to update startingPrice to zero", async function () {
       // error StartingPriceZero();
       await expectRevert.unspecified(token.setStartingPrice(0));
     });
