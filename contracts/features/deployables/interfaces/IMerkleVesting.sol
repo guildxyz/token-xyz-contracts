@@ -94,7 +94,7 @@ interface IMerkleVesting {
     /// @param index A value from the generated input list.
     /// @param account A value from the generated input list.
     /// @param amount A value from the generated input list (so the full amount).
-    /// @param merkleProof A an array of values from the generated input list.
+    /// @param merkleProof An array of values from the generated input list.
     function claim(
         uint256 cohortId,
         uint256 index,

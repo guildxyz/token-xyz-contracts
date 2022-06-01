@@ -21,7 +21,7 @@ interface IERC721MerkleDrop is IERC721Metadata {
     /// @param index A value from the generated input list.
     /// @param account A value from the generated input list.
     /// @param amount A value from the generated input list.
-    /// @param merkleProof A an array of values from the generated input list.
+    /// @param merkleProof An array of values from the generated input list.
     function claim(
         uint256 index,
         address account,
@@ -55,7 +55,7 @@ interface IERC721MerkleDrop is IERC721Metadata {
     /// @param tokenId The queried id.
     error NonExistentToken(uint256 tokenId);
 
-    /// @notice Error thrown when the tokenId is higher the maximum supply.
+    /// @notice Error thrown when the tokenId is higher than the maximum supply.
     /// @param tokenId The id that was attempted to be used.
     /// @param maxSupply The maximum supply of the token.
     error TokenIdOutOfBounds(uint256 tokenId, uint256 maxSupply);

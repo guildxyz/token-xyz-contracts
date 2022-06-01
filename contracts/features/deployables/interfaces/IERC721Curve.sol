@@ -47,12 +47,14 @@ interface IERC721Curve is IERC721Metadata {
     error NonExistentToken(uint256 tokenId);
 
     /// @notice Error thrown when the transaction value is lower than the price of the token.
+    /// @param paid The amount paid in wei.
+    /// @param nextPrice The price of the next token in wei.
     error PriceTooLow(uint256 paid, uint256 nextPrice);
 
     /// @notice Error thrown when the starting price attempted to be set is zero.
     error StartingPriceZero();
 
-    /// @notice Error thrown when the tokenId is higher the maximum supply.
+    /// @notice Error thrown when the tokenId is higher than the maximum supply.
     /// @param tokenId The id that was attempted to be used.
     /// @param maxSupply The maximum supply of the token.
     error TokenIdOutOfBounds(uint256 tokenId, uint256 maxSupply);

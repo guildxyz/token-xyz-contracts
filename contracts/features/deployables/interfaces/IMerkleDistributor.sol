@@ -28,7 +28,7 @@ interface IMerkleDistributor {
     /// @param index A value from the generated input list.
     /// @param account A value from the generated input list.
     /// @param amount A value from the generated input list.
-    /// @param merkleProof A an array of values from the generated input list.
+    /// @param merkleProof An array of values from the generated input list.
     function claim(
         uint256 index,
         address account,
