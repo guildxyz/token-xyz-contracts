@@ -6,12 +6,16 @@ import "@openzeppelin/contracts/token/ERC721/extensions/IERC721Metadata.sol";
 
 /// @title An NFT distributed via on-chain bidding.
 interface IERC721Auction is IERC721Metadata {
-    /// @notice Struct storing the state of an auction.
-    /// @param bidAmount The current highest bid amount.
-    /// @param startTime The time when the auction started.
-    /// @param endTime The time when the auction is scheduled to end.
-    /// @param bidder The address of the current highest bidder.
-    struct Auction {
+    /// @notice See {getAuctionConfig}.
+    struct AuctionConfig {
+        uint128 startingPrice;
+        uint128 auctionDuration;
+        uint128 timeBuffer;
+        uint128 minimumPercentageIncreasex100;
+    }
+
+    /// @notice See {getAuctionState}.
+    struct AuctionState {
         uint256 bidAmount;
         uint128 startTime;
         uint128 endTime;
@@ -41,6 +45,22 @@ interface IERC721Auction is IERC721Metadata {
     /// @param newValue The new value for minimumPercentageIncreasex100.
     function setMinimumPercentageIncreasex100(uint128 newValue) external;
 
+    /// @notice Returns the configuration of an auction. Properties can be changed only by the owner.
+    /// @return startingPrice The starting price of the tokens, i.e. the minimum amount of the first bid.
+    /// @return auctionDuration The duration of the auction of a specific token.
+    /// @return timeBuffer The minimum time until an auction's end after a bid.
+    /// @return minimumPercentageIncreasex100 The min. percentage of the increase between the previous and the current bid
+    ///                                      multiplied by 100.
+    function getAuctionConfig()
+        external
+        view
+        returns (
+            uint128 startingPrice,
+            uint128 auctionDuration,
+            uint128 timeBuffer,
+            uint128 minimumPercentageIncreasex100
+        );
+
     /// @notice Returns the state of the current auction.
     /// @return tokenId The id of the token being bid on.
     /// @return bidder The address that made the last bid.
@@ -57,19 +77,6 @@ interface IERC721Auction is IERC721Metadata {
             uint128 startTime,
             uint128 endTime
         );
-
-    /// @notice The starting price of the tokens, i.e. the minimum amount of the first bid.
-    /// @return The price in wei.
-    function startingPrice() external view returns (uint128);
-
-    /// @notice The duration of the auction of a specific token.
-    function auctionDuration() external view returns (uint128);
-
-    /// @notice The minimum time until an auction's end after a bid.
-    function timeBuffer() external view returns (uint128);
-
-    /// @notice The minimum percentage of the increase between the previous and the current bid, multiplied by 100.
-    function minimumPercentageIncreasex100() external view returns (uint128);
 
     /// @notice The maximum number of NFTs that can ever be minted.
     function maxSupply() external view returns (uint256);

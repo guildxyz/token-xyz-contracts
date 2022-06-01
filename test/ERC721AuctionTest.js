@@ -102,18 +102,15 @@ contract("ERC721 auction", function (accounts) {
     const name = await token.name();
     const symbol = await token.symbol();
     const maxSupply = await token.maxSupply();
-    const startingPrice_ = await token.startingPrice();
-    const auctionDuration_ = await token.auctionDuration();
-    const timeBuffer_ = await token.timeBuffer();
-    const minimumPercentageIncreasex100_ = await token.minimumPercentageIncreasex100();
+    const auctionConfig = await token.getAuctionConfig();
     const owner = await token.owner();
     expect(name).to.eq(tokenName);
     expect(symbol).to.eq(tokenSymbol);
     expect(maxSupply).to.bignumber.eq(tokenMaxSupply);
-    expect(startingPrice_).to.bignumber.eq(startingPrice);
-    expect(auctionDuration_).to.bignumber.eq(auctionDuration);
-    expect(timeBuffer_).to.bignumber.eq(timeBuffer);
-    expect(minimumPercentageIncreasex100_).to.bignumber.eq(minimumPercentageIncreasex100);
+    expect(auctionConfig.startingPrice).to.bignumber.eq(startingPrice);
+    expect(auctionConfig.auctionDuration).to.bignumber.eq(auctionDuration);
+    expect(auctionConfig.timeBuffer).to.bignumber.eq(timeBuffer);
+    expect(auctionConfig.minimumPercentageIncreasex100).to.bignumber.eq(minimumPercentageIncreasex100);
     expect(owner).to.eq(wallet0);
   });
 
@@ -196,37 +193,37 @@ contract("ERC721 auction", function (accounts) {
     });
 
     it("should update startingPrice", async function () {
-      const oldValue = await token.startingPrice();
+      const oldValue = (await token.getAuctionConfig()).startingPrice;
       const desiredValue = ether("1");
       await token.setStartingPrice(desiredValue);
-      const newValue = await token.startingPrice();
+      const newValue = (await token.getAuctionConfig()).startingPrice;
       expect(newValue).to.not.bignumber.eq(oldValue);
       expect(newValue).to.bignumber.eq(desiredValue);
     });
 
     it("should update auctionDuration", async function () {
-      const oldValue = await token.auctionDuration();
+      const oldValue = (await token.getAuctionConfig()).auctionDuration;
       const desiredValue = "69420";
       await token.setAuctionDuration(desiredValue);
-      const newValue = await token.auctionDuration();
+      const newValue = await (await token.getAuctionConfig()).auctionDuration;
       expect(newValue).to.not.bignumber.eq(oldValue);
       expect(newValue).to.bignumber.eq(desiredValue);
     });
 
     it("should update timeBuffer", async function () {
-      const oldValue = await token.timeBuffer();
+      const oldValue = await (await token.getAuctionConfig()).timeBuffer;
       const desiredValue = "120";
       await token.setTimeBuffer(desiredValue);
-      const newValue = await token.timeBuffer();
+      const newValue = await (await token.getAuctionConfig()).timeBuffer;
       expect(newValue).to.not.bignumber.eq(oldValue);
       expect(newValue).to.bignumber.eq(desiredValue);
     });
 
     it("should update minimumPercentageIncreasex100", async function () {
-      const oldValue = await token.minimumPercentageIncreasex100();
+      const oldValue = (await token.getAuctionConfig()).minimumPercentageIncreasex100;
       const desiredValue = "200";
       await token.setMinimumPercentageIncreasex100(desiredValue);
-      const newValue = await token.minimumPercentageIncreasex100();
+      const newValue = (await token.getAuctionConfig()).minimumPercentageIncreasex100;
       expect(newValue).to.not.bignumber.eq(oldValue);
       expect(newValue).to.bignumber.eq(desiredValue);
     });

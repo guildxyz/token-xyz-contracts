@@ -14,11 +14,8 @@ contract ERC721Auction is IERC721Auction, ERC721, Ownable {
     using Strings for uint256;
 
     // Auction properties
-    uint128 public startingPrice;
-    uint128 public auctionDuration;
-    uint128 public timeBuffer;
-    uint128 public minimumPercentageIncreasex100;
-    Auction internal auction;
+    AuctionConfig internal auctionConfig;
+    AuctionState internal auctionState;
 
     // Token properties
     uint256 public immutable maxSupply;
@@ -43,10 +40,10 @@ contract ERC721Auction is IERC721Auction, ERC721, Ownable {
         if (startingPrice_ == 0) revert StartingPriceZero();
         if (auctionDuration_ == 0 || owner == address(0)) revert InvalidParameters();
 
-        startingPrice = startingPrice_;
-        auctionDuration = auctionDuration_;
-        timeBuffer = timeBuffer_;
-        minimumPercentageIncreasex100 = minimumPercentageIncreasex100_;
+        auctionConfig.startingPrice = startingPrice_;
+        auctionConfig.auctionDuration = auctionDuration_;
+        auctionConfig.timeBuffer = timeBuffer_;
+        auctionConfig.minimumPercentageIncreasex100 = minimumPercentageIncreasex100_;
 
         maxSupply = maxSupply_;
         cid = cid_;
@@ -64,28 +61,30 @@ contract ERC721Auction is IERC721Auction, ERC721, Ownable {
         if (tokenIdCounter.current() != tokenId) revert BidForAnotherToken(tokenId, tokenIdCounter.current());
 
         // Check if the auction is currently running.
-        uint128 auctionEndTime = auction.endTime;
-        if (block.timestamp < auction.startTime) revert AuctionNotStarted(block.timestamp, auction.startTime);
+        uint128 auctionEndTime = auctionState.endTime;
+        if (block.timestamp < auctionState.startTime) revert AuctionNotStarted(block.timestamp, auctionState.startTime);
         if (block.timestamp >= auctionEndTime) revert AuctionEnded(block.timestamp, auctionEndTime);
 
         // Check the amount offered.
-        uint256 bidAmount = auction.bidAmount;
-        uint256 minimumBid = bidAmount + ((bidAmount * minimumPercentageIncreasex100) / 10000);
+        uint256 bidAmount = auctionState.bidAmount;
+        uint256 minimumBid = bidAmount + ((bidAmount * auctionConfig.minimumPercentageIncreasex100) / 10000);
         if (msg.value < minimumBid) revert BidTooLow(msg.value, minimumBid);
-        if (minimumBid == 0 && msg.value < startingPrice) revert BidTooLow(msg.value, startingPrice);
+        if (minimumBid == 0 && msg.value < auctionConfig.startingPrice)
+            revert BidTooLow(msg.value, auctionConfig.startingPrice);
 
         // Refund the previous bidder.
-        address lastBidder = auction.bidder;
+        address lastBidder = auctionState.bidder;
         if (lastBidder != address(0)) payable(lastBidder).sendEther(bidAmount);
 
         // Save the new bid.
-        auction.bidAmount = msg.value;
-        auction.bidder = payable(msg.sender);
+        auctionState.bidAmount = msg.value;
+        auctionState.bidder = payable(msg.sender);
 
         // Extend the auction duration if we receive a bid in the last minutes.
+        uint128 timeBuffer = auctionConfig.timeBuffer;
         if (auctionEndTime - block.timestamp < timeBuffer) {
             auctionEndTime = uint128(block.timestamp) + timeBuffer;
-            auction.endTime = auctionEndTime;
+            auctionState.endTime = auctionEndTime;
             emit AuctionExtended(tokenId, auctionEndTime);
         }
 
@@ -93,10 +92,10 @@ contract ERC721Auction is IERC721Auction, ERC721, Ownable {
     }
 
     function settleAuction() external {
-        if (auction.endTime > block.timestamp) revert AuctionNotEnded(block.timestamp, auction.endTime);
+        if (auctionState.endTime > block.timestamp) revert AuctionNotEnded(block.timestamp, auctionState.endTime);
 
-        address winner = auction.bidder;
-        uint256 bidAmount = auction.bidAmount;
+        address winner = auctionState.bidder;
+        uint256 bidAmount = auctionState.bidAmount;
         uint256 tokenId = tokenIdCounter.current();
 
         // Mint the token to the winner and pay out the owner.
@@ -115,31 +114,31 @@ contract ERC721Auction is IERC721Auction, ERC721, Ownable {
 
     function setStartingPrice(uint128 newValue) external onlyOwner {
         if (newValue == 0) revert StartingPriceZero();
-        startingPrice = newValue;
+        auctionConfig.startingPrice = newValue;
         emit StartingPriceChanged(newValue);
     }
 
     function setAuctionDuration(uint128 newValue) external onlyOwner {
         if (newValue == 0) revert InvalidParameters();
-        auctionDuration = newValue;
+        auctionConfig.auctionDuration = newValue;
         emit AuctionDurationChanged(newValue);
     }
 
     function setTimeBuffer(uint128 newValue) external onlyOwner {
-        timeBuffer = newValue;
+        auctionConfig.timeBuffer = newValue;
         emit TimeBufferChanged(newValue);
     }
 
     function setMinimumPercentageIncreasex100(uint128 newValue) external onlyOwner {
-        minimumPercentageIncreasex100 = newValue;
+        auctionConfig.minimumPercentageIncreasex100 = newValue;
         emit MinimumPercentageIncreasex100Changed(newValue);
     }
 
     // Create a new auction if possible and emit an event.
     function _createAuction(uint256 nextTokenId, uint128 startTime) internal {
         if (nextTokenId < maxSupply) {
-            uint128 endTime = startTime + auctionDuration;
-            auction = Auction({bidAmount: 0, startTime: startTime, endTime: endTime, bidder: address(0)});
+            uint128 endTime = startTime + auctionConfig.auctionDuration;
+            auctionState = AuctionState({bidAmount: 0, startTime: startTime, endTime: endTime, bidder: address(0)});
             emit AuctionCreated(nextTokenId, startTime, endTime);
         }
     }
@@ -149,6 +148,24 @@ contract ERC721Auction is IERC721Auction, ERC721, Ownable {
         tokenIdCounter.increment();
         ++totalSupply;
         _safeMint(to, tokenId, "");
+    }
+
+    function getAuctionConfig()
+        external
+        view
+        returns (
+            uint128 startingPrice,
+            uint128 auctionDuration,
+            uint128 timeBuffer,
+            uint128 minimumPercentageIncreasex100
+        )
+    {
+        return (
+            auctionConfig.startingPrice,
+            auctionConfig.auctionDuration,
+            auctionConfig.timeBuffer,
+            auctionConfig.minimumPercentageIncreasex100
+        );
     }
 
     function getAuctionState()
@@ -162,7 +179,13 @@ contract ERC721Auction is IERC721Auction, ERC721, Ownable {
             uint128 endTime
         )
     {
-        return (tokenIdCounter.current(), auction.bidder, auction.bidAmount, auction.startTime, auction.endTime);
+        return (
+            tokenIdCounter.current(),
+            auctionState.bidder,
+            auctionState.bidAmount,
+            auctionState.startTime,
+            auctionState.endTime
+        );
     }
 
     function tokenURI(uint256 tokenId) public view override(ERC721, IERC721Metadata) returns (string memory) {
