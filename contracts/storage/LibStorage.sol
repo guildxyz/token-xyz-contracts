@@ -43,7 +43,8 @@ library LibStorage {
         MerkleDistributorFactory,
         MerkleVestingFactory,
         ERC721MerkleDropFactory,
-        ERC721CurveFactory
+        ERC721CurveFactory,
+        ERC721AuctionFactory
     }
 
     /// @notice Get the storage slot given a storage ID. We assign unique, well-spaced

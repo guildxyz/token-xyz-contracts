@@ -36,6 +36,7 @@ import "../features/MerkleDistributorFactoryFeature.sol";
 import "../features/MerkleVestingFactoryFeature.sol";
 import "../features/ERC721MerkleDropFactoryFeature.sol";
 import "../features/ERC721CurveFactoryFeature.sol";
+import "../features/ERC721AuctionFactoryFeature.sol";
 import "./InitialMigration.sol";
 
 /// @title A contract for deploying and configuring the full TokenXyz contract.
@@ -51,6 +52,7 @@ contract FullMigration {
         MerkleVestingFactoryFeature merkleVestingFactory;
         ERC721MerkleDropFactoryFeature erc721MerkleDropFactory;
         ERC721CurveFactoryFeature erc721CurveFactory;
+        ERC721AuctionFactoryFeature erc721AuctionFactory;
     }
 
     /// @notice The allowed caller of `initializeTokenXyz()`.
@@ -179,6 +181,15 @@ contract FullMigration {
             ownable.migrate(
                 address(features.erc721CurveFactory),
                 abi.encodeWithSelector(ERC721CurveFactoryFeature.migrate.selector),
+                address(this)
+            );
+        }
+        // ERC721AuctionFactoryFeature
+        {
+            // Register the feature.
+            ownable.migrate(
+                address(features.erc721AuctionFactory),
+                abi.encodeWithSelector(ERC721AuctionFactoryFeature.migrate.selector),
                 address(this)
             );
         }

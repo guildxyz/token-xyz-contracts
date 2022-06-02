@@ -36,6 +36,7 @@ import "./features/interfaces/IMerkleDistributorFactoryFeature.sol";
 import "./features/interfaces/IMerkleVestingFactoryFeature.sol";
 import "./features/interfaces/IERC721MerkleDropFactoryFeature.sol";
 import "./features/interfaces/IERC721CurveFactoryFeature.sol";
+import "./features/interfaces/IERC721AuctionFactoryFeature.sol";
 
 /// @title Interface for a fully featured token.xyz proxy.
 interface ITokenXyz is
@@ -47,7 +48,8 @@ interface ITokenXyz is
     IMerkleDistributorFactoryFeature,
     IMerkleVestingFactoryFeature,
     IERC721MerkleDropFactoryFeature,
-    IERC721CurveFactoryFeature
+    IERC721CurveFactoryFeature,
+    IERC721AuctionFactoryFeature
 {
     /// @notice Error thrown when the requested function is not found in any features.
     /// @param selector The function's selector that was attempted to be called.
