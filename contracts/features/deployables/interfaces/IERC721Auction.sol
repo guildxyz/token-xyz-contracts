@@ -50,7 +50,7 @@ interface IERC721Auction is IERC721Metadata {
     /// @return auctionDuration The duration of the auction of a specific token.
     /// @return timeBuffer The minimum time until an auction's end after a bid.
     /// @return minimumPercentageIncreasex100 The min. percentage of the increase between the previous and the current bid
-    ///                                      multiplied by 100.
+    ///                                       multiplied by 100.
     function getAuctionConfig()
         external
         view
