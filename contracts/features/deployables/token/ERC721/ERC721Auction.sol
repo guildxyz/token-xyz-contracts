@@ -29,21 +29,18 @@ contract ERC721Auction is IERC721Auction, ERC721, Ownable {
         string memory symbol,
         string memory cid_,
         uint256 maxSupply_,
-        uint128 startingPrice_,
-        uint128 auctionDuration_,
-        uint128 timeBuffer_,
-        uint128 minimumPercentageIncreasex100_,
+        AuctionConfig memory config_,
         uint128 startTime,
         address owner
     ) ERC721(name, symbol) {
         if (maxSupply_ == 0) revert MaxSupplyZero();
-        if (startingPrice_ == 0) revert StartingPriceZero();
-        if (auctionDuration_ == 0 || owner == address(0)) revert InvalidParameters();
+        if (config_.startingPrice == 0) revert StartingPriceZero();
+        if (config_.auctionDuration == 0 || owner == address(0)) revert InvalidParameters();
 
-        auctionConfig.startingPrice = startingPrice_;
-        auctionConfig.auctionDuration = auctionDuration_;
-        auctionConfig.timeBuffer = timeBuffer_;
-        auctionConfig.minimumPercentageIncreasex100 = minimumPercentageIncreasex100_;
+        auctionConfig.startingPrice = config_.startingPrice;
+        auctionConfig.auctionDuration = config_.auctionDuration;
+        auctionConfig.timeBuffer = config_.timeBuffer;
+        auctionConfig.minimumPercentageIncreasex100 = config_.minimumPercentageIncreasex100;
 
         maxSupply = maxSupply_;
         cid = cid_;

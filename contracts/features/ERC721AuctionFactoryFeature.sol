@@ -26,20 +26,13 @@ contract ERC721AuctionFactoryFeature is IFeature, IERC721AuctionFactoryFeature, 
     /// @notice Deploys a new ERC721Auction contract.
     /// @param urlName The url name used by the frontend, kind of an id of the creator.
     /// @param nftMetadata The basic metadata of the NFT that will be created (name, symbol, ipfsHash, maxSupply).
-    /// @param startingPrice The price of the first token that will be minted.
-    /// @param auctionDuration The duration of the auction of a specific token.
-    /// @param timeBuffer The minimum time until an auction's end after a bid.
-    /// @param minimumPercentageIncreasex100 The min. percentage of the increase between the previous and the current bid
-    ///                                      multiplied by 100.
+    /// @param auctionConfig See {IERC721Auction-AuctionConfig}.
     /// @param startTime The unix timestamp at which the first auction starts. Current time if set to 0.
     /// @param owner The owner address of the contract to be deployed. Will have special access to some functions.
     function createNFTAuction(
         string calldata urlName,
         IERC721FactoryCommon.NftMetadata calldata nftMetadata,
-        uint128 startingPrice,
-        uint128 auctionDuration,
-        uint128 timeBuffer,
-        uint128 minimumPercentageIncreasex100,
+        IERC721Auction.AuctionConfig calldata auctionConfig,
         uint128 startTime,
         address owner
     ) external {
@@ -49,10 +42,7 @@ contract ERC721AuctionFactoryFeature is IFeature, IERC721AuctionFactoryFeature, 
                 nftMetadata.symbol,
                 nftMetadata.ipfsHash,
                 nftMetadata.maxSupply,
-                startingPrice,
-                auctionDuration,
-                timeBuffer,
-                minimumPercentageIncreasex100,
+                auctionConfig,
                 startTime,
                 owner
             )

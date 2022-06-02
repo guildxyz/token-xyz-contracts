@@ -7,45 +7,31 @@ const tokenName = "SupercoolNFT";
 const tokenSymbol = "SNFT";
 const tokenCid = "QmPaZD7i8TpLEeGjHtGoXe4mPKbRNNt8YTHH5nrKoqz9wJ";
 const tokenMaxSupply = new BN(3);
-const startingPrice = new BN(ether("0.01"));
-const auctionDuration = new BN(86400);
-const timeBuffer = new BN(300);
-const minimumPercentageIncreasex100 = new BN(500);
+const auctionConfig = {
+  startingPrice: new BN(ether("0.01")),
+  auctionDuration: new BN(86400),
+  timeBuffer: new BN(300),
+  minimumPercentageIncreasex100: new BN(500)
+};
+const auctionConfigString = {
+  startingPrice: auctionConfig.startingPrice.toString(),
+  auctionDuration: auctionConfig.auctionDuration.toString(),
+  timeBuffer: auctionConfig.timeBuffer.toString(),
+  minimumPercentageIncreasex100: auctionConfig.minimumPercentageIncreasex100.toString()
+};
 
 contract("ERC721 auction", function (accounts) {
   const [wallet0, wallet1] = accounts;
   let token;
 
   beforeEach("create a token", async function () {
-    token = await ERC721Auction.new(
-      tokenName,
-      tokenSymbol,
-      tokenCid,
-      tokenMaxSupply,
-      startingPrice,
-      auctionDuration,
-      timeBuffer,
-      minimumPercentageIncreasex100,
-      0,
-      wallet0
-    );
+    token = await ERC721Auction.new(tokenName, tokenSymbol, tokenCid, tokenMaxSupply, auctionConfigString, 0, wallet0);
   });
 
   it("creation fails if called with invalid parameters", async function () {
     // error MaxSupplyZero();
     await expectRevert(
-      ERC721Auction.new(
-        tokenName,
-        tokenSymbol,
-        tokenCid,
-        0,
-        startingPrice,
-        auctionDuration,
-        timeBuffer,
-        minimumPercentageIncreasex100,
-        0,
-        wallet0
-      ),
+      ERC721Auction.new(tokenName, tokenSymbol, tokenCid, 0, auctionConfigString, 0, wallet0),
       "Custom error (could not decode)"
     );
     // error StartingPriceZero();
@@ -55,26 +41,12 @@ contract("ERC721 auction", function (accounts) {
         tokenSymbol,
         tokenCid,
         tokenMaxSupply,
-        0,
-        auctionDuration,
-        timeBuffer,
-        minimumPercentageIncreasex100,
-        0,
-        wallet0
-      ),
-      "Custom error (could not decode)"
-    );
-    // error InvalidParameters();
-    await expectRevert(
-      ERC721Auction.new(
-        tokenName,
-        tokenSymbol,
-        tokenCid,
-        tokenMaxSupply,
-        startingPrice,
-        0,
-        timeBuffer,
-        minimumPercentageIncreasex100,
+        {
+          startingPrice: 0,
+          auctionDuration: auctionConfig.auctionDuration.toString(),
+          timeBuffer: auctionConfig.timeBuffer.toString(),
+          minimumPercentageIncreasex100: auctionConfig.minimumPercentageIncreasex100.toString()
+        },
         0,
         wallet0
       ),
@@ -87,10 +59,25 @@ contract("ERC721 auction", function (accounts) {
         tokenSymbol,
         tokenCid,
         tokenMaxSupply,
-        startingPrice,
-        auctionDuration,
-        timeBuffer,
-        minimumPercentageIncreasex100,
+        {
+          startingPrice: auctionConfig.startingPrice.toString(),
+          auctionDuration: 0,
+          timeBuffer: auctionConfig.timeBuffer.toString(),
+          minimumPercentageIncreasex100: auctionConfig.minimumPercentageIncreasex100.toString()
+        },
+        0,
+        wallet0
+      ),
+      "Custom error (could not decode)"
+    );
+    // error InvalidParameters();
+    await expectRevert(
+      ERC721Auction.new(
+        tokenName,
+        tokenSymbol,
+        tokenCid,
+        tokenMaxSupply,
+        auctionConfigString,
         0,
         constants.ZERO_ADDRESS
       ),
@@ -102,15 +89,15 @@ contract("ERC721 auction", function (accounts) {
     const name = await token.name();
     const symbol = await token.symbol();
     const maxSupply = await token.maxSupply();
-    const auctionConfig = await token.getAuctionConfig();
+    const auctionConfig_ = await token.getAuctionConfig();
     const owner = await token.owner();
     expect(name).to.eq(tokenName);
     expect(symbol).to.eq(tokenSymbol);
     expect(maxSupply).to.bignumber.eq(tokenMaxSupply);
-    expect(auctionConfig.startingPrice).to.bignumber.eq(startingPrice);
-    expect(auctionConfig.auctionDuration).to.bignumber.eq(auctionDuration);
-    expect(auctionConfig.timeBuffer).to.bignumber.eq(timeBuffer);
-    expect(auctionConfig.minimumPercentageIncreasex100).to.bignumber.eq(minimumPercentageIncreasex100);
+    expect(auctionConfig_.startingPrice).to.bignumber.eq(auctionConfig.startingPrice);
+    expect(auctionConfig_.auctionDuration).to.bignumber.eq(auctionConfig.auctionDuration);
+    expect(auctionConfig_.timeBuffer).to.bignumber.eq(auctionConfig.timeBuffer);
+    expect(auctionConfig_.minimumPercentageIncreasex100).to.bignumber.eq(auctionConfig.minimumPercentageIncreasex100);
     expect(owner).to.eq(wallet0);
   });
 
@@ -121,7 +108,7 @@ contract("ERC721 auction", function (accounts) {
     expect(state0.bidder).to.eq(constants.ZERO_ADDRESS);
     expect(state0.bidAmount).to.bignumber.eq("0");
     expect(state0.startTime).to.bignumber.eq(timestamp);
-    expect(state0.endTime).to.bignumber.eq(auctionDuration.add(new BN(state0.startTime)));
+    expect(state0.endTime).to.bignumber.eq(auctionConfig.auctionDuration.add(new BN(state0.startTime)));
 
     const startTime1 = new BN(timestamp.add(new BN(42424)));
     const anotherToken = await ERC721Auction.new(
@@ -129,10 +116,7 @@ contract("ERC721 auction", function (accounts) {
       tokenSymbol,
       tokenCid,
       tokenMaxSupply,
-      startingPrice,
-      auctionDuration,
-      timeBuffer,
-      minimumPercentageIncreasex100,
+      auctionConfigString,
       startTime1,
       wallet0
     );
@@ -141,7 +125,7 @@ contract("ERC721 auction", function (accounts) {
     expect(state1.bidder).to.eq(constants.ZERO_ADDRESS);
     expect(state1.bidAmount).to.bignumber.eq("0");
     expect(state1.startTime).to.bignumber.eq(startTime1);
-    expect(state1.endTime).to.bignumber.eq(auctionDuration.add(new BN(state1.startTime)));
+    expect(state1.endTime).to.bignumber.eq(auctionConfig.auctionDuration.add(new BN(state1.startTime)));
   });
 
   it("should have zero tokens initially", async function () {
@@ -155,8 +139,8 @@ contract("ERC721 auction", function (accounts) {
   });
 
   it("should return the correct tokenURI", async function () {
-    await token.bid(0, { value: startingPrice });
-    await time.increase(auctionDuration);
+    await token.bid(0, { value: auctionConfig.startingPrice });
+    await time.increase(auctionConfig.auctionDuration);
     await token.settleAuction();
     const regex = new RegExp(`ipfs:\/\/${tokenCid}\/0.json`);
     expect(regex.test(await token.tokenURI(0))).to.be.true;
@@ -256,8 +240,8 @@ contract("ERC721 auction", function (accounts) {
   context("bidding", async function () {
     it("should fail if all tokens are already claimed", async function () {
       for (let i = 0; i < 2; i++) {
-        await token.bid(i, { value: startingPrice.mul(new BN(i + 1)) });
-        await time.increase(auctionDuration);
+        await token.bid(i, { value: auctionConfig.startingPrice.mul(new BN(i + 1)) });
+        await time.increase(auctionConfig.auctionDuration);
         await token.settleAuction();
       }
       // error TokenIdOutOfBounds(uint256 tokenId, uint256 maxSupply);
@@ -277,39 +261,43 @@ contract("ERC721 auction", function (accounts) {
         tokenSymbol,
         tokenCid,
         tokenMaxSupply,
-        startingPrice,
-        270,
-        timeBuffer,
-        minimumPercentageIncreasex100,
+        {
+          startingPrice: auctionConfig.startingPrice.toString(),
+          auctionDuration: 270,
+          timeBuffer: auctionConfig.timeBuffer.toString(),
+          minimumPercentageIncreasex100: auctionConfig.minimumPercentageIncreasex100.toString()
+        },
         timestamp.add(new BN(420)),
         wallet0
       );
       // error AuctionNotStarted(uint256 current, uint256 start);
-      await expectRevert.unspecified(aToken.bid(0, { value: startingPrice }));
+      await expectRevert.unspecified(aToken.bid(0, { value: auctionConfig.startingPrice }));
 
       await time.increase(690);
       // error AuctionEnded(uint256 current, uint256 end);
-      await expectRevert.unspecified(aToken.bid(0, { value: startingPrice }));
+      await expectRevert.unspecified(aToken.bid(0, { value: auctionConfig.startingPrice }));
     });
 
     it("should fail if the bid is too low", async function () {
       // error BidTooLow(uint256 paid, uint256 minBid);
-      await expectRevert.unspecified(token.bid(0, { value: startingPrice.div(new BN(2)) }));
-      await token.bid(0, { value: startingPrice });
+      await expectRevert.unspecified(token.bid(0, { value: auctionConfig.startingPrice.div(new BN(2)) }));
+      await token.bid(0, { value: auctionConfig.startingPrice });
       // error BidTooLow(uint256 paid, uint256 minBid);
-      await expectRevert.unspecified(token.bid(0, { value: startingPrice }));
+      await expectRevert.unspecified(token.bid(0, { value: auctionConfig.startingPrice }));
     });
 
     it("should refund the previous bidder", async function () {
-      await token.bid(0, { value: startingPrice });
+      await token.bid(0, { value: auctionConfig.startingPrice });
 
       const tracker = await balance.tracker(wallet0);
       await token.bid(0, {
         from: wallet1,
-        value: startingPrice.add(startingPrice.mul(minimumPercentageIncreasex100).div(new BN(10000)))
+        value: auctionConfig.startingPrice.add(
+          auctionConfig.startingPrice.mul(auctionConfig.minimumPercentageIncreasex100).div(new BN(10000))
+        )
       });
       const delta = await tracker.delta();
-      expect(delta).to.bignumber.eq(startingPrice);
+      expect(delta).to.bignumber.eq(auctionConfig.startingPrice);
     });
 
     it("should save the new bid", async function () {
@@ -317,12 +305,12 @@ contract("ERC721 auction", function (accounts) {
       expect(state0.bidAmount).to.bignumber.eq("0");
       expect(state0.bidder).to.eq(constants.ZERO_ADDRESS);
 
-      await token.bid(0, { value: startingPrice });
+      await token.bid(0, { value: auctionConfig.startingPrice });
       const state1 = await token.getAuctionState();
-      expect(state1.bidAmount).to.bignumber.eq(startingPrice);
+      expect(state1.bidAmount).to.bignumber.eq(auctionConfig.startingPrice);
       expect(state1.bidder).to.eq(wallet0);
 
-      const newAmount = startingPrice.mul(new BN(2));
+      const newAmount = auctionConfig.startingPrice.mul(new BN(2));
       await token.bid(0, { from: wallet1, value: newAmount });
       const state2 = await token.getAuctionState();
       expect(state2.bidAmount).to.bignumber.eq(newAmount);
@@ -332,22 +320,22 @@ contract("ERC721 auction", function (accounts) {
     it("should extend the auction duration after last-minute bids and emit an event", async function () {
       const state0 = await token.getAuctionState();
       await time.increaseTo(state0.endTime.sub(new BN(20)));
-      const tx = await token.bid(0, { value: startingPrice });
+      const tx = await token.bid(0, { value: auctionConfig.startingPrice });
       const state1 = await token.getAuctionState();
       expect(state1.endTime).to.bignumber.gt(state0.endTime);
-      expect(state1.endTime).to.bignumber.eq(timeBuffer.add(await time.latest()));
+      expect(state1.endTime).to.bignumber.eq(auctionConfig.timeBuffer.add(await time.latest()));
       await expectEvent(tx, "AuctionExtended", { tokenId: "0", endTime: state1.endTime });
     });
 
     it("emits Bid event", async function () {
-      const result = await token.bid(0, { value: startingPrice });
-      await expectEvent(result, "Bid", { tokenId: "0", bidder: wallet0, amount: startingPrice });
+      const result = await token.bid(0, { value: auctionConfig.startingPrice });
+      await expectEvent(result, "Bid", { tokenId: "0", bidder: wallet0, amount: auctionConfig.startingPrice });
     });
   });
 
   context("settling auctions", async function () {
     beforeEach("make a bid", async function () {
-      await token.bid(0, { value: startingPrice });
+      await token.bid(0, { value: auctionConfig.startingPrice });
     });
 
     it("should fail if the auction is not over yet", async function () {
@@ -357,14 +345,14 @@ contract("ERC721 auction", function (accounts) {
 
     it("should increase the total supply", async function () {
       const totalSupply0 = await token.totalSupply();
-      await time.increase(auctionDuration);
+      await time.increase(auctionConfig.auctionDuration);
       await token.settleAuction();
       const totalSupply1 = await token.totalSupply();
       expect(totalSupply1).to.bignumber.eq(totalSupply0.add(new BN(1)));
     });
 
     it("should mint the new token to the winner", async function () {
-      await time.increase(auctionDuration);
+      await time.increase(auctionConfig.auctionDuration);
       await token.settleAuction();
       const ownerOfToken = await token.ownerOf(0);
       expect(ownerOfToken).to.eq(wallet0);
@@ -376,14 +364,11 @@ contract("ERC721 auction", function (accounts) {
         tokenSymbol,
         tokenCid,
         tokenMaxSupply,
-        startingPrice,
-        auctionDuration,
-        timeBuffer,
-        minimumPercentageIncreasex100,
+        auctionConfigString,
         0,
         wallet0
       );
-      await time.increase(auctionDuration);
+      await time.increase(auctionConfig.auctionDuration);
       const totalSupply0 = await anotherToken.totalSupply();
       await anotherToken.settleAuction();
       const totalSupply1 = await anotherToken.totalSupply();
@@ -392,25 +377,25 @@ contract("ERC721 auction", function (accounts) {
     });
 
     it("should create a new auction, but only below maxSupply", async function () {
-      await time.increase(auctionDuration);
+      await time.increase(auctionConfig.auctionDuration);
       await token.settleAuction();
       const state0 = await token.getAuctionState();
       expect(state0.startTime).to.bignumber.eq(await time.latest());
-      expect(state0.endTime).to.bignumber.eq(auctionDuration.add(new BN(state0.startTime)));
+      expect(state0.endTime).to.bignumber.eq(auctionConfig.auctionDuration.add(new BN(state0.startTime)));
       expect(state0.bidAmount).to.bignumber.eq("0");
       expect(state0.bidder).to.eq(constants.ZERO_ADDRESS);
 
-      await token.bid(1, { value: startingPrice.mul(new BN(2)) });
-      await time.increase(auctionDuration);
+      await token.bid(1, { value: auctionConfig.startingPrice.mul(new BN(2)) });
+      await time.increase(auctionConfig.auctionDuration);
       await token.settleAuction();
       const state1 = await token.getAuctionState();
       expect(state1.startTime).to.bignumber.eq(await time.latest());
-      expect(state1.endTime).to.bignumber.eq(auctionDuration.add(new BN(state1.startTime)));
+      expect(state1.endTime).to.bignumber.eq(auctionConfig.auctionDuration.add(new BN(state1.startTime)));
       expect(state1.bidAmount).to.bignumber.eq("0");
       expect(state1.bidder).to.eq(constants.ZERO_ADDRESS);
 
-      await token.bid(2, { value: startingPrice.mul(new BN(3)) });
-      await time.increase(auctionDuration);
+      await token.bid(2, { value: auctionConfig.startingPrice.mul(new BN(3)) });
+      await time.increase(auctionConfig.auctionDuration);
       const state2 = await token.getAuctionState();
       await token.settleAuction();
       const state3 = await token.getAuctionState();
@@ -421,21 +406,25 @@ contract("ERC721 auction", function (accounts) {
     });
 
     it("should send the balance of the contract to the owner", async function () {
-      await time.increase(auctionDuration);
+      await time.increase(auctionConfig.auctionDuration);
       const contractTracker = await balance.tracker(token.address);
       const ownerTracker = await balance.tracker(wallet0);
       await token.settleAuction();
       const contractDelta = await contractTracker.delta();
       const { delta: ownerDelta, fees: ownerFees } = await ownerTracker.deltaWithFees();
-      expect(contractDelta).to.bignumber.eq(startingPrice.mul(new BN(-1)));
-      expect(ownerDelta).to.bignumber.eq(startingPrice.sub(ownerFees));
+      expect(contractDelta).to.bignumber.eq(auctionConfig.startingPrice.mul(new BN(-1)));
+      expect(ownerDelta).to.bignumber.eq(auctionConfig.startingPrice.sub(ownerFees));
       expect(await balance.current(token.address)).to.bignumber.eq("0");
     });
 
     it("should emit AuctionSettled event", async function () {
-      await time.increase(auctionDuration);
+      await time.increase(auctionConfig.auctionDuration);
       const result = await token.settleAuction();
-      await expectEvent(result, "AuctionSettled", { tokenId: "0", bidder: wallet0, amount: startingPrice });
+      await expectEvent(result, "AuctionSettled", {
+        tokenId: "0",
+        bidder: wallet0,
+        amount: auctionConfig.startingPrice
+      });
     });
   });
 });
