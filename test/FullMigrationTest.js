@@ -14,6 +14,7 @@ const MerkleDistributorFactoryFeature = artifacts.require("MerkleDistributorFact
 const MerkleVestingFactoryFeature = artifacts.require("MerkleVestingFactoryFeature");
 const ERC721MerkleDropFactoryFeature = artifacts.require("ERC721MerkleDropFactoryFeature");
 const ERC721CurveFactoryFeature = artifacts.require("ERC721CurveFactoryFeature");
+const ERC721AuctionFactoryFeature = artifacts.require("ERC721AuctionFactoryFeature");
 
 const tokenxyzInterface = new utils.Interface(ITokenXyz.abi);
 const randomRoot = "0xf7f77ea15719ea30bd2a584962ab273b1116f0e70fe80bbb0b30557d0addb7f3";
@@ -33,6 +34,7 @@ contract("FullMigration", function (accounts) {
   let merkleVestingFactory;
   let erc721MerkleDropFactory;
   let erc721CurveFactory;
+  let erc721AuctionFactory;
 
   beforeEach("deploy contracts", async function () {
     fullMigration = await FullMigration.new(wallet0);
@@ -47,6 +49,7 @@ contract("FullMigration", function (accounts) {
     merkleVestingFactory = await MerkleVestingFactoryFeature.new();
     erc721MerkleDropFactory = await ERC721MerkleDropFactoryFeature.new();
     erc721CurveFactory = await ERC721CurveFactoryFeature.new();
+    erc721AuctionFactory = await ERC721AuctionFactoryFeature.new();
     features = {
       registry: functionRegistry.address,
       ownable: ownable.address,
@@ -56,7 +59,8 @@ contract("FullMigration", function (accounts) {
       merkleDistributorFactory: merkleDistributorFactory.address,
       merkleVestingFactory: merkleVestingFactory.address,
       erc721MerkleDropFactory: erc721MerkleDropFactory.address,
-      erc721CurveFactory: erc721CurveFactory.address
+      erc721CurveFactory: erc721CurveFactory.address,
+      erc721AuctionFactory: erc721AuctionFactory.address
     };
   });
 
@@ -144,6 +148,24 @@ contract("FullMigration", function (accounts) {
         "Test",
         { name: "name", symbol: "sym", ipfsHash: "cid", maxSupply: 1 },
         420,
+        wallet0
+      );
+      expect(result.receipt.status).to.be.true;
+    });
+
+    it("ERC721 Auction factory is available", async function () {
+      const selector = tokenxyzInterface.getSighash("createNFTAuction");
+      expect(await tokenXyzWithOwnAbi.getFunctionImplementation(selector)).to.eq(erc721AuctionFactory.address);
+      const result = await tokenXyz.createNFTAuction(
+        "Test",
+        { name: "name", symbol: "sym", ipfsHash: "cid", maxSupply: 1 },
+        {
+          startingPrice: 1,
+          auctionDuration: 500,
+          timeBuffer: 100,
+          minimumPercentageIncreasex100: 500
+        },
+        0,
         wallet0
       );
       expect(result.receipt.status).to.be.true;
