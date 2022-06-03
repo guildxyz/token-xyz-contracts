@@ -6,7 +6,7 @@ The smart contracts in this repository are the core of token.xyz.
 
 To run the project you need:
 
-- [Node.js](https://nodejs.org/en/download) development environment (version 12 or newer).
+- [Node.js](https://nodejs.org/en/download) development environment (version 14 or newer).
 - [Truffle](https://www.trufflesuite.com/truffle) for compiling, deploying and testing (version 5.4.30 or newer).
 - (optional) [Ganache](https://github.com/trufflesuite/ganache/releases) environment for local testing (version 7.0.0 or newer).
 - (optional) A file named `.env`. An example can be found in the project's root folder. It should contain the following variables:
@@ -68,6 +68,7 @@ Replace _[start]_ with the number of the first and _[end]_ with the number of th
 - 6 - MerkleVestingFactoryFeature
 - 7 - ERC721MerkleDropFactoryFeature
 - 8 - ERC721CurveFactoryFeature
+- 9 - ERC721AuctionFactoryFeature
 
 ### Extended instructions
 
