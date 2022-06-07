@@ -5,20 +5,18 @@ import { IERC721MerkleDrop } from "../../interfaces/IERC721MerkleDrop.sol";
 import { IERC721Metadata } from "@openzeppelin/contracts/token/ERC721/extensions/IERC721Metadata.sol";
 import { ERC721 } from "@openzeppelin/contracts/token/ERC721/ERC721.sol";
 import { Ownable } from "@openzeppelin/contracts/access/Ownable.sol";
-import { Counters } from "@openzeppelin/contracts/utils/Counters.sol";
 import { Strings } from "@openzeppelin/contracts/utils/Strings.sol";
 import { MerkleProof } from "@openzeppelin/contracts/utils/cryptography/MerkleProof.sol";
 
 /// @title Allows anyone to mint a certain amount of this token if they exist in a Merkle root.
 contract ERC721BatchMerkleDrop is ERC721, IERC721MerkleDrop, Ownable {
     using Strings for uint256;
-    using Counters for Counters.Counter;
 
     bytes32 public immutable merkleRoot;
     uint256 public immutable distributionEnd;
     uint256 public immutable maxSupply;
     string internal cid;
-    Counters.Counter internal tokenIdCounter;
+    uint256 public totalSupply; // Not using Counters because we don't always increment it by 1.
 
     // This is a packed array of booleans.
     mapping(uint256 => uint256) private claimedBitMap;
@@ -63,9 +61,11 @@ contract ERC721BatchMerkleDrop is ERC721, IERC721MerkleDrop, Ownable {
     /// @param to The address receiving the token.
     function safeMint(address to) external onlyOwner {
         if (block.timestamp <= distributionEnd) revert DistributionOngoing(block.timestamp, distributionEnd);
-        uint256 tokenId = tokenIdCounter.current();
+        uint256 tokenId = totalSupply;
         if (tokenId >= maxSupply) revert TokenIdOutOfBounds(tokenId, maxSupply);
-        tokenIdCounter.increment();
+        unchecked {
+            ++totalSupply;
+        }
         _safeMint(to, tokenId);
     }
 
@@ -78,11 +78,11 @@ contract ERC721BatchMerkleDrop is ERC721, IERC721MerkleDrop, Ownable {
     }
 
     function _safeBatchMint(address to, uint256 amount) internal {
-        uint256 tokenId = tokenIdCounter.current();
-        uint256 lastTokenId = tokenId + amount - 1;
-        if (lastTokenId >= maxSupply) revert TokenIdOutOfBounds(lastTokenId, maxSupply);
-        for (; tokenId <= lastTokenId; ) {
-            tokenIdCounter.increment();
+        uint256 tokenId = totalSupply;
+        uint256 nextTotalSupply = tokenId + amount;
+        if (nextTotalSupply > maxSupply) revert TokenIdOutOfBounds(nextTotalSupply, maxSupply);
+        totalSupply = nextTotalSupply;
+        for (; tokenId < nextTotalSupply; ) {
             _safeMint(to, tokenId);
             unchecked {
                 ++tokenId;
@@ -107,9 +107,5 @@ contract ERC721BatchMerkleDrop is ERC721, IERC721MerkleDrop, Ownable {
     function tokenURI(uint256 tokenId) public view override(ERC721, IERC721Metadata) returns (string memory) {
         if (!_exists(tokenId)) revert NonExistentToken(tokenId);
         return string(abi.encodePacked("ipfs://", cid, "/", tokenId.toString(), ".json"));
-    }
-
-    function totalSupply() public view returns (uint256) {
-        return tokenIdCounter.current();
     }
 }
