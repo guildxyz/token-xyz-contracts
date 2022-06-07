@@ -1,13 +1,14 @@
 // SPDX-License-Identifier: MIT
 pragma solidity 0.8.14;
 
-import "./interfaces/ITokenWithRolesFactoryFeature.sol";
-import "./deployables/token/ERC20/ERC20MintableAccessControlled.sol";
-import "./deployables/token/ERC20/ERC20MintableAccessControlledMaxSupply.sol";
-import "../fixins/FixinCommon.sol";
-import "../storage/LibTokenFactoryStorage.sol";
-import "../migrations/LibMigrate.sol";
-import "./interfaces/IFeature.sol";
+import { ITokenWithRolesFactoryFeature } from "./interfaces/ITokenWithRolesFactoryFeature.sol";
+import { ERC20InitialSupply } from "./deployables/token/ERC20/ERC20InitialSupply.sol";
+import { ERC20MintableAccessControlled } from "./deployables/token/ERC20/ERC20MintableAccessControlled.sol";
+import { ERC20MintableAccessControlledMaxSupply } from "./deployables/token/ERC20/ERC20MintableAccessControlledMaxSupply.sol"; // solhint-disable-line max-line-length
+import { FixinCommon } from "../fixins/FixinCommon.sol";
+import { LibTokenFactoryStorage } from "../storage/LibTokenFactoryStorage.sol";
+import { LibMigrate } from "../migrations/LibMigrate.sol";
+import { IFeature } from "./interfaces/IFeature.sol";
 
 /// @title A contract that deploys ERC20 token contracts with OpenZeppelin's AccessControl for anyone.
 contract TokenWithRolesFactoryFeature is IFeature, ITokenWithRolesFactoryFeature, FixinCommon {

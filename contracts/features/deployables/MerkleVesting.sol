@@ -9,11 +9,11 @@
 
 pragma solidity 0.8.14;
 
-import "./interfaces/IMerkleVesting.sol";
-import "@openzeppelin/contracts/access/Ownable.sol";
-import "@openzeppelin/contracts/token/ERC20/IERC20.sol";
-import "@openzeppelin/contracts/utils/cryptography/MerkleProof.sol";
-import "@openzeppelin/contracts/utils/Multicall.sol";
+import { IMerkleVesting } from "./interfaces/IMerkleVesting.sol";
+import { Ownable } from "@openzeppelin/contracts/access/Ownable.sol";
+import { IERC20 } from "@openzeppelin/contracts/token/ERC20/IERC20.sol";
+import { MerkleProof } from "@openzeppelin/contracts/utils/cryptography/MerkleProof.sol";
+import { Multicall } from "@openzeppelin/contracts/utils/Multicall.sol";
 
 /// @title Allows anyone to claim a token if they exist in a Merkle root, but only over time.
 contract MerkleVesting is IMerkleVesting, Multicall, Ownable {

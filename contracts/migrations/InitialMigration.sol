@@ -27,11 +27,11 @@
 
 pragma solidity 0.8.14;
 
-import "../TokenXyz.sol";
-import "../features/interfaces/IBootstrapFeature.sol";
-import "../features/SimpleFunctionRegistryFeature.sol";
-import "../features/OwnableFeature.sol";
-import "./LibBootstrap.sol";
+import { TokenXyz } from "../TokenXyz.sol";
+import { IBootstrapFeature } from "../features/interfaces/IBootstrapFeature.sol";
+import { SimpleFunctionRegistryFeature } from "../features/SimpleFunctionRegistryFeature.sol";
+import { OwnableFeature } from "../features/OwnableFeature.sol";
+import { LibBootstrap } from "./LibBootstrap.sol";
 
 /// @title A contract for deploying and configuring a minimal TokenXyz contract.
 contract InitialMigration {

@@ -1,7 +1,7 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.0;
 
-import "./ITokenFactoryBase.sol";
+import { ITokenFactoryBase } from "./ITokenFactoryBase.sol";
 
 /// @title A contract that deploys ERC20 token contracts with OpenZeppelin's AccessControl for anyone.
 interface ITokenWithRolesFactoryFeature is ITokenFactoryBase {

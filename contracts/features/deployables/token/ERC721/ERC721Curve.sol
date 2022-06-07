@@ -1,11 +1,13 @@
 // SPDX-License-Identifier: MIT
 pragma solidity 0.8.14;
 
-import "../../lib/LibAddress.sol";
-import "../../interfaces/IERC721Curve.sol";
-import "@openzeppelin/contracts/token/ERC721/ERC721.sol";
-import "@openzeppelin/contracts/access/Ownable.sol";
-import "@openzeppelin/contracts/utils/Counters.sol";
+import { LibAddress } from "../../lib/LibAddress.sol";
+import { IERC721Curve } from "../../interfaces/IERC721Curve.sol";
+import { IERC721Metadata } from "@openzeppelin/contracts/token/ERC721/extensions/IERC721Metadata.sol";
+import { ERC721 } from "@openzeppelin/contracts/token/ERC721/ERC721.sol";
+import { Ownable } from "@openzeppelin/contracts/access/Ownable.sol";
+import { Counters } from "@openzeppelin/contracts/utils/Counters.sol";
+import { Strings } from "@openzeppelin/contracts/utils/Strings.sol";
 
 /// @title An NFT with an ever increasing price along a curve.
 contract ERC721Curve is IERC721Curve, ERC721, Ownable {

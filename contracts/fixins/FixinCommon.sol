@@ -27,8 +27,8 @@
 
 pragma solidity 0.8.14;
 
-import "../features/interfaces/IOwnableFeature.sol";
-import "../features/interfaces/ISimpleFunctionRegistryFeature.sol";
+import { IOwnableFeature } from "../features/interfaces/IOwnableFeature.sol";
+import { ISimpleFunctionRegistryFeature } from "../features/interfaces/ISimpleFunctionRegistryFeature.sol";
 
 /// @title Common feature utilities.
 abstract contract FixinCommon {

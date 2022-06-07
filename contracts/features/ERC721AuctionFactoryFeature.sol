@@ -1,12 +1,14 @@
 // SPDX-License-Identifier: MIT
 pragma solidity 0.8.14;
 
-import "./interfaces/IERC721AuctionFactoryFeature.sol";
-import "./deployables/token/ERC721/ERC721Auction.sol";
-import "../fixins/FixinCommon.sol";
-import "../storage/LibERC721AuctionFactoryStorage.sol";
-import "../migrations/LibMigrate.sol";
-import "./interfaces/IFeature.sol";
+import { IERC721FactoryCommon } from "./interfaces/IERC721FactoryCommon.sol";
+import { IERC721AuctionFactoryFeature } from "./interfaces/IERC721AuctionFactoryFeature.sol";
+import { IERC721Auction } from "./deployables/interfaces/IERC721Auction.sol";
+import { ERC721Auction } from "./deployables/token/ERC721/ERC721Auction.sol";
+import { FixinCommon } from "../fixins/FixinCommon.sol";
+import { LibERC721AuctionFactoryStorage } from "../storage/LibERC721AuctionFactoryStorage.sol";
+import { LibMigrate } from "../migrations/LibMigrate.sol";
+import { IFeature } from "./interfaces/IFeature.sol";
 
 /// @title A contract that deploys special ERC721 contracts for anyone.
 contract ERC721AuctionFactoryFeature is IFeature, IERC721AuctionFactoryFeature, FixinCommon {
@@ -48,7 +50,7 @@ contract ERC721AuctionFactoryFeature is IFeature, IERC721AuctionFactoryFeature, 
             )
         );
         LibERC721AuctionFactoryStorage.getStorage().deploys[urlName].push(
-            DeployData({factoryVersion: FEATURE_VERSION, contractAddress: instance})
+            DeployData({ factoryVersion: FEATURE_VERSION, contractAddress: instance })
         );
         emit ERC721AuctionDeployed(msg.sender, urlName, instance, FEATURE_VERSION);
     }

@@ -1,9 +1,9 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.0;
 
-import "./IFactoryFeature.sol";
-import "./IERC721FactoryCommon.sol";
-import "../deployables/interfaces/IERC721Auction.sol";
+import { IFactoryFeature } from "./IFactoryFeature.sol";
+import { IERC721FactoryCommon } from "./IERC721FactoryCommon.sol";
+import { IERC721Auction } from "../deployables/interfaces/IERC721Auction.sol";
 
 /// @title A contract that deploys special ERC721 contracts for anyone.
 interface IERC721AuctionFactoryFeature is IFactoryFeature {

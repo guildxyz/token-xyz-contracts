@@ -1,8 +1,8 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.0;
 
-import "./IFactoryFeature.sol";
-import "./IERC721FactoryCommon.sol";
+import { IFactoryFeature } from "./IFactoryFeature.sol";
+import { IERC721FactoryCommon } from "./IERC721FactoryCommon.sol";
 
 /// @title A contract that deploys NFTs with Merkle tree-based distribution for anyone.
 interface IERC721MerkleDropFactoryFeature is IFactoryFeature {

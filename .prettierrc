@@ -9,7 +9,7 @@
       "files": "*.sol",
       "options": {
         "tabWidth": 4,
-        "bracketSpacing": false,
+        "bracketSpacing": true,
         "explicitTypes": "always"
       }
     }

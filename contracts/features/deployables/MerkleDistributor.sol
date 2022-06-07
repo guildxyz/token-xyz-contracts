@@ -9,10 +9,10 @@
 
 pragma solidity 0.8.14;
 
-import "./interfaces/IMerkleDistributor.sol";
-import "@openzeppelin/contracts/access/Ownable.sol";
-import "@openzeppelin/contracts/token/ERC20/IERC20.sol";
-import "@openzeppelin/contracts/utils/cryptography/MerkleProof.sol";
+import { IMerkleDistributor } from "./interfaces/IMerkleDistributor.sol";
+import { Ownable } from "@openzeppelin/contracts/access/Ownable.sol";
+import { IERC20 } from "@openzeppelin/contracts/token/ERC20/IERC20.sol";
+import { MerkleProof } from "@openzeppelin/contracts/utils/cryptography/MerkleProof.sol";
 
 /// @title Allows anyone to claim a token if they exist in a Merkle root.
 contract MerkleDistributor is IMerkleDistributor, Ownable {

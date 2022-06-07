@@ -27,7 +27,7 @@
 
 pragma solidity 0.8.14;
 
-import "./LibStorage.sol";
+import { LibStorage } from "./LibStorage.sol";
 
 /// @title Storage helpers for the proxy contract.
 library LibProxyStorage {

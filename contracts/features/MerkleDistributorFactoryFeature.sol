@@ -1,12 +1,12 @@
 // SPDX-License-Identifier: MIT
 pragma solidity 0.8.14;
 
-import "./interfaces/IMerkleDistributorFactoryFeature.sol";
-import "./deployables/MerkleDistributor.sol";
-import "../fixins/FixinCommon.sol";
-import "../storage/LibMerkleDistributorFactoryStorage.sol";
-import "../migrations/LibMigrate.sol";
-import "./interfaces/IFeature.sol";
+import { IMerkleDistributorFactoryFeature } from "./interfaces/IMerkleDistributorFactoryFeature.sol";
+import { MerkleDistributor } from "./deployables/MerkleDistributor.sol";
+import { FixinCommon } from "../fixins/FixinCommon.sol";
+import { LibMerkleDistributorFactoryStorage } from "../storage/LibMerkleDistributorFactoryStorage.sol";
+import { LibMigrate } from "../migrations/LibMigrate.sol";
+import { IFeature } from "./interfaces/IFeature.sol";
 
 /// @title A contract that deploys token airdrop contracts for anyone.
 contract MerkleDistributorFactoryFeature is IFeature, IMerkleDistributorFactoryFeature, FixinCommon {
@@ -38,7 +38,7 @@ contract MerkleDistributorFactoryFeature is IFeature, IMerkleDistributorFactoryF
     ) external {
         address instance = address(new MerkleDistributor(token, merkleRoot, distributionDuration, owner));
         LibMerkleDistributorFactoryStorage.getStorage().deploys[urlName].push(
-            DeployData({factoryVersion: FEATURE_VERSION, contractAddress: instance})
+            DeployData({ factoryVersion: FEATURE_VERSION, contractAddress: instance })
         );
         emit MerkleDistributorDeployed(msg.sender, urlName, instance, FEATURE_VERSION);
     }

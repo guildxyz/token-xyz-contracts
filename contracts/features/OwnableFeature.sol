@@ -27,13 +27,13 @@
 
 pragma solidity 0.8.14;
 
-import "../fixins/FixinCommon.sol";
-import "../storage/LibOwnableStorage.sol";
-import "../migrations/LibBootstrap.sol";
-import "../migrations/LibMigrate.sol";
-import "./interfaces/IFeature.sol";
-import "./interfaces/IOwnableFeature.sol";
-import "./SimpleFunctionRegistryFeature.sol";
+import { FixinCommon } from "../fixins/FixinCommon.sol";
+import { LibOwnableStorage } from "../storage/LibOwnableStorage.sol";
+import { LibBootstrap } from "../migrations/LibBootstrap.sol";
+import { LibMigrate } from "../migrations/LibMigrate.sol";
+import { IFeature } from "./interfaces/IFeature.sol";
+import { IOwnableFeature } from "./interfaces/IOwnableFeature.sol";
+import { SimpleFunctionRegistryFeature } from "./SimpleFunctionRegistryFeature.sol";
 
 /// @title Owner management features.
 contract OwnableFeature is IFeature, IOwnableFeature, FixinCommon {

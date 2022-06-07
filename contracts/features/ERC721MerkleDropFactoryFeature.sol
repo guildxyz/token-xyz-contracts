@@ -1,13 +1,14 @@
 // SPDX-License-Identifier: MIT
 pragma solidity 0.8.14;
 
-import "./interfaces/IERC721MerkleDropFactoryFeature.sol";
-import "./deployables/token/ERC721/ERC721MerkleDrop.sol";
-import "./deployables/token/ERC721/ERC721BatchMerkleDrop.sol";
-import "../fixins/FixinCommon.sol";
-import "../storage/LibERC721MerkleDropFactoryStorage.sol";
-import "../migrations/LibMigrate.sol";
-import "./interfaces/IFeature.sol";
+import { IERC721FactoryCommon } from "./interfaces/IERC721FactoryCommon.sol";
+import { IERC721MerkleDropFactoryFeature } from "./interfaces/IERC721MerkleDropFactoryFeature.sol";
+import { ERC721MerkleDrop } from "./deployables/token/ERC721/ERC721MerkleDrop.sol";
+import { ERC721BatchMerkleDrop } from "./deployables/token/ERC721/ERC721BatchMerkleDrop.sol";
+import { FixinCommon } from "../fixins/FixinCommon.sol";
+import { LibERC721MerkleDropFactoryStorage } from "../storage/LibERC721MerkleDropFactoryStorage.sol";
+import { LibMigrate } from "../migrations/LibMigrate.sol";
+import { IFeature } from "./interfaces/IFeature.sol";
 
 /// @title A contract that deploys NFTs with Merkle tree-based distribution for anyone.
 contract ERC721MerkleDropFactoryFeature is IFeature, IERC721MerkleDropFactoryFeature, FixinCommon {
@@ -65,7 +66,7 @@ contract ERC721MerkleDropFactoryFeature is IFeature, IERC721MerkleDropFactoryFea
                 )
             );
         LibERC721MerkleDropFactoryStorage.getStorage().deploys[urlName].push(
-            DeployData({factoryVersion: FEATURE_VERSION, contractAddress: instance})
+            DeployData({ factoryVersion: FEATURE_VERSION, contractAddress: instance })
         );
         emit ERC721MerkleDropDeployed(msg.sender, urlName, instance, FEATURE_VERSION);
     }

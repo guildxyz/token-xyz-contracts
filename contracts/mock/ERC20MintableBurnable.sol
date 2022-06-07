@@ -1,7 +1,7 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.0;
 
-import "../features/deployables/token/ERC20/ERC20MintableOwned.sol";
+import { ERC20MintableOwned } from "../features/deployables/token/ERC20/ERC20MintableOwned.sol";
 
 /// @title A mintable and burnable ERC20 token.
 contract ERC20MintableBurnable is ERC20MintableOwned {

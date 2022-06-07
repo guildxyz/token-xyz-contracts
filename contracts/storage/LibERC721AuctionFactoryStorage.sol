@@ -2,8 +2,8 @@
 
 pragma solidity 0.8.14;
 
-import "./LibStorage.sol";
-import "../features/interfaces/IFactoryFeature.sol";
+import { LibStorage } from "./LibStorage.sol";
+import { IFactoryFeature } from "../features/interfaces/IFactoryFeature.sol";
 
 /// @title Storage helpers for the `ERC721AuctionFactory` feature.
 library LibERC721AuctionFactoryStorage {

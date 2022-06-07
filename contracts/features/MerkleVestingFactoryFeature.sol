@@ -1,12 +1,12 @@
 // SPDX-License-Identifier: MIT
 pragma solidity 0.8.14;
 
-import "./interfaces/IMerkleVestingFactoryFeature.sol";
-import "./deployables/MerkleVesting.sol";
-import "../fixins/FixinCommon.sol";
-import "../storage/LibMerkleVestingFactoryStorage.sol";
-import "../migrations/LibMigrate.sol";
-import "./interfaces/IFeature.sol";
+import { IMerkleVestingFactoryFeature } from "./interfaces/IMerkleVestingFactoryFeature.sol";
+import { MerkleVesting } from "./deployables/MerkleVesting.sol";
+import { FixinCommon } from "../fixins/FixinCommon.sol";
+import { LibMerkleVestingFactoryStorage } from "../storage/LibMerkleVestingFactoryStorage.sol";
+import { LibMigrate } from "../migrations/LibMigrate.sol";
+import { IFeature } from "./interfaces/IFeature.sol";
 
 /// @title A contract that deploys token vesting contracts for anyone.
 contract MerkleVestingFactoryFeature is IFeature, IMerkleVestingFactoryFeature, FixinCommon {
@@ -34,7 +34,7 @@ contract MerkleVestingFactoryFeature is IFeature, IMerkleVestingFactoryFeature, 
     ) external {
         address instance = address(new MerkleVesting(token, owner));
         LibMerkleVestingFactoryStorage.getStorage().deploys[urlName].push(
-            DeployData({factoryVersion: FEATURE_VERSION, contractAddress: instance})
+            DeployData({ factoryVersion: FEATURE_VERSION, contractAddress: instance })
         );
         emit MerkleVestingDeployed(msg.sender, urlName, instance, FEATURE_VERSION);
     }

@@ -27,16 +27,16 @@
 
 pragma solidity ^0.8.0;
 
-import "./features/interfaces/IOwnableFeature.sol";
-import "./features/interfaces/ISimpleFunctionRegistryFeature.sol";
-import "./features/interfaces/IMulticallFeature.sol";
-import "./features/interfaces/ITokenFactoryFeature.sol";
-import "./features/interfaces/ITokenWithRolesFactoryFeature.sol";
-import "./features/interfaces/IMerkleDistributorFactoryFeature.sol";
-import "./features/interfaces/IMerkleVestingFactoryFeature.sol";
-import "./features/interfaces/IERC721MerkleDropFactoryFeature.sol";
-import "./features/interfaces/IERC721CurveFactoryFeature.sol";
-import "./features/interfaces/IERC721AuctionFactoryFeature.sol";
+import { IOwnableFeature } from "./features/interfaces/IOwnableFeature.sol";
+import { ISimpleFunctionRegistryFeature } from "./features/interfaces/ISimpleFunctionRegistryFeature.sol";
+import { IMulticallFeature } from "./features/interfaces/IMulticallFeature.sol";
+import { ITokenFactoryFeature } from "./features/interfaces/ITokenFactoryFeature.sol";
+import { ITokenWithRolesFactoryFeature } from "./features/interfaces/ITokenWithRolesFactoryFeature.sol";
+import { IMerkleDistributorFactoryFeature } from "./features/interfaces/IMerkleDistributorFactoryFeature.sol";
+import { IMerkleVestingFactoryFeature } from "./features/interfaces/IMerkleVestingFactoryFeature.sol";
+import { IERC721MerkleDropFactoryFeature } from "./features/interfaces/IERC721MerkleDropFactoryFeature.sol";
+import { IERC721CurveFactoryFeature } from "./features/interfaces/IERC721CurveFactoryFeature.sol";
+import { IERC721AuctionFactoryFeature } from "./features/interfaces/IERC721AuctionFactoryFeature.sol";
 
 /// @title Interface for a fully featured token.xyz proxy.
 interface ITokenXyz is

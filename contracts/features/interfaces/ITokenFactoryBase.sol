@@ -1,7 +1,7 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.0;
 
-import "./IFactoryFeature.sol";
+import { IFactoryFeature } from "./IFactoryFeature.sol";
 
 /// @title Common functions and events for a contract that deploys ERC20 token contracts for anyone.
 interface ITokenFactoryBase is IFactoryFeature {

@@ -1,12 +1,13 @@
 // SPDX-License-Identifier: MIT
 pragma solidity 0.8.14;
 
-import "./interfaces/IERC721CurveFactoryFeature.sol";
-import "./deployables/token/ERC721/ERC721Curve.sol";
-import "../fixins/FixinCommon.sol";
-import "../storage/LibERC721CurveFactoryStorage.sol";
-import "../migrations/LibMigrate.sol";
-import "./interfaces/IFeature.sol";
+import { IERC721FactoryCommon } from "./interfaces/IERC721FactoryCommon.sol";
+import { IERC721CurveFactoryFeature } from "./interfaces/IERC721CurveFactoryFeature.sol";
+import { ERC721Curve } from "./deployables/token/ERC721/ERC721Curve.sol";
+import { FixinCommon } from "../fixins/FixinCommon.sol";
+import { LibERC721CurveFactoryStorage } from "../storage/LibERC721CurveFactoryStorage.sol";
+import { LibMigrate } from "../migrations/LibMigrate.sol";
+import { IFeature } from "./interfaces/IFeature.sol";
 
 /// @title A contract that deploys special ERC721 contracts for anyone.
 contract ERC721CurveFactoryFeature is IFeature, IERC721CurveFactoryFeature, FixinCommon {
@@ -45,7 +46,7 @@ contract ERC721CurveFactoryFeature is IFeature, IERC721CurveFactoryFeature, Fixi
             )
         );
         LibERC721CurveFactoryStorage.getStorage().deploys[urlName].push(
-            DeployData({factoryVersion: FEATURE_VERSION, contractAddress: instance})
+            DeployData({ factoryVersion: FEATURE_VERSION, contractAddress: instance })
         );
         emit ERC721CurveDeployed(msg.sender, urlName, instance, FEATURE_VERSION);
     }

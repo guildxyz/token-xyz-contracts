@@ -27,10 +27,9 @@
 
 pragma solidity 0.8.14;
 
-import "./utils/LibBytesV06.sol";
-import "./migrations/LibBootstrap.sol";
-import "./features/BootstrapFeature.sol";
-import "./storage/LibProxyStorage.sol";
+import { LibBytesV06 } from "./utils/LibBytesV06.sol";
+import { BootstrapFeature } from "./features/BootstrapFeature.sol";
+import { LibProxyStorage } from "./storage/LibProxyStorage.sol";
 
 /// @title An extensible proxy contract that serves as a universal entry point for
 ///      interacting with the token.xyz contracts.

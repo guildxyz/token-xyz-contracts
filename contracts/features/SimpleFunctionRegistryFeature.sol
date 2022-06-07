@@ -27,12 +27,12 @@
 
 pragma solidity 0.8.14;
 
-import "../fixins/FixinCommon.sol";
-import "../storage/LibProxyStorage.sol";
-import "../storage/LibSimpleFunctionRegistryStorage.sol";
-import "../migrations/LibBootstrap.sol";
-import "./interfaces/IFeature.sol";
-import "./interfaces/ISimpleFunctionRegistryFeature.sol";
+import { FixinCommon } from "../fixins/FixinCommon.sol";
+import { LibProxyStorage } from "../storage/LibProxyStorage.sol";
+import { LibSimpleFunctionRegistryStorage } from "../storage/LibSimpleFunctionRegistryStorage.sol";
+import { LibBootstrap } from "../migrations/LibBootstrap.sol";
+import { IFeature } from "./interfaces/IFeature.sol";
+import { ISimpleFunctionRegistryFeature } from "./interfaces/ISimpleFunctionRegistryFeature.sol";
 
 /// @title Basic registry management features.
 contract SimpleFunctionRegistryFeature is IFeature, ISimpleFunctionRegistryFeature, FixinCommon {

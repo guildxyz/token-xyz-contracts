@@ -1,10 +1,10 @@
 // SPDX-License-Identifier: MIT
 pragma solidity 0.8.14;
 
-import "../fixins/FixinCommon.sol";
-import "../migrations/LibMigrate.sol";
-import "./interfaces/IFeature.sol";
-import "@openzeppelin/contracts/utils/Multicall.sol";
+import { FixinCommon } from "../fixins/FixinCommon.sol";
+import { LibMigrate } from "../migrations/LibMigrate.sol";
+import { IFeature } from "./interfaces/IFeature.sol";
+import { Multicall } from "@openzeppelin/contracts/utils/Multicall.sol";
 
 /// @title Provides a function to batch together multiple calls in a single external call.
 contract MulticallFeature is IFeature, FixinCommon, Multicall {

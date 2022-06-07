@@ -27,9 +27,9 @@
 
 pragma solidity 0.8.14;
 
-import "../migrations/LibBootstrap.sol";
-import "../storage/LibProxyStorage.sol";
-import "./interfaces/IBootstrapFeature.sol";
+import { LibBootstrap } from "../migrations/LibBootstrap.sol";
+import { LibProxyStorage } from "../storage/LibProxyStorage.sol";
+import { IBootstrapFeature } from "./interfaces/IBootstrapFeature.sol";
 
 /// @title Detachable `bootstrap()` feature.
 contract BootstrapFeature is IBootstrapFeature {

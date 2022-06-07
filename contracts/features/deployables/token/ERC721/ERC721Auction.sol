@@ -1,11 +1,13 @@
 // SPDX-License-Identifier: MIT
 pragma solidity 0.8.14;
 
-import "../../lib/LibAddress.sol";
-import "../../interfaces/IERC721Auction.sol";
-import "@openzeppelin/contracts/token/ERC721/ERC721.sol";
-import "@openzeppelin/contracts/access/Ownable.sol";
-import "@openzeppelin/contracts/utils/Counters.sol";
+import { LibAddress } from "../../lib/LibAddress.sol";
+import { IERC721Auction } from "../../interfaces/IERC721Auction.sol";
+import { IERC721Metadata } from "@openzeppelin/contracts/token/ERC721/extensions/IERC721Metadata.sol";
+import { ERC721 } from "@openzeppelin/contracts/token/ERC721/ERC721.sol";
+import { Ownable } from "@openzeppelin/contracts/access/Ownable.sol";
+import { Counters } from "@openzeppelin/contracts/utils/Counters.sol";
+import { Strings } from "@openzeppelin/contracts/utils/Strings.sol";
 
 /// @title An NFT distributed via on-chain bidding.
 contract ERC721Auction is IERC721Auction, ERC721, Ownable {
@@ -135,7 +137,7 @@ contract ERC721Auction is IERC721Auction, ERC721, Ownable {
     function _createAuction(uint256 nextTokenId, uint128 startTime) internal {
         if (nextTokenId < maxSupply) {
             uint128 endTime = startTime + auctionConfig.auctionDuration;
-            auctionState = AuctionState({bidAmount: 0, startTime: startTime, endTime: endTime, bidder: address(0)});
+            auctionState = AuctionState({ bidAmount: 0, startTime: startTime, endTime: endTime, bidder: address(0) });
             emit AuctionCreated(nextTokenId, startTime, endTime);
         }
     }

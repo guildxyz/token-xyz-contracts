@@ -1,13 +1,14 @@
 // SPDX-License-Identifier: MIT
 pragma solidity 0.8.14;
 
-import "./interfaces/ITokenFactoryFeature.sol";
-import "./deployables/token/ERC20/ERC20MintableOwned.sol";
-import "./deployables/token/ERC20/ERC20MintableOwnedMaxSupply.sol";
-import "../fixins/FixinCommon.sol";
-import "../storage/LibTokenFactoryStorage.sol";
-import "../migrations/LibMigrate.sol";
-import "./interfaces/IFeature.sol";
+import { ITokenFactoryFeature } from "./interfaces/ITokenFactoryFeature.sol";
+import { ERC20InitialSupply } from "./deployables/token/ERC20/ERC20InitialSupply.sol";
+import { ERC20MintableOwned } from "./deployables/token/ERC20/ERC20MintableOwned.sol";
+import { ERC20MintableOwnedMaxSupply } from "./deployables/token/ERC20/ERC20MintableOwnedMaxSupply.sol";
+import { FixinCommon } from "../fixins/FixinCommon.sol";
+import { LibTokenFactoryStorage } from "../storage/LibTokenFactoryStorage.sol";
+import { LibMigrate } from "../migrations/LibMigrate.sol";
+import { IFeature } from "./interfaces/IFeature.sol";
 
 /// @title A contract that deploys ERC20 token contracts for anyone.
 contract TokenFactoryFeature is IFeature, ITokenFactoryFeature, FixinCommon {
@@ -94,7 +95,7 @@ contract TokenFactoryFeature is IFeature, ITokenFactoryFeature, FixinCommon {
     /// @param tokenAddress The address of the token to add.
     function addToken(string calldata urlName, address tokenAddress) external onlyOwner {
         LibTokenFactoryStorage.getStorage().deploys[urlName].push(
-            DeployData({factoryVersion: 0, contractAddress: tokenAddress})
+            DeployData({ factoryVersion: 0, contractAddress: tokenAddress })
         );
         emit TokenAdded(address(0), urlName, tokenAddress, 0);
     }

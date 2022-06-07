@@ -1,7 +1,7 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.0;
 
-import "./IFactoryFeature.sol";
+import { IFactoryFeature } from "./IFactoryFeature.sol";
 
 /// @title A contract that deploys token airdrop contracts for anyone.
 interface IMerkleDistributorFactoryFeature is IFactoryFeature {

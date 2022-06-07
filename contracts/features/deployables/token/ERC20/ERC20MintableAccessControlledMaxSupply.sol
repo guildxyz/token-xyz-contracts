@@ -1,9 +1,9 @@
 // SPDX-License-Identifier: MIT
 pragma solidity 0.8.14;
 
-import "./ERC20InitialSupply.sol";
-import "./IERC20MaxSupply.sol";
-import "@openzeppelin/contracts/access/AccessControl.sol";
+import { ERC20InitialSupply } from "./ERC20InitialSupply.sol";
+import { IERC20MaxSupply } from "./IERC20MaxSupply.sol";
+import { AccessControl } from "@openzeppelin/contracts/access/AccessControl.sol";
 
 /// @title A mintable ERC20 token.
 contract ERC20MintableAccessControlledMaxSupply is IERC20MaxSupply, ERC20InitialSupply, AccessControl {

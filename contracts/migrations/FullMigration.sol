@@ -27,17 +27,18 @@
 
 pragma solidity 0.8.14;
 
-import "../TokenXyz.sol";
-import "../features/interfaces/IOwnableFeature.sol";
-import "../features/MulticallFeature.sol";
-import "../features/TokenFactoryFeature.sol";
-import "../features/TokenWithRolesFactoryFeature.sol";
-import "../features/MerkleDistributorFactoryFeature.sol";
-import "../features/MerkleVestingFactoryFeature.sol";
-import "../features/ERC721MerkleDropFactoryFeature.sol";
-import "../features/ERC721CurveFactoryFeature.sol";
-import "../features/ERC721AuctionFactoryFeature.sol";
-import "./InitialMigration.sol";
+import { TokenXyz } from "../TokenXyz.sol";
+import { OwnableFeature } from "../features/OwnableFeature.sol";
+import { SimpleFunctionRegistryFeature } from "../features/SimpleFunctionRegistryFeature.sol";
+import { MulticallFeature } from "../features/MulticallFeature.sol";
+import { TokenFactoryFeature } from "../features/TokenFactoryFeature.sol";
+import { TokenWithRolesFactoryFeature } from "../features/TokenWithRolesFactoryFeature.sol";
+import { MerkleDistributorFactoryFeature } from "../features/MerkleDistributorFactoryFeature.sol";
+import { MerkleVestingFactoryFeature } from "../features/MerkleVestingFactoryFeature.sol";
+import { ERC721MerkleDropFactoryFeature } from "../features/ERC721MerkleDropFactoryFeature.sol";
+import { ERC721CurveFactoryFeature } from "../features/ERC721CurveFactoryFeature.sol";
+import { ERC721AuctionFactoryFeature } from "../features/ERC721AuctionFactoryFeature.sol";
+import { InitialMigration } from "./InitialMigration.sol";
 
 /// @title A contract for deploying and configuring the full TokenXyz contract.
 contract FullMigration {
@@ -92,14 +93,14 @@ contract FullMigration {
         _initialMigration.initializeTokenXyz(
             payable(address(uint160(address(this)))),
             tokenXyz,
-            InitialMigration.BootstrapFeatures({registry: features.registry, ownable: features.ownable})
+            InitialMigration.BootstrapFeatures({ registry: features.registry, ownable: features.ownable })
         );
 
         // Add features.
         _addFeatures(tokenXyz, features);
 
         // Transfer ownership to the real owner.
-        IOwnableFeature(address(tokenXyz)).transferOwnership(owner);
+        OwnableFeature(address(tokenXyz)).transferOwnership(owner);
 
         // Self-destruct.
         this.die(owner);
@@ -120,7 +121,7 @@ contract FullMigration {
     /// @param tokenXyz The bootstrapped TokenXyz contract.
     /// @param features Features to add to the proxy.
     function _addFeatures(TokenXyz tokenXyz, Features memory features) private {
-        IOwnableFeature ownable = IOwnableFeature(address(tokenXyz));
+        OwnableFeature ownable = OwnableFeature(address(tokenXyz));
         // MulticallFeature
         {
             // Register the feature.
