@@ -26,6 +26,9 @@ interface IERC721AuctionFactoryFeature is IFactoryFeature {
     /// @return nftAddresses The requested array of contract addresses.
     function getDeployedNFTAuctions(string calldata urlName) external view returns (DeployData[] memory nftAddresses);
 
+    /// @notice The address of the wrapped ether (or equivalent) contract.
+    function WETH() external returns (address); // solhint-disable-line func-name-mixedcase
+
     /// @notice Event emitted when creating a new ERC721Auction contract.
     /// @param deployer The address which created the contract.
     /// @param urlName The urlName, where the created contract is sorted in.

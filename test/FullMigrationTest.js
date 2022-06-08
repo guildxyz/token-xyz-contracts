@@ -49,7 +49,7 @@ contract("FullMigration", function (accounts) {
     merkleVestingFactory = await MerkleVestingFactoryFeature.new();
     erc721MerkleDropFactory = await ERC721MerkleDropFactoryFeature.new();
     erc721CurveFactory = await ERC721CurveFactoryFeature.new();
-    erc721AuctionFactory = await ERC721AuctionFactoryFeature.new();
+    erc721AuctionFactory = await ERC721AuctionFactoryFeature.new(wallet0);
     features = {
       registry: functionRegistry.address,
       ownable: ownable.address,

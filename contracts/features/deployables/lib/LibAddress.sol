@@ -1,7 +1,9 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.0;
 
-/// @title Library for functions related to addresses
+import "../interfaces/IWETH.sol";
+
+/// @title Library for functions related to addresses.
 library LibAddress {
     /// @notice Error thrown when sending ether fails.
     /// @param recipient The address that could not receive the ether.
@@ -12,7 +14,20 @@ library LibAddress {
     /// @param amount The amount of ether to send in wei.
     function sendEther(address payable recipient, uint256 amount) internal {
         // solhint-disable-next-line avoid-low-level-calls
-        (bool success, ) = recipient.call{value: amount}("");
+        (bool success, ) = recipient.call{ value: amount }("");
         if (!success) revert FailedToSendEther(recipient);
+    }
+
+    function sendEtherWithFallback(
+        address payable recipient,
+        uint256 amount,
+        address fallbackToken
+    ) internal {
+        // solhint-disable-next-line avoid-low-level-calls
+        (bool success, ) = recipient.call{ value: amount }("");
+        if (!success) {
+            IWETH(fallbackToken).deposit{ value: amount }();
+            IWETH(fallbackToken).transfer(recipient, amount);
+        }
     }
 }

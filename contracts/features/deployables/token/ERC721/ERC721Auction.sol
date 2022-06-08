@@ -25,6 +25,9 @@ contract ERC721Auction is IERC721Auction, ERC721, Ownable {
     string internal cid;
     Counters.Counter internal tokenIdCounter;
 
+    // Other
+    address internal immutable WETH;
+
     /// @dev If startTime is 0, block.timestamp will be used.
     constructor(
         string memory name,
@@ -33,11 +36,12 @@ contract ERC721Auction is IERC721Auction, ERC721, Ownable {
         uint256 maxSupply_,
         AuctionConfig memory config_,
         uint128 startTime,
+        address weth,
         address owner
     ) ERC721(name, symbol) {
         if (maxSupply_ == 0) revert MaxSupplyZero();
         if (config_.startingPrice == 0) revert StartingPriceZero();
-        if (config_.auctionDuration == 0 || owner == address(0)) revert InvalidParameters();
+        if (config_.auctionDuration == 0 || owner == address(0) || weth == address(0)) revert InvalidParameters();
 
         auctionConfig.startingPrice = config_.startingPrice;
         auctionConfig.auctionDuration = config_.auctionDuration;
@@ -46,6 +50,8 @@ contract ERC721Auction is IERC721Auction, ERC721, Ownable {
 
         maxSupply = maxSupply_;
         cid = cid_;
+
+        WETH = weth;
 
         _createAuction(0, startTime == 0 ? uint128(block.timestamp) : startTime);
 
@@ -71,9 +77,10 @@ contract ERC721Auction is IERC721Auction, ERC721, Ownable {
         if (minimumBid == 0 && msg.value < auctionConfig.startingPrice)
             revert BidTooLow(msg.value, auctionConfig.startingPrice);
 
-        // Refund the previous bidder.
+        // Refund the previous bidder. If sending ether fails, it will be wrapped to WETH and sent that way.
+        // This eliminates a case when a bidder can revert on receiving ether, thus making it impossible to outbid them.
         address lastBidder = auctionState.bidder;
-        if (lastBidder != address(0)) payable(lastBidder).sendEther(bidAmount);
+        if (lastBidder != address(0)) payable(lastBidder).sendEtherWithFallback(bidAmount, WETH);
 
         // Save the new bid.
         auctionState.bidAmount = msg.value;

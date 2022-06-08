@@ -63,6 +63,8 @@ If you are updating an already deployed feature, ensure you have done these step
 - updated their interface
 - (optional) updated FEATURE_VERSION
 
+Note: some contracts require constructor arguments. To specify these, check their corresponding migration files.
+
 ### Deployment & migration
 
 To extend the contracts with a new feature contract, deploy it first.

@@ -17,6 +17,13 @@ contract ERC721AuctionFactoryFeature is IFeature, IERC721AuctionFactoryFeature, 
     /// @notice Version of this feature.
     uint96 public immutable FEATURE_VERSION = _encodeVersion(1, 0, 0);
 
+    /// @notice The address of the wrapped ether (or equivalent) contract.
+    address public immutable WETH;
+
+    constructor(address weth) {
+        WETH = weth;
+    }
+
     /// @notice Initialize and register this feature. Should be delegatecalled by `Migrate.migrate()`.
     /// @return success `LibMigrate.SUCCESS` on success.
     function migrate() external returns (bytes4 success) {
@@ -46,6 +53,7 @@ contract ERC721AuctionFactoryFeature is IFeature, IERC721AuctionFactoryFeature, 
                 nftMetadata.maxSupply,
                 auctionConfig,
                 startTime,
+                WETH,
                 owner
             )
         );

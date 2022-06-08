@@ -45,7 +45,7 @@ contract("ERC721AuctionFactory", function (accounts) {
       ownable: ownable.address
     };
     await initialMigration.initializeTokenXyz(wallet0, tokenXyz.address, features);
-    erc721AuctionFactory = await ERC721AuctionFactoryFeature.new();
+    erc721AuctionFactory = await ERC721AuctionFactoryFeature.new(wallet0);
     const migrateInterface = new utils.Interface(["function migrate()"]);
     await tokenXyz.migrate(erc721AuctionFactory.address, migrateInterface.encodeFunctionData("migrate()"), wallet0);
   });

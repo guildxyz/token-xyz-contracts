@@ -2,6 +2,8 @@ const { balance, BN, constants, ether, expectEvent, expectRevert, time } = requi
 const expect = require("chai").expect;
 
 const ERC721Auction = artifacts.require("ERC721Auction");
+const WETH = artifacts.require("WETHMock");
+const ERC721AuctionMaliciousBidder = artifacts.require("ERC721AuctionMaliciousBidder.sol");
 
 const tokenName = "SupercoolNFT";
 const tokenSymbol = "SNFT";
@@ -23,15 +25,26 @@ const auctionConfigString = {
 contract("ERC721 auction", function (accounts) {
   const [wallet0, wallet1] = accounts;
   let token;
+  let weth;
 
   beforeEach("create a token", async function () {
-    token = await ERC721Auction.new(tokenName, tokenSymbol, tokenCid, tokenMaxSupply, auctionConfigString, 0, wallet0);
+    weth = await WETH.new("Fake WETH", "WETH", 18, wallet0, 0);
+    token = await ERC721Auction.new(
+      tokenName,
+      tokenSymbol,
+      tokenCid,
+      tokenMaxSupply,
+      auctionConfigString,
+      0,
+      weth.address,
+      wallet0
+    );
   });
 
   it("creation fails if called with invalid parameters", async function () {
     // error MaxSupplyZero();
     await expectRevert(
-      ERC721Auction.new(tokenName, tokenSymbol, tokenCid, 0, auctionConfigString, 0, wallet0),
+      ERC721Auction.new(tokenName, tokenSymbol, tokenCid, 0, auctionConfigString, 0, weth.address, wallet0),
       "Custom error (could not decode)"
     );
     // error StartingPriceZero();
@@ -48,6 +61,7 @@ contract("ERC721 auction", function (accounts) {
           minimumPercentageIncreasex100: auctionConfig.minimumPercentageIncreasex100.toString()
         },
         0,
+        weth.address,
         wallet0
       ),
       "Custom error (could not decode)"
@@ -66,6 +80,7 @@ contract("ERC721 auction", function (accounts) {
           minimumPercentageIncreasex100: auctionConfig.minimumPercentageIncreasex100.toString()
         },
         0,
+        weth.address,
         wallet0
       ),
       "Custom error (could not decode)"
@@ -79,6 +94,21 @@ contract("ERC721 auction", function (accounts) {
         tokenMaxSupply,
         auctionConfigString,
         0,
+        constants.ZERO_ADDRESS,
+        wallet0
+      ),
+      "Custom error (could not decode)"
+    );
+    // error InvalidParameters();
+    await expectRevert(
+      ERC721Auction.new(
+        tokenName,
+        tokenSymbol,
+        tokenCid,
+        tokenMaxSupply,
+        auctionConfigString,
+        0,
+        weth.address,
         constants.ZERO_ADDRESS
       ),
       "Custom error (could not decode)"
@@ -118,6 +148,7 @@ contract("ERC721 auction", function (accounts) {
       tokenMaxSupply,
       auctionConfigString,
       startTime1,
+      weth.address,
       wallet0
     );
     const state1 = await anotherToken.getAuctionState();
@@ -268,6 +299,7 @@ contract("ERC721 auction", function (accounts) {
           minimumPercentageIncreasex100: auctionConfig.minimumPercentageIncreasex100.toString()
         },
         timestamp.add(new BN(420)),
+        weth.address,
         wallet0
       );
       // error AuctionNotStarted(uint256 current, uint256 start);
@@ -298,6 +330,27 @@ contract("ERC721 auction", function (accounts) {
       });
       const delta = await tracker.delta();
       expect(delta).to.bignumber.eq(auctionConfig.startingPrice);
+    });
+
+    it("should refund the previous bidder in WETH if it cannot receive ETH", async function () {
+      const trickyBidder = await ERC721AuctionMaliciousBidder.new(token.address);
+      await trickyBidder.bid(0, { value: auctionConfig.startingPrice });
+
+      const ethTracker = await balance.tracker(trickyBidder.address);
+      const wethBalance0 = await weth.balanceOf2(trickyBidder.address);
+
+      await token.bid(0, {
+        from: wallet1,
+        value: auctionConfig.startingPrice.add(
+          auctionConfig.startingPrice.mul(auctionConfig.minimumPercentageIncreasex100).div(new BN(10000))
+        )
+      });
+
+      const delta = await ethTracker.delta();
+      const wethBalance1 = await weth.balanceOf2(trickyBidder.address);
+
+      expect(delta).to.bignumber.eq("0");
+      expect(wethBalance1).to.bignumber.eq(wethBalance0.add(auctionConfig.startingPrice));
     });
 
     it("should save the new bid", async function () {
@@ -366,6 +419,7 @@ contract("ERC721 auction", function (accounts) {
         tokenMaxSupply,
         auctionConfigString,
         0,
+        weth.address,
         wallet0
       );
       await time.increase(auctionConfig.auctionDuration);
