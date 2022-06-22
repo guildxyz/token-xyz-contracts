@@ -1,5 +1,5 @@
 // SPDX-License-Identifier: MIT
-pragma solidity 0.8.14;
+pragma solidity 0.8.15;
 
 import { ITokenWithRolesFactoryFeature } from "./interfaces/ITokenWithRolesFactoryFeature.sol";
 import { ERC20InitialSupply } from "./deployables/token/ERC20/ERC20InitialSupply.sol";

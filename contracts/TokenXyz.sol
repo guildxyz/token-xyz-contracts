@@ -25,7 +25,7 @@
 
 */
 
-pragma solidity 0.8.14;
+pragma solidity 0.8.15;
 
 import { LibBytesV06 } from "./utils/LibBytesV06.sol";
 import { BootstrapFeature } from "./features/BootstrapFeature.sol";

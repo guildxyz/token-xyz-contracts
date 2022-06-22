@@ -25,7 +25,7 @@
 
 */
 
-pragma solidity 0.8.14;
+pragma solidity 0.8.15;
 
 import { IOwnableFeature } from "../features/interfaces/IOwnableFeature.sol";
 import { ISimpleFunctionRegistryFeature } from "../features/interfaces/ISimpleFunctionRegistryFeature.sol";

@@ -7,7 +7,7 @@
 
 */
 
-pragma solidity 0.8.14;
+pragma solidity 0.8.15;
 
 import { IMerkleVesting } from "./interfaces/IMerkleVesting.sol";
 import { Ownable } from "@openzeppelin/contracts/access/Ownable.sol";

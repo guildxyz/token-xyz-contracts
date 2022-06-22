@@ -1,5 +1,5 @@
 // SPDX-License-Identifier: MIT
-pragma solidity 0.8.14;
+pragma solidity 0.8.15;
 
 import { IERC721FactoryCommon } from "./interfaces/IERC721FactoryCommon.sol";
 import { IERC721MerkleDropFactoryFeature } from "./interfaces/IERC721MerkleDropFactoryFeature.sol";
