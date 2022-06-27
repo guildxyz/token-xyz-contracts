@@ -49,8 +49,7 @@ interface IERC721Auction is IERC721Metadata {
     /// @return startingPrice The starting price of the tokens, i.e. the minimum amount of the first bid.
     /// @return auctionDuration The duration of the auction of a specific token.
     /// @return timeBuffer The minimum time until an auction's end after a bid.
-    /// @return minimumPercentageIncreasex100 The min. percentage of the increase between the previous and the current bid
-    ///                                       multiplied by 100.
+    /// @return minimumPercentageIncreasex100 The min. % increase between the previous & the current bid multiplied by 100.
     function getAuctionConfig()
         external
         view

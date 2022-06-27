@@ -63,8 +63,7 @@ contract InitialMigration {
     ///         transfers ownership to `owner`, then self-destructs.
     ///         Only callable by `initializeCaller` set in the contstructor.
     /// @param owner The owner of the contract.
-    /// @param tokenXyz The instance of the TokenXyz contract. TokenXyz should
-    ///        been constructed with this contract as the bootstrapper.
+    /// @param tokenXyz The instance of the TokenXyz contract, constructed with this contract as the bootstrapper.
     /// @param features Features to bootstrap into the proxy.
     /// @return _tokenXyz The configured TokenXyz contract. Same as the `tokenXyz` parameter.
     function initializeTokenXyz(
