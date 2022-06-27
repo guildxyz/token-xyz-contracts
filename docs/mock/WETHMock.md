@@ -1,3 +1,7 @@
+# WETHMock
+
+A minimal implementation of WETH for testing purposes.
+
 
 It has many flaws and doesn't work correctly. Don't even think of using it in production!
 

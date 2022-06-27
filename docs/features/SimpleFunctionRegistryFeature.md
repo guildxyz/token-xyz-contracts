@@ -1,3 +1,6 @@
+# SimpleFunctionRegistryFeature
+
+Basic registry management features.
 
 
 

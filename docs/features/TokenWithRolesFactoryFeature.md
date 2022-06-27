@@ -1,3 +1,6 @@
+# TokenWithRolesFactoryFeature
+
+A contract that deploys ERC20 token contracts with OpenZeppelin's AccessControl for anyone.
 
 
 

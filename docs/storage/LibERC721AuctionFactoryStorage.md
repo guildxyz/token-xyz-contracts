@@ -1,3 +1,6 @@
+# LibERC721AuctionFactoryStorage
+
+Storage helpers for the `ERC721AuctionFactory` feature.
 
 
 

@@ -1,3 +1,6 @@
+# ERC721MerkleDropFactoryFeature
+
+A contract that deploys NFTs with Merkle tree-based distribution for anyone.
 
 
 

@@ -1,3 +1,6 @@
+# TokenFactoryFeature
+
+A contract that deploys ERC20 token contracts for anyone.
 
 
 

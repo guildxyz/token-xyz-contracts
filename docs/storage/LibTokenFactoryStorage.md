@@ -1,3 +1,6 @@
+# LibTokenFactoryStorage
+
+Storage helpers for the `TokenFactory` feature.
 
 
 

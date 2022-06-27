@@ -1,3 +1,6 @@
+# IBootstrapFeature
+
+Detachable `bootstrap()` feature.
 
 
 

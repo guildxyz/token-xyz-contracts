@@ -1,3 +1,6 @@
+# ERC20MintableBurnable
+
+A mintable and burnable ERC20 token.
 
 
 

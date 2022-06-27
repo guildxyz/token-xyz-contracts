@@ -1,3 +1,6 @@
+# ERC721AuctionMaliciousBidder
+
+A bidder for ERC721Auction that cannot be outbid.
 
 
 

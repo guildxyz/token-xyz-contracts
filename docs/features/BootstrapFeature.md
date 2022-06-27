@@ -1,3 +1,6 @@
+# BootstrapFeature
+
+Detachable `bootstrap()` feature.
 
 
 

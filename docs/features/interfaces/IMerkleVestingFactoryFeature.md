@@ -1,3 +1,6 @@
+# IMerkleVestingFactoryFeature
+
+A contract that deploys token vesting contracts for anyone.
 
 
 

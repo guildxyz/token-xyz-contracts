@@ -1,3 +1,6 @@
+# IMerkleDistributor
+
+Allows anyone to claim a token if they exist in a Merkle root.
 
 
 

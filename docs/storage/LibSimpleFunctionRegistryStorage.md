@@ -1,3 +1,6 @@
+# LibSimpleFunctionRegistryStorage
+
+Storage helpers for the `SimpleFunctionRegistry` feature.
 
 
 

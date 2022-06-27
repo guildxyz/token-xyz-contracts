@@ -1,3 +1,6 @@
+# LibERC721MerkleDropFactoryStorage
+
+Storage helpers for the `ERC721MerkleDropFactory` feature.
 
 
 

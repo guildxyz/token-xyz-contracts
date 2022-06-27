@@ -1,3 +1,6 @@
+# InitialMigration
+
+A contract for deploying and configuring a minimal TokenXyz contract.
 
 
 
