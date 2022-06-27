@@ -4,6 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
+    "docgen": "solidity-docgen --solc-module solc -t ./docs/templates/",
     "lint": "solhint 'contracts/**/*.sol'",
     "test": "node run-tests.js"
   },
@@ -15,6 +16,7 @@
     "prettier": "^2.7.1",
     "prettier-plugin-solidity": "^1.0.0-beta.19",
     "solhint": "^3.3.7",
+    "solidity-docgen": "^0.5.17",
     "truffle-plugin-verify": "^0.5.26"
   },
   "dependencies": {
@@ -22,6 +24,7 @@
     "@truffle/hdwallet-provider": "^2.0.9",
     "dotenv": "^16.0.1",
     "ethers": "^5.6.9",
+    "solc": "^0.8.15",
     "ts-import": "^2.0.40"
   }
 }
