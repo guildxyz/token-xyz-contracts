@@ -1,3 +1,6 @@
+# MerkleDistributorFactoryFeature
+
+A contract that deploys token airdrop contracts for anyone.
 
 
 

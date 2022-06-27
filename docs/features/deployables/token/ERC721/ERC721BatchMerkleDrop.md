@@ -1,3 +1,6 @@
+# ERC721BatchMerkleDrop
+
+Allows anyone to mint a certain amount of this token if they exist in a Merkle root.
 
 
 

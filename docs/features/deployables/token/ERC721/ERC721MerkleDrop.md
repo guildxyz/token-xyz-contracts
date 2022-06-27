@@ -1,3 +1,6 @@
+# ERC721MerkleDrop
+
+Allows anyone to mint a token with a specific ID if they exist in a Merkle root.
 
 
 

@@ -1,3 +1,6 @@
+# IERC721MerkleDrop
+
+Allows anyone to mint a non-fungible token if they exist in a Merkle root.
 
 
 

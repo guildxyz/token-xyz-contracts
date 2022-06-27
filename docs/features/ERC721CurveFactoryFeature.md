@@ -1,3 +1,6 @@
+# ERC721CurveFactoryFeature
+
+A contract that deploys special ERC721 contracts for anyone.
 
 
 

@@ -1,3 +1,6 @@
+# MulticallFeature
+
+Provides a function to batch together multiple calls in a single external call.
 
 
 

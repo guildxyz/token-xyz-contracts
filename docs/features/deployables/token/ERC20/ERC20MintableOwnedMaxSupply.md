@@ -1,3 +1,6 @@
+# ERC20MintableOwnedMaxSupply
+
+A mintable ERC20 token.
 
 
 

@@ -1,3 +1,6 @@
+# ERC20InitialSupply
+
+An ERC20 token with initial supply.
 
 
 

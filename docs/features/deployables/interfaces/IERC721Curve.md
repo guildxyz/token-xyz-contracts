@@ -1,3 +1,6 @@
+# IERC721Curve
+
+An NFT with an ever increasing price along a curve.
 
 
 

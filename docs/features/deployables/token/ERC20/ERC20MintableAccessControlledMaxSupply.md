@@ -1,3 +1,6 @@
+# ERC20MintableAccessControlledMaxSupply
+
+A mintable ERC20 token.
 
 
 

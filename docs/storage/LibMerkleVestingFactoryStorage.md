@@ -1,3 +1,6 @@
+# LibMerkleVestingFactoryStorage
+
+Storage helpers for the `MerkleVestingFactory` feature.
 
 
 

@@ -1,3 +1,6 @@
+# IFeature
+
+Basic interface for a feature contract.
 
 
 

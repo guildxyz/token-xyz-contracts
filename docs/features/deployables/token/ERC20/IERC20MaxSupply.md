@@ -1,3 +1,6 @@
+# IERC20MaxSupply
+
+MaxSupply-related functions and errors.
 
 
 
