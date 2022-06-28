@@ -103,7 +103,7 @@ Allows the owner to reclaim the tokens after the distribution has ended.
     uint256 amount
   )
 ```
-This event is triggered whenever a call to #claim succeeds.
+This event is triggered whenever a call to {claim} succeeds.
 
 
 #### Parameters:
@@ -118,7 +118,7 @@ This event is triggered whenever a call to #claim succeeds.
     uint256 newDistributionEnd
   )
 ```
-This event is triggered whenever a call to #prolongDistributionPeriod succeeds.
+This event is triggered whenever a call to {prolongDistributionPeriod} succeeds.
 
 
 #### Parameters:
@@ -132,7 +132,7 @@ This event is triggered whenever a call to #prolongDistributionPeriod succeeds.
     uint256 amount
   )
 ```
-This event is triggered whenever a call to #withdraw succeeds.
+This event is triggered whenever a call to {withdraw} succeeds.
 
 
 #### Parameters:

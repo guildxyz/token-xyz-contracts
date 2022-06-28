@@ -12,7 +12,7 @@ An extensible proxy contract that serves as a universal entry point for
     address bootstrapper
   ) public
 ```
-Construct this contract and register the `BootstrapFeature` feature.
+Constructs this contract and registers the `BootstrapFeature` feature.
         After constructing this contract, `bootstrap()` should be called
         by `bootstrap()` to seed the initial feature set.
 

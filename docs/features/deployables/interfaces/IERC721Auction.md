@@ -189,7 +189,7 @@ This event is triggered whenever an auction's end time is extended.
     uint256 amount
   )
 ```
-This event is triggered whenever a call to #settleAuction succeeds.
+This event is triggered whenever a call to {settleAuction} succeeds.
 
 
 #### Parameters:
@@ -206,7 +206,7 @@ This event is triggered whenever a call to #settleAuction succeeds.
     uint256 amount
   )
 ```
-This event is triggered whenever a call to #bid succeeds.
+This event is triggered whenever a call to {bid} succeeds.
 
 
 #### Parameters:

@@ -85,7 +85,7 @@ The total amount of tokens stored by the contract.
     uint256 amount
   )
 ```
-This event is triggered whenever a call to #withdraw succeeds.
+This event is triggered whenever a call to {withdraw} succeeds.
 
 
 #### Parameters:
