@@ -16,8 +16,11 @@ import { MerkleProof } from "@openzeppelin/contracts/utils/cryptography/MerklePr
 
 /// @title Allows anyone to claim a token if they exist in a Merkle root.
 contract MerkleDistributor is IMerkleDistributor, Ownable {
+    /// @inheritdoc IMerkleDistributor
     address public immutable token;
+    /// @inheritdoc IMerkleDistributor
     bytes32 public immutable merkleRoot;
+    /// @inheritdoc IMerkleDistributor
     uint256 public distributionEnd;
 
     // This is a packed array of booleans.
@@ -36,6 +39,7 @@ contract MerkleDistributor is IMerkleDistributor, Ownable {
         _transferOwnership(owner);
     }
 
+    /// @inheritdoc IMerkleDistributor
     function isClaimed(uint256 index) public view returns (bool) {
         uint256 claimedWordIndex = index / 256;
         uint256 claimedBitIndex = index % 256;
@@ -50,6 +54,7 @@ contract MerkleDistributor is IMerkleDistributor, Ownable {
         claimedBitMap[claimedWordIndex] = claimedBitMap[claimedWordIndex] | (1 << claimedBitIndex);
     }
 
+    /// @inheritdoc IMerkleDistributor
     function claim(
         uint256 index,
         address account,
@@ -70,12 +75,14 @@ contract MerkleDistributor is IMerkleDistributor, Ownable {
         emit Claimed(index, account, amount);
     }
 
+    /// @inheritdoc IMerkleDistributor
     function prolongDistributionPeriod(uint256 additionalSeconds) external onlyOwner {
         uint256 newDistributionEnd = distributionEnd + additionalSeconds;
         distributionEnd = newDistributionEnd;
         emit DistributionProlonged(newDistributionEnd);
     }
 
+    /// @inheritdoc IMerkleDistributor
     function withdraw(address recipient) external onlyOwner {
         if (block.timestamp <= distributionEnd) revert DistributionOngoing(block.timestamp, distributionEnd);
         uint256 balance = IERC20(token).balanceOf(address(this));

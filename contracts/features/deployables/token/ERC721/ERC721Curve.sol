@@ -15,7 +15,9 @@ contract ERC721Curve is IERC721Curve, ERC721, Ownable {
     using LibAddress for address payable;
     using Strings for uint256;
 
+    /// @inheritdoc IERC721Curve
     uint256 public immutable maxSupply;
+    /// @inheritdoc IERC721Curve
     uint256 public immutable startingPrice;
     string internal cid;
     Counters.Counter internal tokenIdCounter;
@@ -37,11 +39,13 @@ contract ERC721Curve is IERC721Curve, ERC721, Ownable {
         _transferOwnership(owner);
     }
 
+    /// @inheritdoc IERC721Curve
     function getPriceOf(uint256 tokenId) public view returns (uint256) {
         if (tokenId >= maxSupply) revert TokenIdOutOfBounds(tokenId, maxSupply);
         return (startingPrice * maxSupply**2) / ((maxSupply - tokenId)**2);
     }
 
+    /// @inheritdoc IERC721Curve
     function claim(address payable to) external payable {
         uint256 tokenId = tokenIdCounter.current();
         uint256 nextPrice = getPriceOf(tokenId);
@@ -52,17 +56,21 @@ contract ERC721Curve is IERC721Curve, ERC721, Ownable {
         _safeMint(to, tokenId);
     }
 
+    /// @inheritdoc IERC721Curve
     function withdraw(address payable recipient) external onlyOwner {
         uint256 amount = address(this).balance;
         recipient.sendEther(amount);
         emit Withdrawn(recipient, amount);
     }
 
+    /// @inheritdoc IERC721Metadata
+    /// @param tokenId The id of the token.
     function tokenURI(uint256 tokenId) public view override(ERC721, IERC721Metadata) returns (string memory) {
         if (!_exists(tokenId)) revert NonExistentToken(tokenId);
         return string(abi.encodePacked("ipfs://", cid, "/", tokenId.toString(), ".json"));
     }
 
+    /// @inheritdoc IERC721Curve
     function totalSupply() public view returns (uint256) {
         return tokenIdCounter.current();
     }

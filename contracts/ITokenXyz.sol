@@ -39,6 +39,7 @@ import { IERC721CurveFactoryFeature } from "./features/interfaces/IERC721CurveFa
 import { IERC721AuctionFactoryFeature } from "./features/interfaces/IERC721AuctionFactoryFeature.sol";
 
 /// @title Interface for a fully featured token.xyz proxy.
+/// @dev The ABI of this contract should be used when interacting with the set of TokenXyz contracts.
 interface ITokenXyz is
     IOwnableFeature,
     ISimpleFunctionRegistryFeature,

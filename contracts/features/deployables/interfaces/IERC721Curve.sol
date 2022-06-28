@@ -28,7 +28,7 @@ interface IERC721Curve is IERC721Metadata {
     /// @notice The total amount of tokens stored by the contract.
     function totalSupply() external view returns (uint256);
 
-    /// @notice This event is triggered whenever a call to #withdraw succeeds.
+    /// @notice This event is triggered whenever a call to {withdraw} succeeds.
     /// @param account The address that received the tokens.
     /// @param amount The amount of tokens the address received.
     event Withdrawn(address account, uint256 amount);

@@ -20,7 +20,9 @@ contract ERC721Auction is IERC721Auction, ERC721, Ownable {
     AuctionState internal auctionState;
 
     // Token properties
+    /// @inheritdoc IERC721Auction
     uint256 public immutable maxSupply;
+    /// @inheritdoc IERC721Auction
     uint256 public totalSupply;
     string internal cid;
     Counters.Counter internal tokenIdCounter;
@@ -58,6 +60,7 @@ contract ERC721Auction is IERC721Auction, ERC721, Ownable {
         _transferOwnership(owner);
     }
 
+    /// @inheritdoc IERC721Auction
     function bid(uint256 tokenId) external payable {
         // Note: where condition is mostly false creating a local variable wouldn't save gas for most users.
 
@@ -97,6 +100,7 @@ contract ERC721Auction is IERC721Auction, ERC721, Ownable {
         emit Bid(tokenId, msg.sender, msg.value);
     }
 
+    /// @inheritdoc IERC721Auction
     function settleAuction() external {
         if (auctionState.endTime > block.timestamp) revert AuctionNotEnded(block.timestamp, auctionState.endTime);
 
@@ -118,29 +122,33 @@ contract ERC721Auction is IERC721Auction, ERC721, Ownable {
         emit AuctionSettled(tokenId, winner, bidAmount);
     }
 
+    /// @inheritdoc IERC721Auction
     function setStartingPrice(uint128 newValue) external onlyOwner {
         if (newValue == 0) revert StartingPriceZero();
         auctionConfig.startingPrice = newValue;
         emit StartingPriceChanged(newValue);
     }
 
+    /// @inheritdoc IERC721Auction
     function setAuctionDuration(uint128 newValue) external onlyOwner {
         if (newValue == 0) revert InvalidParameters();
         auctionConfig.auctionDuration = newValue;
         emit AuctionDurationChanged(newValue);
     }
 
+    /// @inheritdoc IERC721Auction
     function setTimeBuffer(uint128 newValue) external onlyOwner {
         auctionConfig.timeBuffer = newValue;
         emit TimeBufferChanged(newValue);
     }
 
+    /// @inheritdoc IERC721Auction
     function setMinimumPercentageIncreasex100(uint128 newValue) external onlyOwner {
         auctionConfig.minimumPercentageIncreasex100 = newValue;
         emit MinimumPercentageIncreasex100Changed(newValue);
     }
 
-    // Create a new auction if possible and emit an event.
+    /// Create a new auction if possible and emit an event.
     function _createAuction(uint256 nextTokenId, uint128 startTime) internal {
         if (nextTokenId < maxSupply) {
             uint128 endTime = startTime + auctionConfig.auctionDuration;
@@ -156,6 +164,7 @@ contract ERC721Auction is IERC721Auction, ERC721, Ownable {
         _safeMint(to, tokenId, "");
     }
 
+    /// @inheritdoc IERC721Auction
     function getAuctionConfig()
         external
         view
@@ -174,6 +183,7 @@ contract ERC721Auction is IERC721Auction, ERC721, Ownable {
         );
     }
 
+    /// @inheritdoc IERC721Auction
     function getAuctionState()
         external
         view
@@ -194,6 +204,8 @@ contract ERC721Auction is IERC721Auction, ERC721, Ownable {
         );
     }
 
+    /// @inheritdoc IERC721Metadata
+    /// @param tokenId The id of the token.
     function tokenURI(uint256 tokenId) public view override(ERC721, IERC721Metadata) returns (string memory) {
         if (!_exists(tokenId)) revert NonExistentToken(tokenId);
         return string(abi.encodePacked("ipfs://", cid, "/", tokenId.toString(), ".json"));

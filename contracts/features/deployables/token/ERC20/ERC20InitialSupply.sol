@@ -18,7 +18,7 @@ contract ERC20InitialSupply is ERC20 {
         if (initialSupply > 0) _mint(owner, initialSupply);
     }
 
-    /// @dev See {ERC20-decimals}
+    /// @inheritdoc ERC20
     function decimals() public view override returns (uint8) {
         return _tokenDecimals;
     }

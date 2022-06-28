@@ -44,17 +44,17 @@ interface IMerkleDistributor {
     /// @param recipient The address receiving the tokens.
     function withdraw(address recipient) external;
 
-    /// @notice This event is triggered whenever a call to #claim succeeds.
+    /// @notice This event is triggered whenever a call to {claim} succeeds.
     /// @param index A value from the generated input list.
     /// @param account A value from the generated input list.
     /// @param amount A value from the generated input list.
     event Claimed(uint256 index, address account, uint256 amount);
 
-    /// @notice This event is triggered whenever a call to #prolongDistributionPeriod succeeds.
+    /// @notice This event is triggered whenever a call to {prolongDistributionPeriod} succeeds.
     /// @param newDistributionEnd The time when the distribution ends.
     event DistributionProlonged(uint256 newDistributionEnd);
 
-    /// @notice This event is triggered whenever a call to #withdraw succeeds.
+    /// @notice This event is triggered whenever a call to {withdraw} succeeds.
     /// @param account The address that received the tokens.
     /// @param amount The amount of tokens the address received.
     event Withdrawn(address account, uint256 amount);

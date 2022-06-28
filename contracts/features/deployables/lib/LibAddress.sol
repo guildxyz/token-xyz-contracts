@@ -18,6 +18,10 @@ library LibAddress {
         if (!success) revert FailedToSendEther(recipient);
     }
 
+    /// @notice Similar to {sendEther}, but converts the value to `fallbackToken` and sends it anyways on failure.
+    /// @param recipient The recipient of the ether.
+    /// @param amount The amount of ether to send in wei.
+    /// @param fallbackToken A token compatible with WETH's interface.
     function sendEtherWithFallback(
         address payable recipient,
         uint256 amount,

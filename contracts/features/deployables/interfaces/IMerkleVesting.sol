@@ -112,22 +112,22 @@ interface IMerkleVesting {
     /// @param recipient The address receiving the tokens.
     function withdraw(address recipient) external;
 
-    /// @notice This event is triggered whenever a call to #addCohort succeeds.
+    /// @notice This event is triggered whenever a call to {addCohort} succeeds.
     /// @param cohortId Theid of the cohort.
     event CohortAdded(uint256 cohortId);
 
-    /// @notice This event is triggered whenever a call to #claim succeeds.
+    /// @notice This event is triggered whenever a call to {claim} succeeds.
     /// @param cohortId The id of the cohort.
     /// @param account The address that claimed the tokens.
     /// @param amount The amount of tokens the address received.
     event Claimed(uint256 cohortId, address account, uint256 amount);
 
-    /// @notice This event is triggered whenever a call to #prolongDistributionPeriod succeeds.
+    /// @notice This event is triggered whenever a call to {prolongDistributionPeriod} succeeds.
     /// @param cohortId The id of the cohort.
     /// @param newDistributionEnd The time when the distribution ends.
     event DistributionProlonged(uint256 cohortId, uint256 newDistributionEnd);
 
-    /// @notice This event is triggered whenever a call to #withdraw succeeds.
+    /// @notice This event is triggered whenever a call to {withdraw} succeeds.
     /// @param account The address that received the tokens.
     /// @param amount The amount of tokens the address received.
     event Withdrawn(address account, uint256 amount);
