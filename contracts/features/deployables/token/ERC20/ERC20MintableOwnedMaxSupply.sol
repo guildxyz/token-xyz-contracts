@@ -7,6 +7,7 @@ import { Ownable } from "@openzeppelin/contracts/access/Ownable.sol";
 
 /// @title A mintable ERC20 token.
 contract ERC20MintableOwnedMaxSupply is IERC20MaxSupply, ERC20InitialSupply, Ownable {
+    /// @inheritdoc IERC20MaxSupply
     uint256 public immutable maxSupply;
 
     constructor(

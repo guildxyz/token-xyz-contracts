@@ -40,7 +40,7 @@ contract TokenXyz {
     /// @param selector The function's selector that was attempted to be called.
     error NotImplemented(bytes4 selector);
 
-    /// @notice Construct this contract and register the `BootstrapFeature` feature.
+    /// @notice Constructs this contract and registers the `BootstrapFeature` feature.
     ///         After constructing this contract, `bootstrap()` should be called
     ///         by `bootstrap()` to seed the initial feature set.
     /// @param bootstrapper Who can call `bootstrap()`.

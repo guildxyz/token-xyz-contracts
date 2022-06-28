@@ -12,11 +12,15 @@ import { MerkleProof } from "@openzeppelin/contracts/utils/cryptography/MerklePr
 contract ERC721BatchMerkleDrop is ERC721, IERC721MerkleDrop, Ownable {
     using Strings for uint256;
 
+    /// @inheritdoc IERC721MerkleDrop
     bytes32 public immutable merkleRoot;
+    /// @inheritdoc IERC721MerkleDrop
     uint256 public immutable distributionEnd;
+    /// @inheritdoc IERC721MerkleDrop
     uint256 public immutable maxSupply;
-    string internal cid;
+    /// @inheritdoc IERC721MerkleDrop
     uint256 public totalSupply; // Not using Counters because we don't always increment it by 1.
+    string internal cid;
 
     // This is a packed array of booleans.
     mapping(uint256 => uint256) private claimedBitMap;
@@ -39,6 +43,7 @@ contract ERC721BatchMerkleDrop is ERC721, IERC721MerkleDrop, Ownable {
         _transferOwnership(owner);
     }
 
+    /// @inheritdoc IERC721MerkleDrop
     function claim(
         uint256 index,
         address account,
@@ -96,6 +101,8 @@ contract ERC721BatchMerkleDrop is ERC721, IERC721MerkleDrop, Ownable {
         claimedBitMap[claimedWordIndex] = claimedBitMap[claimedWordIndex] | (1 << claimedBitIndex);
     }
 
+    /// @notice Returns true if the index has been marked claimed.
+    /// @param index A value from the generated input list.
     function isClaimed(uint256 index) public view returns (bool) {
         uint256 claimedWordIndex = index / 256;
         uint256 claimedBitIndex = index % 256;
@@ -104,6 +111,8 @@ contract ERC721BatchMerkleDrop is ERC721, IERC721MerkleDrop, Ownable {
         return claimedWord & mask == mask;
     }
 
+    /// @inheritdoc IERC721Metadata
+    /// @param tokenId The id of the token.
     function tokenURI(uint256 tokenId) public view override(ERC721, IERC721Metadata) returns (string memory) {
         if (!_exists(tokenId)) revert NonExistentToken(tokenId);
         return string(abi.encodePacked("ipfs://", cid, "/", tokenId.toString(), ".json"));

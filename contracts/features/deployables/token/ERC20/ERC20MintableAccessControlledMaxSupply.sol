@@ -7,7 +7,10 @@ import { AccessControl } from "@openzeppelin/contracts/access/AccessControl.sol"
 
 /// @title A mintable ERC20 token.
 contract ERC20MintableAccessControlledMaxSupply is IERC20MaxSupply, ERC20InitialSupply, AccessControl {
+    /// @notice The id of the role that has access to the {mint} function.
     bytes32 public constant MINTER_ROLE = keccak256("MINTER_ROLE");
+
+    /// @inheritdoc IERC20MaxSupply
     uint256 public immutable maxSupply;
 
     constructor(

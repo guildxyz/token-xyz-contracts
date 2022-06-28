@@ -15,7 +15,9 @@ contract ERC20MintableBurnable is ERC20MintableOwned {
         uint256 initialSupply
     ) ERC20MintableOwned(name, symbol, tokenDecimals, minter, initialSupply) {}
 
-    /// @notice Burn an amount of tokens from an account.
+    /// @notice Burn `amount` of tokens from `account`.
+    /// @param account The address of the account to burn tokens from.
+    /// @param amount The amount of tokens to burn in wei.
     function burn(address account, uint256 amount) public onlyOwner {
         _burn(account, amount);
     }

@@ -12,9 +12,13 @@ import { MerkleProof } from "@openzeppelin/contracts/utils/cryptography/MerklePr
 contract ERC721MerkleDrop is ERC721, IERC721MerkleDrop, Ownable {
     using Strings for uint256;
 
+    /// @inheritdoc IERC721MerkleDrop
     bytes32 public immutable merkleRoot;
+    /// @inheritdoc IERC721MerkleDrop
     uint256 public immutable distributionEnd;
+    /// @inheritdoc IERC721MerkleDrop
     uint256 public immutable maxSupply;
+    /// @inheritdoc IERC721MerkleDrop
     uint256 public totalSupply;
     string internal cid;
 
@@ -36,6 +40,7 @@ contract ERC721MerkleDrop is ERC721, IERC721MerkleDrop, Ownable {
         _transferOwnership(owner);
     }
 
+    /// @inheritdoc IERC721MerkleDrop
     function claim(
         uint256 index,
         address account,
@@ -68,6 +73,8 @@ contract ERC721MerkleDrop is ERC721, IERC721MerkleDrop, Ownable {
         _safeMint(to, tokenId, "");
     }
 
+    /// @inheritdoc IERC721Metadata
+    /// @param tokenId The id of the token.
     function tokenURI(uint256 tokenId) public view override(ERC721, IERC721Metadata) returns (string memory) {
         if (!_exists(tokenId)) revert NonExistentToken(tokenId);
         return string(abi.encodePacked("ipfs://", cid, "/", tokenId.toString(), ".json"));

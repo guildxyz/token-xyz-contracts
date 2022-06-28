@@ -98,13 +98,13 @@ interface IERC721Auction is IERC721Metadata {
     /// @param endTime The time that the auction is scheduled to end.
     event AuctionExtended(uint256 tokenId, uint256 endTime);
 
-    /// @notice This event is triggered whenever a call to #settleAuction succeeds.
+    /// @notice This event is triggered whenever a call to {settleAuction} succeeds.
     /// @param tokenId The id of the token being bid on.
     /// @param bidder The address that received the tokens.
     /// @param amount The amount of tokens the address received.
     event AuctionSettled(uint256 tokenId, address bidder, uint256 amount);
 
-    /// @notice This event is triggered whenever a call to #bid succeeds.
+    /// @notice This event is triggered whenever a call to {bid} succeeds.
     /// @param tokenId The id of the token being bid on.
     /// @param bidder The address that received the tokens.
     /// @param amount The amount of tokens the address received.

@@ -5,6 +5,8 @@ import { IERC20Metadata } from "@openzeppelin/contracts/token/ERC20/extensions/I
 
 /// @title MaxSupply-related functions and errors.
 interface IERC20MaxSupply is IERC20Metadata {
+    /// @notice The maximum amount of tokens that can ever exist.
+    /// @return _ The amount of tokens in wei.
     function maxSupply() external returns (uint256);
 
     /// @notice Error thrown when the max supply is attempted to be set lower than the initial supply.
