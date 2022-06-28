@@ -30,3 +30,12 @@ Mint an amount of tokens to an account.
 |`account` | address | The address of the account receiving the tokens.
 |`amount` | uint256 | The amount of tokens the account receives.
 
+
+
+
+
+
+## State variables
+```solidity
+  bytes32 MINTER_ROLE;
+```

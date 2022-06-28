@@ -30,3 +30,8 @@ Burn `amount` of tokens from `account`.
 |`account` | address | The address of the account to burn tokens from.
 |`amount` | uint256 | The amount of tokens to burn in wei.
 
+
+
+
+
+

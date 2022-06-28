@@ -23,6 +23,7 @@ Returns all the deployed token addresses by a specific creator.
 | Name                           | Type          | Description                                                                  |
 | :----------------------------- | :------------ | :--------------------------------------------------------------------------- |
 |`tokenAddresses`| string | The requested array of token addresses.
+
 ## Events
 ### TokenAdded
 ```solidity
@@ -44,3 +45,7 @@ The deployer and factoryversion params are 0 if the token was added manually.
 |`urlName`| string | The urlName, where the created token is sorted in.
 |`token`| address | The address of the newly created token.
 |`factoryVersion`| uint96 | The version number of the factory that was used to deploy the contract.
+
+
+
+

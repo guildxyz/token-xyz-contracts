@@ -157,3 +157,24 @@ Returns the Uniform Resource Identifier (URI) for `tokenId` token.
 | :--- | :--- | :------------------------------------------------------------------- |
 |`tokenId` | uint256 | The id of the token.
 
+
+
+
+
+
+## State variables
+```solidity
+  struct IERC721Auction.AuctionConfig auctionConfig;
+
+  struct IERC721Auction.AuctionState auctionState;
+
+  uint256 maxSupply;
+
+  uint256 totalSupply;
+
+  string cid;
+
+  struct Counters.Counter tokenIdCounter;
+
+  address WETH;
+```

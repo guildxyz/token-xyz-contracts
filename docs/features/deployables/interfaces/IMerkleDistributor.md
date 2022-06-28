@@ -94,6 +94,7 @@ Allows the owner to reclaim the tokens after the distribution has ended.
 | :--- | :--- | :------------------------------------------------------------------- |
 |`recipient` | address | The address receiving the tokens.
 
+
 ## Events
 ### Claimed
 ```solidity
@@ -140,3 +141,7 @@ This event is triggered whenever a call to {withdraw} succeeds.
 | :----------------------------- | :------------ | :--------------------------------------------- |
 |`account`| address | The address that received the tokens.
 |`amount`| uint256 | The amount of tokens the address received.
+
+
+
+

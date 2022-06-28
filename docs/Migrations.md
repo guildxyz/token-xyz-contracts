@@ -14,3 +14,23 @@ Helper contract for a Truffle feature.
 
 
 
+
+
+## Modifiers
+### restricted
+```solidity
+  modifier restricted(
+  ) 
+```
+
+
+
+
+
+
+## State variables
+```solidity
+  address owner;
+
+  uint256 last_completed_migration;
+```

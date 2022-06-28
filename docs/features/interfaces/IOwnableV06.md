@@ -32,6 +32,7 @@ The owner of this contract.
 | Name                           | Type          | Description                                                                  |
 | :----------------------------- | :------------ | :--------------------------------------------------------------------------- |
 |`ownerAddress`|  | The owner address.
+
 ## Events
 ### OwnershipTransferred
 ```solidity
@@ -48,3 +49,7 @@ Emitted by Ownable when ownership is transferred.
 | :----------------------------- | :------------ | :--------------------------------------------- |
 |`previousOwner`| address | The previous owner of the contract.
 |`newOwner`| address | The new owner of the contract.
+
+
+
+

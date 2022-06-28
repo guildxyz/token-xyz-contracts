@@ -18,3 +18,14 @@ Initialize and register this feature. Should be delegatecalled by `Migrate.migra
 | Name                           | Type          | Description                                                                  |
 | :----------------------------- | :------------ | :--------------------------------------------------------------------------- |
 |`success`|  | `LibMigrate.SUCCESS` on success.
+
+
+
+
+
+## State variables
+```solidity
+  string FEATURE_NAME;
+
+  uint96 FEATURE_VERSION;
+```

@@ -56,3 +56,14 @@ Returns all the deployed ERC721Curve contract addresses by a specific creator.
 | Name                           | Type          | Description                                                                  |
 | :----------------------------- | :------------ | :--------------------------------------------------------------------------- |
 |`nftAddresses`| string | The requested array of contract addresses.
+
+
+
+
+
+## State variables
+```solidity
+  string FEATURE_NAME;
+
+  uint96 FEATURE_VERSION;
+```

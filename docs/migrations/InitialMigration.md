@@ -91,3 +91,20 @@ Self-destructs this contract. Only callable by this contract.
 | :--- | :--- | :------------------------------------------------------------------- |
 |`ethRecipient` | address payable | Who to transfer outstanding ETH to.
 
+
+
+
+
+## Structs
+### BootstrapFeatures
+```solidity
+  struct BootstrapFeatures{
+    contract SimpleFunctionRegistryFeature registry;
+    contract OwnableFeature ownable;
+  }
+```
+
+## State variables
+```solidity
+  address initializeCaller;
+```

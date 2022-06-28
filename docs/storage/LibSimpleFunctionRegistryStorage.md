@@ -14,3 +14,15 @@ Get the storage bucket for this contract.
 
 
 
+
+
+
+
+## Structs
+### Storage
+```solidity
+  struct Storage{
+    mapping(bytes4 => address[]) implHistory;
+  }
+```
+

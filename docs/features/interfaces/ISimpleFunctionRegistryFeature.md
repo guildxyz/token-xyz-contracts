@@ -77,6 +77,7 @@ Retrieve an entry in the rollback history for a function.
 | :----------------------------- | :------------ | :--------------------------------------------------------------------------- |
 |`impl`| bytes4 | An implementation address for the function at
         index `idx`.
+
 ## Events
 ### ProxyFunctionUpdated
 ```solidity
@@ -95,3 +96,7 @@ A function implementation was updated via `extend()` or `rollback()`.
 |`selector`| bytes4 | The function selector.
 |`oldImpl`| address | The implementation contract address being replaced.
 |`newImpl`| address | The replacement implementation contract address.
+
+
+
+

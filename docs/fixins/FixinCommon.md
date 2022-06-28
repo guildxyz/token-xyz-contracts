@@ -52,3 +52,29 @@ Encode a feature version as a `uint256`.
 | Name                           | Type          | Description                                                                  |
 | :----------------------------- | :------------ | :--------------------------------------------------------------------------- |
 |`encodedVersion`| uint32 | The encoded version number.
+
+
+## Modifiers
+### onlySelf
+```solidity
+  modifier onlySelf(
+  ) 
+```
+The caller must be this contract.
+
+
+### onlyOwner
+```solidity
+  modifier onlyOwner(
+  ) 
+```
+The caller of this function must be the owner.
+
+
+
+
+
+## State variables
+```solidity
+  address _implementation;
+```

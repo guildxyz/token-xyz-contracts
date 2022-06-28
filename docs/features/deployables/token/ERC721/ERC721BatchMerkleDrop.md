@@ -109,3 +109,20 @@ Returns the Uniform Resource Identifier (URI) for `tokenId` token.
 | :--- | :--- | :------------------------------------------------------------------- |
 |`tokenId` | uint256 | The id of the token.
 
+
+
+
+
+
+## State variables
+```solidity
+  bytes32 merkleRoot;
+
+  uint256 distributionEnd;
+
+  uint256 maxSupply;
+
+  uint256 totalSupply;
+
+  string cid;
+```

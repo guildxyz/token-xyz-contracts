@@ -31,3 +31,8 @@ Deploys a new ERC20 token contract.
 |`maxSupply` | uint256 | The maximum amount of tokens that can ever be minted. Unlimited if set to zero.
 |`firstOwner` | address | The address to assign ownership/minter role to (if mintable). Recipient of the initial supply.
 
+
+
+
+
+

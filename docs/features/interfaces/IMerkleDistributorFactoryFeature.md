@@ -45,6 +45,7 @@ Returns all the deployed airdrop contract addresses by a specific creator.
 | Name                           | Type          | Description                                                                  |
 | :----------------------------- | :------------ | :--------------------------------------------------------------------------- |
 |`airdropAddresses`| string | The requested array of contract addresses.
+
 ## Events
 ### MerkleDistributorDeployed
 ```solidity
@@ -65,3 +66,7 @@ Event emitted when creating a new airdrop contract.
 |`urlName`| string | The urlName, where the created airdrop contract is sorted in.
 |`instance`| address | The address of the newly created airdrop contract.
 |`factoryVersion`| uint96 | The version number of the factory that was used to deploy the contract.
+
+
+
+
