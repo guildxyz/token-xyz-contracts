@@ -54,3 +54,14 @@ Returns all the deployed vesting contract addresses by a specific creator.
 | Name                           | Type          | Description                                                                  |
 | :----------------------------- | :------------ | :--------------------------------------------------------------------------- |
 |`vestingAddresses`| string | The requested array of contract addresses.
+
+
+
+
+
+## State variables
+```solidity
+  string FEATURE_NAME;
+
+  uint96 FEATURE_VERSION;
+```

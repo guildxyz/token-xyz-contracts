@@ -18,3 +18,8 @@ The maximum amount of tokens that can ever exist.
 | Name                           | Type          | Description                                                                  |
 | :----------------------------- | :------------ | :--------------------------------------------------------------------------- |
 |`_`|  | The amount of tokens in wei.
+
+
+
+
+

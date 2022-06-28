@@ -76,3 +76,16 @@ Allows the owner to reclaim the tokens after the distribution has ended.
 | :--- | :--- | :------------------------------------------------------------------- |
 |`recipient` | address | The address receiving the tokens.
 
+
+
+
+
+
+## State variables
+```solidity
+  address token;
+
+  bytes32 merkleRoot;
+
+  uint256 distributionEnd;
+```

@@ -70,3 +70,14 @@ Get the owner of this contract.
 | Name                           | Type          | Description                                                                  |
 | :----------------------------- | :------------ | :--------------------------------------------------------------------------- |
 |`owner_`|  | The owner of this contract.
+
+
+
+
+
+## State variables
+```solidity
+  string FEATURE_NAME;
+
+  uint96 FEATURE_VERSION;
+```

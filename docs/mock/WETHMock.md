@@ -62,3 +62,12 @@ Update the mapping declared here...
 
 
 
+
+
+
+
+
+## State variables
+```solidity
+  mapping(address => uint256) _balances;
+```

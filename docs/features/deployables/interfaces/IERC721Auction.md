@@ -135,6 +135,7 @@ The total amount of tokens stored by the contract.
 
 
 
+
 ## Events
 ### AuctionCreated
 ```solidity
@@ -254,3 +255,26 @@ This event is triggered whenever the timeBuffer is changed.
 | Name                           | Type          | Description                                    |
 | :----------------------------- | :------------ | :--------------------------------------------- |
 |`newValue`| uint128 | The new value of timeBuffer.
+
+
+
+## Structs
+### AuctionConfig
+```solidity
+  struct AuctionConfig{
+    uint128 startingPrice;
+    uint128 auctionDuration;
+    uint128 timeBuffer;
+    uint128 minimumPercentageIncreasex100;
+  }
+```
+### AuctionState
+```solidity
+  struct AuctionState{
+    uint256 bidAmount;
+    uint128 startTime;
+    uint128 endTime;
+    address bidder;
+  }
+```
+

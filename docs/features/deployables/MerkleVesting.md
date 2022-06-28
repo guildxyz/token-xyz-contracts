@@ -188,3 +188,16 @@ Checks if allCohortsEnd should be updated and updates it with the new timestamp.
 
 
 
+
+
+
+
+
+## State variables
+```solidity
+  address token;
+
+  uint256 allCohortsEnd;
+
+  struct IMerkleVesting.Cohort[] cohorts;
+```

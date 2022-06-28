@@ -54,6 +54,7 @@ The address of the wrapped ether (or equivalent) contract.
 
 
 
+
 ## Events
 ### ERC721AuctionDeployed
 ```solidity
@@ -74,3 +75,7 @@ Event emitted when creating a new ERC721Auction contract.
 |`urlName`| string | The urlName, where the created contract is sorted in.
 |`instance`| address | The address of the newly created contract.
 |`factoryVersion`| uint96 | The version number of the factory that was used to deploy the contract.
+
+
+
+

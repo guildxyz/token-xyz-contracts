@@ -25,3 +25,8 @@ Reads an unpadded bytes4 value from a position in a byte array.
 | Name                           | Type          | Description                                                                  |
 | :----------------------------- | :------------ | :--------------------------------------------------------------------------- |
 |`result`| bytes | bytes4 value from byte array.
+
+
+
+
+

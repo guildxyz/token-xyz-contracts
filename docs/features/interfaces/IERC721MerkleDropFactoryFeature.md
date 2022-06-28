@@ -47,6 +47,7 @@ Returns all the deployed contract addresses by a specific creator.
 | Name                           | Type          | Description                                                                  |
 | :----------------------------- | :------------ | :--------------------------------------------------------------------------- |
 |`nftAddresses`| string | The requested array of contract addresses.
+
 ## Events
 ### ERC721MerkleDropDeployed
 ```solidity
@@ -67,3 +68,7 @@ Event emitted when creating a new NFT Merkle Drop contract.
 |`urlName`| string | The urlName, where the created NFT contract is sorted in.
 |`instance`| address | The address of the newly created NFT contract.
 |`factoryVersion`| uint96 | The version number of the factory that was used to deploy the contract.
+
+
+
+

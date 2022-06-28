@@ -28,3 +28,12 @@ Calls bid on the auction contract.
 | :--- | :--- | :------------------------------------------------------------------- |
 |`tokenId` | uint256 | The tokenId to bid on.
 
+
+
+
+
+
+## State variables
+```solidity
+  contract IERC721Auction auctionContract;
+```

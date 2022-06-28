@@ -70,3 +70,28 @@ Destroy this contract. Only callable from ourselves (from `initializeTokenXyz()`
 | :--- | :--- | :------------------------------------------------------------------- |
 |`ethRecipient` | address payable | Receiver of any ETH in this contract.
 
+
+
+
+
+## Structs
+### Features
+```solidity
+  struct Features{
+    contract SimpleFunctionRegistryFeature registry;
+    contract OwnableFeature ownable;
+    contract MulticallFeature multicall;
+    contract TokenFactoryFeature tokenFactory;
+    contract TokenWithRolesFactoryFeature tokenWithRolesFactory;
+    contract MerkleDistributorFactoryFeature merkleDistributorFactory;
+    contract MerkleVestingFactoryFeature merkleVestingFactory;
+    contract ERC721MerkleDropFactoryFeature erc721MerkleDropFactory;
+    contract ERC721CurveFactoryFeature erc721CurveFactory;
+    contract ERC721AuctionFactoryFeature erc721AuctionFactory;
+  }
+```
+
+## State variables
+```solidity
+  address initializeCaller;
+```

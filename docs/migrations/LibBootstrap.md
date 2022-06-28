@@ -21,3 +21,12 @@ Perform a delegatecall and ensure it returns the magic bytes.
 |`target` | address | The call target.
 |`data` | bytes | The call data.
 
+
+
+
+
+
+## State variables
+```solidity
+  bytes4 BOOTSTRAP_SUCCESS;
+```

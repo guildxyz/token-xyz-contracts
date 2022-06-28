@@ -23,3 +23,20 @@ See: https://solidity.readthedocs.io/en/v0.8.14/assembly.html#access-to-external
 | Name                           | Type          | Description                                                                  |
 | :----------------------------- | :------------ | :--------------------------------------------------------------------------- |
 |`slot`| enum LibStorage.StorageId | The storage slot.
+
+
+
+## Enums
+### StorageId
+Members:
+- Proxy
+- SimpleFunctionRegistry
+- Ownable
+- TokenFactory
+- MerkleDistributorFactory
+- MerkleVestingFactory
+- ERC721MerkleDropFactory
+- ERC721CurveFactory
+- ERC721AuctionFactory
+
+

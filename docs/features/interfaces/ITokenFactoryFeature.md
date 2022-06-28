@@ -47,3 +47,8 @@ Adds a token to the contract's storage.
 |`urlName` | string | The url name used by the frontend, kind of an id of the creator.
 |`tokenAddress` | address | The address of the token to add.
 
+
+
+
+
+

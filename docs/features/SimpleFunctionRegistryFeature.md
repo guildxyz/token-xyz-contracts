@@ -108,3 +108,14 @@ Retrieve an entry in the rollback history for a function.
 | Name                           | Type          | Description                                                                  |
 | :----------------------------- | :------------ | :--------------------------------------------------------------------------- |
 |`impl`| bytes4 | An implementation address for the function at index `idx`.
+
+
+
+
+
+## State variables
+```solidity
+  string FEATURE_NAME;
+
+  uint96 FEATURE_VERSION;
+```

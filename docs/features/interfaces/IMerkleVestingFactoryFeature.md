@@ -41,6 +41,7 @@ Returns all the deployed vesting contract addresses by a specific creator.
 | Name                           | Type          | Description                                                                  |
 | :----------------------------- | :------------ | :--------------------------------------------------------------------------- |
 |`vestingAddresses`| string | The requested array of contract addresses.
+
 ## Events
 ### MerkleVestingDeployed
 ```solidity
@@ -61,3 +62,7 @@ Event emitted when creating a new vesting contract.
 |`urlName`| string | The urlName, where the created vesting contract is sorted in.
 |`instance`| address | The address of the newly created vesting contract.
 |`factoryVersion`| uint96 | The version number of the factory that was used to deploy the contract.
+
+
+
+

@@ -77,3 +77,18 @@ The total amount of tokens stored by the contract.
 
 
 
+
+
+
+
+
+## State variables
+```solidity
+  uint256 maxSupply;
+
+  uint256 startingPrice;
+
+  string cid;
+
+  struct Counters.Counter tokenIdCounter;
+```

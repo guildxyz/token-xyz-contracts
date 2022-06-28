@@ -27,6 +27,7 @@ Execute a migration function in the context of the TokenXyz contract.
 |`newOwner` | bytes | The address of the new owner.
 |`data` | address | The call data.
 
+
 ## Events
 ### Migrated
 ```solidity
@@ -45,3 +46,7 @@ Emitted when `migrate()` is called.
 |`caller`| address | The caller of `migrate()`.
 |`migrator`| address | The migration contract.
 |`newOwner`| address | The address of the new owner.
+
+
+
+
