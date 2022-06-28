@@ -41,18 +41,24 @@ Withdraw wrapped ether to get ether.
 ### balanceOf2
 ```solidity
   function balanceOf2(
+    address account
   ) public returns (uint256)
 ```
+Returns the amount of tokens owned by `account`.
 
 This should be used instead of the original.
 
+#### Parameters:
+| Name | Type | Description                                                          |
+| :--- | :--- | :------------------------------------------------------------------- |
+|`account` | address | The address whose balance is queried.
 
 ### _transfer
 ```solidity
   function _transfer(
   ) internal
 ```
-
+Update the mapping declared here...
 
 
 

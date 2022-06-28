@@ -1,6 +1,6 @@
 # Migrations
 
-
+Helper contract for a Truffle feature.
 
 
 
