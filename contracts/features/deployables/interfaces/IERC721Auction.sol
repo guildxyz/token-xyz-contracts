@@ -78,10 +78,12 @@ interface IERC721Auction is IERC721Metadata {
         );
 
     /// @notice The maximum number of NFTs that can ever be minted.
-    function maxSupply() external view returns (uint256);
+    /// @return count The number of NFTs.
+    function maxSupply() external view returns (uint256 count);
 
     /// @notice The total amount of tokens stored by the contract.
-    function totalSupply() external view returns (uint256);
+    /// @return count The number of NFTs.
+    function totalSupply() external view returns (uint256 count);
 
     /// @notice This event is triggered whenever a new auction is created.
     /// @param tokenId The id of the token to bid on.

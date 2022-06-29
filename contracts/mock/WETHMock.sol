@@ -30,10 +30,11 @@ contract WETHMock is IWETH, ERC20InitialSupply {
         payable(msg.sender).transfer(wad);
     }
 
-    /// @notice Returns the amount of tokens owned by `account`.
+    /// @notice Returns the amount of tokens owned by `account`, that were transferred using the mocked transfer function.
     /// @dev This should be used instead of the original.
     /// @param account The address whose balance is queried.
-    function balanceOf2(address account) public view returns (uint256) {
+    /// @return wad The amount of tokens owned by the account.
+    function balanceOf2(address account) public view returns (uint256 wad) {
         return _balances[account];
     }
 

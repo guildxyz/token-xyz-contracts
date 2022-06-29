@@ -12,17 +12,21 @@ pragma solidity ^0.8.0;
 /// @title Allows anyone to claim a token if they exist in a Merkle root.
 interface IMerkleDistributor {
     /// @notice Returns the address of the token distributed by this contract.
-    function token() external view returns (address);
+    /// @return tokenAddress The address of the token.
+    function token() external view returns (address tokenAddress);
 
     /// @notice Returns the Merkle root of the Merkle tree containing account balances available to claim.
-    function merkleRoot() external view returns (bytes32);
+    /// @return root The root hash of the Merkle tree.
+    function merkleRoot() external view returns (bytes32 root);
 
     /// @notice Returns the unix timestamp that marks the end of the token distribution.
-    function distributionEnd() external view returns (uint256);
+    /// @return unixSeconds The unix timestamp in seconds.
+    function distributionEnd() external view returns (uint256 unixSeconds);
 
     /// @notice Returns true if the index has been marked claimed.
     /// @param index A value from the generated input list.
-    function isClaimed(uint256 index) external view returns (bool);
+    /// @return claimed Whether the tokens from `index` have been claimed.
+    function isClaimed(uint256 index) external view returns (bool claimed);
 
     /// @notice Claim the given amount of the token to the given address. Reverts if the inputs are invalid.
     /// @param index A value from the generated input list.

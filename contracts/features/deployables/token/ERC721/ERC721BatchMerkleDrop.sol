@@ -103,7 +103,8 @@ contract ERC721BatchMerkleDrop is ERC721, IERC721MerkleDrop, Ownable {
 
     /// @notice Returns true if the index has been marked claimed.
     /// @param index A value from the generated input list.
-    function isClaimed(uint256 index) public view returns (bool) {
+    /// @return claimed Whether the tokens from `index` have been claimed.
+    function isClaimed(uint256 index) public view returns (bool claimed) {
         uint256 claimedWordIndex = index / 256;
         uint256 claimedBitIndex = index % 256;
         uint256 claimedWord = claimedBitMap[claimedWordIndex];

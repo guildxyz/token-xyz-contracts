@@ -31,12 +31,12 @@ contract MerkleVesting is IMerkleVesting, Multicall, Ownable {
     }
 
     /// @inheritdoc IMerkleVesting
-    function getCohort(uint256 cohortId) external view returns (CohortData memory) {
+    function getCohort(uint256 cohortId) external view returns (CohortData memory cohort) {
         return cohorts[cohortId].data;
     }
 
     /// @inheritdoc IMerkleVesting
-    function getCohortsLength() external view returns (uint256) {
+    function getCohortsLength() external view returns (uint256 count) {
         return cohorts.length;
     }
 
@@ -46,7 +46,7 @@ contract MerkleVesting is IMerkleVesting, Multicall, Ownable {
         uint256 index,
         address account,
         uint256 fullAmount
-    ) public view returns (uint256) {
+    ) public view returns (uint256 amount) {
         Cohort storage cohort = cohorts[cohortId];
         uint256 claimedSoFar = cohort.claims[account];
         uint256 vestingEnd = cohort.data.distributionStart + cohort.data.vestingPeriod;
@@ -60,7 +60,7 @@ contract MerkleVesting is IMerkleVesting, Multicall, Ownable {
     }
 
     /// @inheritdoc IMerkleVesting
-    function getClaimed(uint256 cohortId, address account) public view returns (uint256) {
+    function getClaimed(uint256 cohortId, address account) public view returns (uint256 amount) {
         return cohorts[cohortId].claims[account];
     }
 
