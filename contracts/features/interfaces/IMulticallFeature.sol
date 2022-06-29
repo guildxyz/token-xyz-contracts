@@ -5,5 +5,6 @@ pragma solidity ^0.8.0;
 interface IMulticallFeature {
     /// @notice Receives and executes a batch of function calls on this contract.
     /// @param data An array of the encoded function call data.
+    /// @return results An array of the results of the individual function calls.
     function multicall(bytes[] calldata data) external returns (bytes[] memory results);
 }

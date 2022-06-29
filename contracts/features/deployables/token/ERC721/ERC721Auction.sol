@@ -157,10 +157,13 @@ contract ERC721Auction is IERC721Auction, ERC721, Ownable {
         }
     }
 
+    /// An optimized version of {_safeMint} using custom errors.
     function _safeMint(address to, uint256 tokenId) internal override {
         if (tokenId >= maxSupply) revert TokenIdOutOfBounds(tokenId, maxSupply);
         tokenIdCounter.increment();
-        ++totalSupply;
+        unchecked {
+            ++totalSupply;
+        }
         _safeMint(to, tokenId, "");
     }
 

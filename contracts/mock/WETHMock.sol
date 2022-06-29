@@ -38,7 +38,7 @@ contract WETHMock is IWETH, ERC20InitialSupply {
         return _balances[account];
     }
 
-    /// Update the mapping declared here...
+    /// Updates the mapping declared here and does nothing else.
     function _transfer(
         address from,
         address to,
