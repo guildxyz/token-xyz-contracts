@@ -95,6 +95,7 @@ contract ERC721BatchMerkleDrop is ERC721, IERC721MerkleDrop, Ownable {
         }
     }
 
+    /// Sets token(s) on `index` as claimed.
     function _setClaimed(uint256 index) internal {
         uint256 claimedWordIndex = index / 256;
         uint256 claimedBitIndex = index % 256;
