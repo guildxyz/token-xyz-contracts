@@ -42,9 +42,9 @@ Withdraw wrapped ether to get ether.
 ```solidity
   function balanceOf2(
     address account
-  ) public returns (uint256)
+  ) public returns (uint256 wad)
 ```
-Returns the amount of tokens owned by `account`.
+Returns the amount of tokens owned by `account`, that were transferred using the mocked transfer function.
 
 This should be used instead of the original.
 
@@ -53,12 +53,16 @@ This should be used instead of the original.
 | :--- | :--- | :------------------------------------------------------------------- |
 |`account` | address | The address whose balance is queried.
 
+#### Return Values:
+| Name                           | Type          | Description                                                                  |
+| :----------------------------- | :------------ | :--------------------------------------------------------------------------- |
+|`wad`| address | The amount of tokens owned by the account.
 ### _transfer
 ```solidity
   function _transfer(
   ) internal
 ```
-Update the mapping declared here...
+Updates the mapping declared here and does nothing else.
 
 
 

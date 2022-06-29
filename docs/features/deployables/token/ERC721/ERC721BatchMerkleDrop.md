@@ -78,7 +78,7 @@ Mint a certain amount of tokens to the given address.
   function _setClaimed(
   ) internal
 ```
-
+Sets token(s) on `index` as claimed.
 
 
 
@@ -86,7 +86,7 @@ Mint a certain amount of tokens to the given address.
 ```solidity
   function isClaimed(
     uint256 index
-  ) public returns (bool)
+  ) public returns (bool claimed)
 ```
 Returns true if the index has been marked claimed.
 
@@ -96,6 +96,10 @@ Returns true if the index has been marked claimed.
 | :--- | :--- | :------------------------------------------------------------------- |
 |`index` | uint256 | A value from the generated input list.
 
+#### Return Values:
+| Name                           | Type          | Description                                                                  |
+| :----------------------------- | :------------ | :--------------------------------------------------------------------------- |
+|`claimed`| uint256 | Whether the tokens from `index` have been claimed.
 ### tokenURI
 ```solidity
   function tokenURI(

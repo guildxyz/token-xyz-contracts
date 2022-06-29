@@ -19,6 +19,10 @@ Receives and executes a batch of function calls on this contract.
 | :--- | :--- | :------------------------------------------------------------------- |
 |`data` | bytes[] | An array of the encoded function call data.
 
+#### Return Values:
+| Name                           | Type          | Description                                                                  |
+| :----------------------------- | :------------ | :--------------------------------------------------------------------------- |
+|`results`| bytes[] | An array of the results of the individual function calls.
 
 
 

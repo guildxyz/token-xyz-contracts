@@ -120,21 +120,29 @@ Returns the state of the current auction.
 ### maxSupply
 ```solidity
   function maxSupply(
-  ) external returns (uint256)
+  ) external returns (uint256 count)
 ```
 The maximum number of NFTs that can ever be minted.
 
 
 
+#### Return Values:
+| Name                           | Type          | Description                                                                  |
+| :----------------------------- | :------------ | :--------------------------------------------------------------------------- |
+|`count`|  | The number of NFTs.
 ### totalSupply
 ```solidity
   function totalSupply(
-  ) external returns (uint256)
+  ) external returns (uint256 count)
 ```
 The total amount of tokens stored by the contract.
 
 
 
+#### Return Values:
+| Name                           | Type          | Description                                                                  |
+| :----------------------------- | :------------ | :--------------------------------------------------------------------------- |
+|`count`|  | The number of NFTs.
 
 ## Events
 ### AuctionCreated

@@ -32,7 +32,7 @@ Allows the owner to withdraw the collected funds.
 ```solidity
   function getPriceOf(
     uint256 tokenId
-  ) external returns (uint256)
+  ) external returns (uint256 price)
 ```
 Gets the price of a specific token.
 
@@ -45,20 +45,24 @@ Gets the price of a specific token.
 #### Return Values:
 | Name                           | Type          | Description                                                                  |
 | :----------------------------- | :------------ | :--------------------------------------------------------------------------- |
-|`The`| uint256 | price of the token in wei.
+|`price`| uint256 | The price of the token in wei.
 ### maxSupply
 ```solidity
   function maxSupply(
-  ) external returns (uint256)
+  ) external returns (uint256 count)
 ```
 The maximum number of NFTs that can ever be minted.
 
 
 
+#### Return Values:
+| Name                           | Type          | Description                                                                  |
+| :----------------------------- | :------------ | :--------------------------------------------------------------------------- |
+|`count`|  | The number of NFTs.
 ### startingPrice
 ```solidity
   function startingPrice(
-  ) external returns (uint256)
+  ) external returns (uint256 price)
 ```
 The price of the first token.
 
@@ -67,16 +71,20 @@ The price of the first token.
 #### Return Values:
 | Name                           | Type          | Description                                                                  |
 | :----------------------------- | :------------ | :--------------------------------------------------------------------------- |
-|`The`|  | price in wei.
+|`price`|  | The price in wei.
 ### totalSupply
 ```solidity
   function totalSupply(
-  ) external returns (uint256)
+  ) external returns (uint256 count)
 ```
 The total amount of tokens stored by the contract.
 
 
 
+#### Return Values:
+| Name                           | Type          | Description                                                                  |
+| :----------------------------- | :------------ | :--------------------------------------------------------------------------- |
+|`count`|  | The number of NFTs.
 
 ## Events
 ### Withdrawn

@@ -107,7 +107,7 @@ Create a new auction if possible and emit an event.
   function _safeMint(
   ) internal
 ```
-
+An optimized version of {_safeMint} using custom errors.
 
 
 

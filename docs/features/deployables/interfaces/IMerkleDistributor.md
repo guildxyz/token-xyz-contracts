@@ -8,35 +8,47 @@ Allows anyone to claim a token if they exist in a Merkle root.
 ### token
 ```solidity
   function token(
-  ) external returns (address)
+  ) external returns (address tokenAddress)
 ```
 Returns the address of the token distributed by this contract.
 
 
 
+#### Return Values:
+| Name                           | Type          | Description                                                                  |
+| :----------------------------- | :------------ | :--------------------------------------------------------------------------- |
+|`tokenAddress`|  | The address of the token.
 ### merkleRoot
 ```solidity
   function merkleRoot(
-  ) external returns (bytes32)
+  ) external returns (bytes32 root)
 ```
 Returns the Merkle root of the Merkle tree containing account balances available to claim.
 
 
 
+#### Return Values:
+| Name                           | Type          | Description                                                                  |
+| :----------------------------- | :------------ | :--------------------------------------------------------------------------- |
+|`root`|  | The root hash of the Merkle tree.
 ### distributionEnd
 ```solidity
   function distributionEnd(
-  ) external returns (uint256)
+  ) external returns (uint256 unixSeconds)
 ```
 Returns the unix timestamp that marks the end of the token distribution.
 
 
 
+#### Return Values:
+| Name                           | Type          | Description                                                                  |
+| :----------------------------- | :------------ | :--------------------------------------------------------------------------- |
+|`unixSeconds`|  | The unix timestamp in seconds.
 ### isClaimed
 ```solidity
   function isClaimed(
     uint256 index
-  ) external returns (bool)
+  ) external returns (bool claimed)
 ```
 Returns true if the index has been marked claimed.
 
@@ -46,6 +58,10 @@ Returns true if the index has been marked claimed.
 | :--- | :--- | :------------------------------------------------------------------- |
 |`index` | uint256 | A value from the generated input list.
 
+#### Return Values:
+| Name                           | Type          | Description                                                                  |
+| :----------------------------- | :------------ | :--------------------------------------------------------------------------- |
+|`claimed`| uint256 | Whether the tokens from `index` have been claimed.
 ### claim
 ```solidity
   function claim(
