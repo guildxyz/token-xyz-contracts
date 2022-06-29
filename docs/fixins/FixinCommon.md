@@ -7,8 +7,8 @@ Common feature utilities.
 ## Functions
 ### constructor
 ```solidity
-  function constructor(
-  ) internal
+  constructor(
+  ) 
 ```
 
 

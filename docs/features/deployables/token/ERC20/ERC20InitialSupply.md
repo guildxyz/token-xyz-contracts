@@ -7,8 +7,8 @@ An ERC20 token with initial supply.
 ## Functions
 ### constructor
 ```solidity
-  function constructor(
-  ) public
+  constructor(
+  ) 
 ```
 
 

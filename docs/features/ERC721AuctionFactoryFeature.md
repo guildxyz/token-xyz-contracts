@@ -7,8 +7,8 @@ A contract that deploys special ERC721 contracts for anyone.
 ## Functions
 ### constructor
 ```solidity
-  function constructor(
-  ) public
+  constructor(
+  ) 
 ```
 
 

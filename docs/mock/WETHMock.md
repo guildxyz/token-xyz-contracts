@@ -8,8 +8,8 @@ It has many flaws and doesn't work correctly. Don't even think of using it in pr
 ## Functions
 ### constructor
 ```solidity
-  function constructor(
-  ) public
+  constructor(
+  ) 
 ```
 
 

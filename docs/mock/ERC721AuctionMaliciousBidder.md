@@ -7,8 +7,8 @@ A bidder for ERC721Auction that cannot be outbid.
 ## Functions
 ### constructor
 ```solidity
-  function constructor(
-  ) public
+  constructor(
+  ) 
 ```
 
 

@@ -7,8 +7,8 @@ An NFT with an ever increasing price along a curve.
 ## Functions
 ### constructor
 ```solidity
-  function constructor(
-  ) public
+  constructor(
+  ) 
 ```
 
 

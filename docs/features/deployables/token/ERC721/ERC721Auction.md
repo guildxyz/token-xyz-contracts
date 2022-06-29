@@ -7,8 +7,8 @@ An NFT distributed via on-chain bidding.
 ## Functions
 ### constructor
 ```solidity
-  function constructor(
-  ) public
+  constructor(
+  ) 
 ```
 
 If startTime is 0, block.timestamp will be used.

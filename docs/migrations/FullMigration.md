@@ -7,9 +7,9 @@ A contract for deploying and configuring the full TokenXyz contract.
 ## Functions
 ### constructor
 ```solidity
-  function constructor(
+  constructor(
     address payable initializeCaller_
-  ) public
+  ) 
 ```
 Instantiate this contract and set the allowed caller of `initializeTokenXyz()` to `initializeCaller`.
 
