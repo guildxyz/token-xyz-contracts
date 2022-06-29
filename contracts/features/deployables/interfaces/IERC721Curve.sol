@@ -15,18 +15,20 @@ interface IERC721Curve is IERC721Metadata {
 
     /// @notice Gets the price of a specific token.
     /// @param tokenId The ID of the token.
-    /// @return The price of the token in wei.
-    function getPriceOf(uint256 tokenId) external view returns (uint256);
+    /// @return price The price of the token in wei.
+    function getPriceOf(uint256 tokenId) external view returns (uint256 price);
 
     /// @notice The maximum number of NFTs that can ever be minted.
-    function maxSupply() external view returns (uint256);
+    /// @return count The number of NFTs.
+    function maxSupply() external view returns (uint256 count);
 
     /// @notice The price of the first token.
-    /// @return The price in wei.
-    function startingPrice() external view returns (uint256);
+    /// @return price The price in wei.
+    function startingPrice() external view returns (uint256 price);
 
     /// @notice The total amount of tokens stored by the contract.
-    function totalSupply() external view returns (uint256);
+    /// @return count The number of NFTs.
+    function totalSupply() external view returns (uint256 count);
 
     /// @notice This event is triggered whenever a call to {withdraw} succeeds.
     /// @param account The address that received the tokens.

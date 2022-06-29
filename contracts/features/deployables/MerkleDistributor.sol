@@ -40,7 +40,7 @@ contract MerkleDistributor is IMerkleDistributor, Ownable {
     }
 
     /// @inheritdoc IMerkleDistributor
-    function isClaimed(uint256 index) public view returns (bool) {
+    function isClaimed(uint256 index) public view returns (bool claimed) {
         uint256 claimedWordIndex = index / 256;
         uint256 claimedBitIndex = index % 256;
         uint256 claimedWord = claimedBitMap[claimedWordIndex];
@@ -48,6 +48,7 @@ contract MerkleDistributor is IMerkleDistributor, Ownable {
         return claimedWord & mask == mask;
     }
 
+    /// Sets tokens on `index` as claimed.
     function _setClaimed(uint256 index) private {
         uint256 claimedWordIndex = index / 256;
         uint256 claimedBitIndex = index % 256;

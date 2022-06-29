@@ -6,16 +6,20 @@ import { IERC721Metadata } from "@openzeppelin/contracts/token/ERC721/extensions
 /// @title Allows anyone to mint a non-fungible token if they exist in a Merkle root.
 interface IERC721MerkleDrop is IERC721Metadata {
     /// @notice The maximum number of NFTs that can ever be minted.
-    function maxSupply() external view returns (uint256);
+    /// @return count The number of NFTs.
+    function maxSupply() external view returns (uint256 count);
 
     /// @notice The total amount of tokens stored by the contract.
-    function totalSupply() external view returns (uint256);
+    /// @return count The number of NFTs.
+    function totalSupply() external view returns (uint256 count);
 
     /// @notice Returns the Merkle root of the Merkle tree containing account balances available to claim.
-    function merkleRoot() external view returns (bytes32);
+    /// @return root The root hash of the Merkle tree.
+    function merkleRoot() external view returns (bytes32 root);
 
     /// @notice Returns the unix timestamp that marks the end of the token distribution.
-    function distributionEnd() external view returns (uint256);
+    /// @return unixSeconds The unix timestamp in seconds.
+    function distributionEnd() external view returns (uint256 unixSeconds);
 
     /// @notice Claims tokens to the given address. Reverts if the inputs are invalid.
     /// @param index A value from the generated input list.

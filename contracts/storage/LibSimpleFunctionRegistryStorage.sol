@@ -38,6 +38,7 @@ library LibSimpleFunctionRegistryStorage {
     }
 
     /// @notice Get the storage bucket for this contract.
+    /// @return stor The struct containing the state variables of the contract.
     function getStorage() internal pure returns (Storage storage stor) {
         uint256 storageSlot = LibStorage.getStorageSlot(LibStorage.StorageId.SimpleFunctionRegistry);
         // Dip into assembly to change the slot pointed to by the local variable `stor`.

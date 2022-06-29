@@ -36,38 +36,45 @@ interface IMerkleVesting {
     }
 
     /// @notice Returns the address of the token distributed by this contract.
-    function token() external view returns (address);
+    /// @return tokenAddress The address of the token.
+    function token() external view returns (address tokenAddress);
 
     /// @notice Returns the timestamp when all cohorts' distribution period ends.
-    function allCohortsEnd() external view returns (uint256);
+    /// @return unixSeconds The unix timestamp in seconds.
+    function allCohortsEnd() external view returns (uint256 unixSeconds);
 
     /// @notice Returns the parameters of a specific cohort.
     /// @param cohortId The id of the cohort.
-    function getCohort(uint256 cohortId) external view returns (CohortData memory);
+    /// @return cohort The merkleRoot, distributionStart, distributionEnd, vestingPeriod and cliffPeriod of the cohort.
+    function getCohort(uint256 cohortId) external view returns (CohortData memory cohort);
 
     /// @notice Returns the number of created cohorts.
-    function getCohortsLength() external view returns (uint256);
+    /// @return count The number of created cohorts.
+    function getCohortsLength() external view returns (uint256 count);
 
     /// @notice Returns the amount of funds an account can claim at the moment.
     /// @param cohortId The id of the cohort.
     /// @param index A value from the generated input list.
     /// @param account The address of the account to query.
     /// @param fullAmount The full amount of funds the account can claim.
+    /// @return amount The amount of tokens in wei.
     function getClaimableAmount(
         uint256 cohortId,
         uint256 index,
         address account,
         uint256 fullAmount
-    ) external view returns (uint256);
+    ) external view returns (uint256 amount);
 
     /// @notice Returns the amount of funds an account has claimed.
     /// @param cohortId The id of the cohort.
     /// @param account The address of the account to query.
-    function getClaimed(uint256 cohortId, address account) external view returns (uint256);
+    /// @return amount The amount of tokens in wei.
+    function getClaimed(uint256 cohortId, address account) external view returns (uint256 amount);
 
     /// @notice Check if the address in a cohort at the index is excluded from the vesting.
     /// @param cohortId The id of the cohort.
     /// @param index A value from the generated input list.
+    /// @return disabled Whether the address at `index` has been excluded from the vesting.
     function isDisabled(uint256 cohortId, uint256 index) external view returns (bool);
 
     /// @notice Exclude the address in a cohort at the index from the vesting.
