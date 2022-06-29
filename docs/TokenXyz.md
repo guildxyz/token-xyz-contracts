@@ -8,9 +8,9 @@ An extensible proxy contract that serves as a universal entry point for
 ## Functions
 ### constructor
 ```solidity
-  function constructor(
+  constructor(
     address bootstrapper
-  ) public
+  ) 
 ```
 Constructs this contract and registers the `BootstrapFeature` feature.
         After constructing this contract, `bootstrap()` should be called
@@ -24,7 +24,7 @@ Constructs this contract and registers the `BootstrapFeature` feature.
 
 ### fallback
 ```solidity
-  function fallback(
+  fallback(
   ) external
 ```
 Forwards calls to the appropriate implementation contract.
@@ -33,7 +33,7 @@ Forwards calls to the appropriate implementation contract.
 
 ### receive
 ```solidity
-  function receive(
+  receive(
   ) external
 ```
 Fallback for just receiving ether.

@@ -7,9 +7,9 @@ Detachable `bootstrap()` feature.
 ## Functions
 ### constructor
 ```solidity
-  function constructor(
+  constructor(
     address bootstrapCaller
-  ) public
+  ) 
 ```
 Construct this contract and set the bootstrap migration contract.
         After constructing this contract, `bootstrap()` should be called

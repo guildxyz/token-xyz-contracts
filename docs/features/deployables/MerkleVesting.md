@@ -7,8 +7,8 @@ Allows anyone to claim a token if they exist in a Merkle root, but only over tim
 ## Functions
 ### constructor
 ```solidity
-  function constructor(
-  ) public
+  constructor(
+  ) 
 ```
 
 

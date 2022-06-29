@@ -8,7 +8,7 @@ The ABI of this contract should be used when interacting with the set of TokenXy
 ## Functions
 ### receive
 ```solidity
-  function receive(
+  receive(
   ) external
 ```
 Fallback for just receiving ether.

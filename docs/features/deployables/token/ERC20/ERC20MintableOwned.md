@@ -7,8 +7,8 @@ A mintable ERC20 token.
 ## Functions
 ### constructor
 ```solidity
-  function constructor(
-  ) public
+  constructor(
+  ) 
 ```
 
 
