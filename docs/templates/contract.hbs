@@ -12,7 +12,7 @@
 ```solidity
   {{#unless (or (or (eq name "constructor") (eq name "fallback")) (eq name "receive"))}}function {{/unless}}{{name}}(
     {{#natspec.params}}
-    {{#lookup ../args.types @index}}{{/lookup}} {{param}}{{#if @last}}{{else}},{{/if}}
+    {{#lookup ../args.types @index}}{{/lookup}} {{param}}{{#unless @last}},{{/unless}}
     {{/natspec.params}}
   ) {{#unless (eq name "constructor")}}{{visibility}}{{/unless}}{{#if outputs}} returns ({{outputs}}){{/if}}
 ```
@@ -40,7 +40,7 @@
 ```solidity
   event {{name}}(
     {{#natspec.params}}
-    {{#lookup ../args.types @index}}{{/lookup}} {{param}}{{#if @last}}{{else}},{{/if}}
+    {{#lookup ../args.types @index}}{{/lookup}} {{param}}{{#unless @last}},{{/unless}}
     {{/natspec.params}}
   )
 ```
@@ -62,7 +62,7 @@
 ```solidity
   modifier {{name}}(
     {{#natspec.params}}
-    {{#lookup ../args.types @index}}{{/lookup}} {{param}}{{#if @last}}{{else}},{{/if}}
+    {{#lookup ../args.types @index}}{{/lookup}} {{param}}{{#unless @last}},{{/unless}}
     {{/natspec.params}}
   ) {{visibility}}
 ```
@@ -105,8 +105,9 @@ Members:
 ```solidity
 {{#each ownVariables}}
   {{signature}};
-{{#if @last}}{{else}}
-{{/if}}
+{{#unless @last}}
+
+{{/unless}}
 {{/each}}
 ```
 {{/if}}
