@@ -55,7 +55,7 @@ Mint a token to the given address.
   function _safeMint(
   ) internal
 ```
-
+An optimized version of {_safeMint} using custom errors.
 
 
 

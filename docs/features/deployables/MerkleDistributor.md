@@ -18,7 +18,7 @@ Allows anyone to claim a token if they exist in a Merkle root.
 ```solidity
   function isClaimed(
     uint256 index
-  ) public returns (bool)
+  ) public returns (bool claimed)
 ```
 Returns true if the index has been marked claimed.
 
@@ -28,6 +28,10 @@ Returns true if the index has been marked claimed.
 | :--- | :--- | :------------------------------------------------------------------- |
 |`index` | uint256 | A value from the generated input list.
 
+#### Return Values:
+| Name                           | Type          | Description                                                                  |
+| :----------------------------- | :------------ | :--------------------------------------------------------------------------- |
+|`claimed`| uint256 | Whether the tokens from `index` have been claimed.
 ### claim
 ```solidity
   function claim(

@@ -8,7 +8,7 @@ MaxSupply-related functions and errors.
 ### maxSupply
 ```solidity
   function maxSupply(
-  ) external returns (uint256)
+  ) external returns (uint256 amount)
 ```
 The maximum amount of tokens that can ever exist.
 
@@ -17,7 +17,7 @@ The maximum amount of tokens that can ever exist.
 #### Return Values:
 | Name                           | Type          | Description                                                                  |
 | :----------------------------- | :------------ | :--------------------------------------------------------------------------- |
-|`_`|  | The amount of tokens in wei.
+|`amount`|  | The amount of tokens in wei.
 
 
 

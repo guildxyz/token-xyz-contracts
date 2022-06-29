@@ -18,7 +18,7 @@ An NFT with an ever increasing price along a curve.
 ```solidity
   function getPriceOf(
     uint256 tokenId
-  ) public returns (uint256)
+  ) public returns (uint256 price)
 ```
 Gets the price of a specific token.
 
@@ -31,7 +31,7 @@ Gets the price of a specific token.
 #### Return Values:
 | Name                           | Type          | Description                                                                  |
 | :----------------------------- | :------------ | :--------------------------------------------------------------------------- |
-|`The`| uint256 | price of the token in wei.
+|`price`| uint256 | The price of the token in wei.
 ### claim
 ```solidity
   function claim(
@@ -71,12 +71,16 @@ Returns the Uniform Resource Identifier (URI) for `tokenId` token.
 ### totalSupply
 ```solidity
   function totalSupply(
-  ) public returns (uint256)
+  ) public returns (uint256 count)
 ```
 The total amount of tokens stored by the contract.
 
 
 
+#### Return Values:
+| Name                           | Type          | Description                                                                  |
+| :----------------------------- | :------------ | :--------------------------------------------------------------------------- |
+|`count`|  | The number of NFTs.
 
 
 

@@ -18,7 +18,7 @@ Allows anyone to claim a token if they exist in a Merkle root, but only over tim
 ```solidity
   function getCohort(
     uint256 cohortId
-  ) external returns (struct IMerkleVesting.CohortData)
+  ) external returns (struct IMerkleVesting.CohortData cohort)
 ```
 Returns the parameters of a specific cohort.
 
@@ -28,15 +28,23 @@ Returns the parameters of a specific cohort.
 | :--- | :--- | :------------------------------------------------------------------- |
 |`cohortId` | uint256 | The id of the cohort.
 
+#### Return Values:
+| Name                           | Type          | Description                                                                  |
+| :----------------------------- | :------------ | :--------------------------------------------------------------------------- |
+|`cohort`| uint256 | The merkleRoot, distributionStart, distributionEnd, vestingPeriod and cliffPeriod of the cohort.
 ### getCohortsLength
 ```solidity
   function getCohortsLength(
-  ) external returns (uint256)
+  ) external returns (uint256 count)
 ```
 Returns the number of created cohorts.
 
 
 
+#### Return Values:
+| Name                           | Type          | Description                                                                  |
+| :----------------------------- | :------------ | :--------------------------------------------------------------------------- |
+|`count`|  | The number of created cohorts.
 ### getClaimableAmount
 ```solidity
   function getClaimableAmount(
@@ -44,7 +52,7 @@ Returns the number of created cohorts.
     uint256 index,
     address account,
     uint256 fullAmount
-  ) public returns (uint256)
+  ) public returns (uint256 amount)
 ```
 Returns the amount of funds an account can claim at the moment.
 
@@ -57,12 +65,16 @@ Returns the amount of funds an account can claim at the moment.
 |`account` | address | The address of the account to query.
 |`fullAmount` | uint256 | The full amount of funds the account can claim.
 
+#### Return Values:
+| Name                           | Type          | Description                                                                  |
+| :----------------------------- | :------------ | :--------------------------------------------------------------------------- |
+|`amount`| uint256 | The amount of tokens in wei.
 ### getClaimed
 ```solidity
   function getClaimed(
     uint256 cohortId,
     address account
-  ) public returns (uint256)
+  ) public returns (uint256 amount)
 ```
 Returns the amount of funds an account has claimed.
 
@@ -73,6 +85,10 @@ Returns the amount of funds an account has claimed.
 |`cohortId` | uint256 | The id of the cohort.
 |`account` | address | The address of the account to query.
 
+#### Return Values:
+| Name                           | Type          | Description                                                                  |
+| :----------------------------- | :------------ | :--------------------------------------------------------------------------- |
+|`amount`| uint256 | The amount of tokens in wei.
 ### isDisabled
 ```solidity
   function isDisabled(
@@ -89,6 +105,10 @@ Check if the address in a cohort at the index is excluded from the vesting.
 |`cohortId` | uint256 | The id of the cohort.
 |`index` | uint256 | A value from the generated input list.
 
+#### Return Values:
+| Name                           | Type          | Description                                                                  |
+| :----------------------------- | :------------ | :--------------------------------------------------------------------------- |
+|`disabled`| uint256 | Whether the address at `index` has been excluded from the vesting.
 ### setDisabled
 ```solidity
   function setDisabled(
