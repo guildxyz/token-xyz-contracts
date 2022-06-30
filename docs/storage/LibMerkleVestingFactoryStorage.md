@@ -9,7 +9,7 @@ Storage helpers for the `MerkleVestingFactory` feature.
 ```solidity
   function getStorage(
   ) internal returns (struct LibMerkleVestingFactoryStorage.Storage stor)
-```
+``` 
 Get the storage bucket for this contract.
 
 

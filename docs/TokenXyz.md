@@ -11,7 +11,7 @@ An extensible proxy contract that serves as a universal entry point for
   constructor(
     address bootstrapper
   ) 
-```
+``` 
 Constructs this contract and registers the `BootstrapFeature` feature.
         After constructing this contract, `bootstrap()` should be called
         by `bootstrap()` to seed the initial feature set.
@@ -26,7 +26,7 @@ Constructs this contract and registers the `BootstrapFeature` feature.
 ```solidity
   fallback(
   ) external
-```
+``` 
 Forwards calls to the appropriate implementation contract.
 
 
@@ -35,7 +35,7 @@ Forwards calls to the appropriate implementation contract.
 ```solidity
   receive(
   ) external
-```
+``` 
 Fallback for just receiving ether.
 
 
@@ -45,7 +45,7 @@ Fallback for just receiving ether.
   function getFunctionImplementation(
     bytes4 selector
   ) public returns (address impl)
-```
+``` 
 Get the implementation contract of a registered function.
 
 

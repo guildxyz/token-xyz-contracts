@@ -15,7 +15,7 @@ A contract that deploys NFTs with Merkle tree-based distribution for anyone.
     bool specificIds,
     address owner
   ) external
-```
+``` 
 Deploys a new NFT Merkle Drop contract.
 
 
@@ -34,7 +34,7 @@ Deploys a new NFT Merkle Drop contract.
   function getDeployedNFTMerkleDrops(
     string urlName
   ) external returns (struct IFactoryFeature.DeployData[] nftAddresses)
-```
+``` 
 Returns all the deployed contract addresses by a specific creator.
 
 

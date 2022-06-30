@@ -11,7 +11,7 @@ Detachable `bootstrap()` feature.
     address target,
     bytes callData
   ) external
-```
+``` 
 Bootstrap the initial feature set of this contract by delegatecalling
         into `target`. Before exiting the `bootstrap()` function will
         deregister itself from the proxy to prevent being called again.

@@ -8,18 +8,33 @@ An NFT with an ever increasing price along a curve.
 ### constructor
 ```solidity
   constructor(
+    string name,
+    string symbol,
+    string cid_,
+    uint256 maxSupply_,
+    uint256 startingPrice_,
+    address owner
   ) 
-```
+``` 
+Sets metadata, config and transfers ownership to `owner`.
 
 
-
+#### Parameters:
+| Name | Type | Description                                                          |
+| :--- | :--- | :------------------------------------------------------------------- |
+|`name` | string | The name of the token.
+|`symbol` | string | The symbol of the token.
+|`cid_` | string | The ipfs hash, under which the off-chain metadata is uploaded.
+|`maxSupply_` | uint256 | The maximum number of NFTs that can ever be minted.
+|`startingPrice_` | uint256 | The price of the first token in wei.
+|`owner` | address | The owner address: will be able to withdraw collected fees.
 
 ### getPriceOf
 ```solidity
   function getPriceOf(
     uint256 tokenId
   ) public returns (uint256 price)
-```
+``` 
 Gets the price of a specific token.
 
 
@@ -36,7 +51,7 @@ Gets the price of a specific token.
 ```solidity
   function claim(
   ) external
-```
+``` 
 Claims a token to the given address. Reverts if the price is invalid.
 
 
@@ -46,8 +61,8 @@ Claims a token to the given address. Reverts if the price is invalid.
   function withdraw(
     address payable recipient
   ) external
-```
-Allows the owner to withdraw the collected funds.
+``` 
+Sends the collected funds to `recipient`. Callable only by the owner.
 
 
 #### Parameters:
@@ -60,7 +75,7 @@ Allows the owner to withdraw the collected funds.
   function tokenURI(
     uint256 tokenId
   ) public returns (string)
-```
+``` 
 
 Returns the Uniform Resource Identifier (URI) for `tokenId` token.
 #### Parameters:
@@ -72,7 +87,7 @@ Returns the Uniform Resource Identifier (URI) for `tokenId` token.
 ```solidity
   function totalSupply(
   ) public returns (uint256 count)
-```
+``` 
 The total amount of tokens stored by the contract.
 
 

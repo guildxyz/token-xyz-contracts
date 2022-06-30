@@ -11,7 +11,7 @@ Library for functions related to addresses.
     address payable recipient,
     uint256 amount
   ) internal
-```
+``` 
 Send ether to an address, forwarding all available gas and reverting on errors.
 
 
@@ -28,7 +28,7 @@ Send ether to an address, forwarding all available gas and reverting on errors.
     uint256 amount,
     address fallbackToken
   ) internal
-```
+``` 
 Similar to {sendEther}, but converts the value to `fallbackToken` and sends it anyways on failure.
 
 

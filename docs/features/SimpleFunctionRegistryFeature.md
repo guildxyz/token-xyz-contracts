@@ -9,7 +9,7 @@ Basic registry management features.
 ```solidity
   function bootstrap(
   ) external returns (bytes4 success)
-```
+``` 
 Initializes this feature, registering its own functions.
 
 
@@ -24,7 +24,7 @@ Initializes this feature, registering its own functions.
     bytes4 selector,
     address targetImpl
   ) external
-```
+``` 
 Roll back to a prior implementation of a function. Only directly callable by an authority.
 
 
@@ -40,7 +40,7 @@ Roll back to a prior implementation of a function. Only directly callable by an 
     bytes4 selector,
     address impl
   ) external
-```
+``` 
 Register or replace a function. Only directly callable by an authority.
 
 
@@ -56,7 +56,7 @@ Register or replace a function. Only directly callable by an authority.
     bytes4 selector,
     address impl
   ) external
-```
+``` 
 Register or replace a function.
         Only callable from within.
         This function is only used during the bootstrap process and
@@ -75,7 +75,7 @@ Register or replace a function.
   function getRollbackLength(
     bytes4 selector
   ) external returns (uint256 rollbackLength)
-```
+``` 
 Retrieve the length of the rollback history for a function.
 
 
@@ -94,7 +94,7 @@ Retrieve the length of the rollback history for a function.
     bytes4 selector,
     uint256 idx
   ) external returns (address impl)
-```
+``` 
 Retrieve an entry in the rollback history for a function.
 
 

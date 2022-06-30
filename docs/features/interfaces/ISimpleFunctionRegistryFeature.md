@@ -11,7 +11,7 @@ Basic registry management features.
     bytes4 selector,
     address targetImpl
   ) external
-```
+``` 
 Roll back to a prior implementation of a function.
 
 
@@ -27,7 +27,7 @@ Roll back to a prior implementation of a function.
     bytes4 selector,
     address impl
   ) external
-```
+``` 
 Register or replace a function.
 
 
@@ -42,7 +42,7 @@ Register or replace a function.
   function getRollbackLength(
     bytes4 selector
   ) external returns (uint256 rollbackLength)
-```
+``` 
 Retrieve the length of the rollback history for a function.
 
 
@@ -62,7 +62,7 @@ Retrieve the length of the rollback history for a function.
     bytes4 selector,
     uint256 idx
   ) external returns (address impl)
-```
+``` 
 Retrieve an entry in the rollback history for a function.
 
 

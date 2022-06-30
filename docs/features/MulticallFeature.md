@@ -9,7 +9,7 @@ Provides a function to batch together multiple calls in a single external call.
 ```solidity
   function migrate(
   ) external returns (bytes4 success)
-```
+``` 
 Initialize and register this feature. Should be delegatecalled by `Migrate.migrate()`.
 
 

@@ -12,7 +12,7 @@ Owner management and migration features.
     bytes newOwner,
     address data
   ) external
-```
+``` 
 Execute a migration function in the context of the TokenXyz contract.
         The result of the function being called should be the magic bytes
         0x2c64c5ef (`keccak('MIGRATE_SUCCESS')`). Only callable by the owner.

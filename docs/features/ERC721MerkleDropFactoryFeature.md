@@ -9,7 +9,7 @@ A contract that deploys NFTs with Merkle tree-based distribution for anyone.
 ```solidity
   function migrate(
   ) external returns (bytes4 success)
-```
+``` 
 Initialize and register this feature. Should be delegatecalled by `Migrate.migrate()`.
 
 
@@ -28,7 +28,7 @@ Initialize and register this feature. Should be delegatecalled by `Migrate.migra
     bool specificIds,
     address owner
   ) external
-```
+``` 
 Deploys a new NFT Merkle Drop contract.
 
 
@@ -47,7 +47,7 @@ Deploys a new NFT Merkle Drop contract.
   function getDeployedNFTMerkleDrops(
     string urlName
   ) external returns (struct IFactoryFeature.DeployData[] nftAddresses)
-```
+``` 
 Returns all the deployed contract addresses by a specific creator.
 
 

@@ -10,7 +10,7 @@ A contract for deploying and configuring a minimal TokenXyz contract.
   constructor(
     address initializeCaller_
   ) 
-```
+``` 
 Instantiate this contract and set the allowed caller of `initializeTokenXyz()` to `initializeCaller_`.
 
 
@@ -23,7 +23,7 @@ Instantiate this contract and set the allowed caller of `initializeTokenXyz()` t
 ```solidity
   function getBootstrapper(
   ) external returns (address bootstrapper)
-```
+``` 
 Retrieve the bootstrapper address to use when constructing `TokenXyz`.
 
 
@@ -39,7 +39,7 @@ Retrieve the bootstrapper address to use when constructing `TokenXyz`.
     contract TokenXyz tokenXyz,
     struct InitialMigration.BootstrapFeatures features
   ) public returns (contract TokenXyz _tokenXyz)
-```
+``` 
 Initialize the `TokenXyz` contract with the minimum feature set,
         transfers ownership to `owner`, then self-destructs.
         Only callable by `initializeCaller` set in the contstructor.
@@ -62,7 +62,7 @@ Initialize the `TokenXyz` contract with the minimum feature set,
     address owner,
     struct InitialMigration.BootstrapFeatures features
   ) public returns (bytes4 success)
-```
+``` 
 Sets up the initial state of the `TokenXyz` contract.
         The `TokenXyz` contract will delegatecall into this function.
 
@@ -82,7 +82,7 @@ Sets up the initial state of the `TokenXyz` contract.
   function die(
     address payable ethRecipient
   ) public
-```
+``` 
 Self-destructs this contract. Only callable by this contract.
 
 

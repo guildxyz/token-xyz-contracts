@@ -9,7 +9,7 @@ A contract that deploys token airdrop contracts for anyone.
 ```solidity
   function migrate(
   ) external returns (bytes4 success)
-```
+``` 
 Initialize and register this feature. Should be delegatecalled by `Migrate.migrate()`.
 
 
@@ -27,7 +27,7 @@ Initialize and register this feature. Should be delegatecalled by `Migrate.migra
     uint256 distributionDuration,
     address owner
   ) external
-```
+``` 
 Deploys a new Merkle Distributor contract.
 
 
@@ -45,7 +45,7 @@ Deploys a new Merkle Distributor contract.
   function getDeployedAirdrops(
     string urlName
   ) external returns (struct IFactoryFeature.DeployData[] airdropAddresses)
-```
+``` 
 Returns all the deployed airdrop contract addresses by a specific creator.
 
 

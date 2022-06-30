@@ -1,6 +1,6 @@
 # IMerkleDistributor
 
-Allows anyone to claim a token if they exist in a Merkle root.
+Provides ERC20 token distribution based on a Merkle tree.
 
 
 
@@ -9,7 +9,7 @@ Allows anyone to claim a token if they exist in a Merkle root.
 ```solidity
   function token(
   ) external returns (address tokenAddress)
-```
+``` 
 Returns the address of the token distributed by this contract.
 
 
@@ -22,7 +22,7 @@ Returns the address of the token distributed by this contract.
 ```solidity
   function merkleRoot(
   ) external returns (bytes32 root)
-```
+``` 
 Returns the Merkle root of the Merkle tree containing account balances available to claim.
 
 
@@ -35,7 +35,7 @@ Returns the Merkle root of the Merkle tree containing account balances available
 ```solidity
   function distributionEnd(
   ) external returns (uint256 unixSeconds)
-```
+``` 
 Returns the unix timestamp that marks the end of the token distribution.
 
 
@@ -49,7 +49,7 @@ Returns the unix timestamp that marks the end of the token distribution.
   function isClaimed(
     uint256 index
   ) external returns (bool claimed)
-```
+``` 
 Returns true if the index has been marked claimed.
 
 
@@ -70,7 +70,7 @@ Returns true if the index has been marked claimed.
     uint256 amount,
     bytes32[] merkleProof
   ) external
-```
+``` 
 Claim the given amount of the token to the given address. Reverts if the inputs are invalid.
 
 
@@ -87,8 +87,8 @@ Claim the given amount of the token to the given address. Reverts if the inputs 
   function prolongDistributionPeriod(
     uint256 additionalSeconds
   ) external
-```
-Allows the owner to prolong the distribution period of the tokens.
+``` 
+Prolongs the distribution period of the tokens. Callable only by the owner.
 
 
 #### Parameters:
@@ -101,8 +101,8 @@ Allows the owner to prolong the distribution period of the tokens.
   function withdraw(
     address recipient
   ) external
-```
-Allows the owner to reclaim the tokens after the distribution has ended.
+``` 
+Sends the tokens remaining after the distribution has ended to `recipient`. Callable only by the owner.
 
 
 #### Parameters:

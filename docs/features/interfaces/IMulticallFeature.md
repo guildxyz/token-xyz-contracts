@@ -10,7 +10,7 @@ Provides a function to batch together multiple calls in a single external call.
   function multicall(
     bytes[] data
   ) external returns (bytes[] results)
-```
+``` 
 Receives and executes a batch of function calls on this contract.
 
 

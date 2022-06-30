@@ -9,7 +9,7 @@ MaxSupply-related functions and errors.
 ```solidity
   function maxSupply(
   ) external returns (uint256 amount)
-```
+``` 
 The maximum amount of tokens that can ever exist.
 
 

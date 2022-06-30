@@ -11,7 +11,7 @@
     address target,
     bytes data
   ) internal
-```
+``` 
 Perform a delegatecall and ensure it returns the magic bytes.
 
 

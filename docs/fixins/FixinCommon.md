@@ -9,8 +9,8 @@ Common feature utilities.
 ```solidity
   constructor(
   ) 
-```
-
+``` 
+Saves the contract's address.
 
 
 
@@ -19,7 +19,7 @@ Common feature utilities.
   function _registerFeatureFunction(
     bytes4 selector
   ) internal
-```
+``` 
 Registers a function implemented by this feature at `_implementation`.
         Can and should only be called within a `migrate()`.
 
@@ -37,7 +37,7 @@ Registers a function implemented by this feature at `_implementation`.
     uint32 minor,
     uint32 revision
   ) internal returns (uint96 encodedVersion)
-```
+``` 
 Encode a feature version as a `uint256`.
 
 
