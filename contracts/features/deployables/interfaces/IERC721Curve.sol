@@ -9,7 +9,7 @@ interface IERC721Curve is IERC721Metadata {
     /// @notice Claims a token to the given address. Reverts if the price is invalid.
     function claim(address payable claimer) external payable;
 
-    /// @notice Allows the owner to withdraw the collected funds.
+    /// @notice Sends the collected funds to `recipient`. Callable only by the owner.
     /// @param recipient The address receiving the tokens.
     function withdraw(address payable recipient) external;
 

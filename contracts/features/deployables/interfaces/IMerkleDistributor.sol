@@ -9,7 +9,7 @@
 
 pragma solidity ^0.8.0;
 
-/// @title Allows anyone to claim a token if they exist in a Merkle root.
+/// @title Provides ERC20 token distribution based on a Merkle tree.
 interface IMerkleDistributor {
     /// @notice Returns the address of the token distributed by this contract.
     /// @return tokenAddress The address of the token.
@@ -40,11 +40,11 @@ interface IMerkleDistributor {
         bytes32[] calldata merkleProof
     ) external;
 
-    /// @notice Allows the owner to prolong the distribution period of the tokens.
+    /// @notice Prolongs the distribution period of the tokens. Callable only by the owner.
     /// @param additionalSeconds The seconds to add to the current distributionEnd.
     function prolongDistributionPeriod(uint256 additionalSeconds) external;
 
-    /// @notice Allows the owner to reclaim the tokens after the distribution has ended.
+    /// @notice Sends the tokens remaining after the distribution has ended to `recipient`. Callable only by the owner.
     /// @param recipient The address receiving the tokens.
     function withdraw(address recipient) external;
 

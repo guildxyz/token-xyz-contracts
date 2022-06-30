@@ -9,7 +9,7 @@
 
 pragma solidity ^0.8.0;
 
-/// @title Allows anyone to claim a token if they exist in a Merkle root, but only over time.
+/// @title Provides ERC20 token distribution over time, based on a Merkle tree.
 interface IMerkleVesting {
     /// @notice The struct holding a specific cohort's data and the individual claim statuses.
     /// @param data The struct holding a specific cohort's data.
@@ -82,7 +82,7 @@ interface IMerkleVesting {
     /// @param index A value from the generated input list.
     function setDisabled(uint256 cohortId, uint256 index) external;
 
-    /// @notice Allows the owner to add a new cohort.
+    /// @notice Adds a new cohort. Callable only by the owner.
     /// @param merkleRoot The Merkle root of the cohort. It will also serve as the cohort's ID.
     /// @param distributionStart The unix timestamp that marks the start of the token distribution. Current time if 0.
     /// @param distributionDuration The length of the token distribtion period in seconds.
@@ -110,12 +110,12 @@ interface IMerkleVesting {
         bytes32[] calldata merkleProof
     ) external;
 
-    /// @notice Allows the owner to prolong the distribution period of the tokens.
+    /// @notice Prolongs the distribution period of the tokens. Callable only by the owner.
     /// @param cohortId The id of the cohort.
     /// @param additionalSeconds The seconds to add to the current distributionEnd.
     function prolongDistributionPeriod(uint256 cohortId, uint64 additionalSeconds) external;
 
-    /// @notice Allows the owner to reclaim the tokens after the distribution has ended.
+    /// @notice Sends the tokens remaining after the distribution has ended to `recipient`. Callable only by the owner.
     /// @param recipient The address receiving the tokens.
     function withdraw(address recipient) external;
 

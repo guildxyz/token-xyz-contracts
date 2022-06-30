@@ -8,7 +8,7 @@ import { Ownable } from "@openzeppelin/contracts/access/Ownable.sol";
 import { Strings } from "@openzeppelin/contracts/utils/Strings.sol";
 import { MerkleProof } from "@openzeppelin/contracts/utils/cryptography/MerkleProof.sol";
 
-/// @title Allows anyone to mint a token with a specific ID if they exist in a Merkle root.
+/// @title Provides ERC721 token minting with access to individual IDs restricted based on a Merkle tree.
 contract ERC721MerkleDrop is ERC721, IERC721MerkleDrop, Ownable {
     using Strings for uint256;
 
@@ -22,6 +22,14 @@ contract ERC721MerkleDrop is ERC721, IERC721MerkleDrop, Ownable {
     uint256 public totalSupply;
     string internal cid;
 
+    /// @notice Sets metadata, drop config and transfers ownership to `owner`.
+    /// @param name The name of the token.
+    /// @param symbol The symbol of the token.
+    /// @param cid_ The ipfs hash, under which the off-chain metadata is uploaded.
+    /// @param maxSupply_ The maximum number of NFTs that can ever be minted.
+    /// @param merkleRoot_ The root of the Merkle tree generated from the distribution list.
+    /// @param distributionDuration The time interval while the distribution lasts in seconds.
+    /// @param owner The owner address: will be able to mint tokens after `distributionDuration` ends.
     constructor(
         string memory name,
         string memory symbol,
