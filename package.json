@@ -4,7 +4,8 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "docgen": "solidity-docgen --solc-module solc -t ./docs/templates/",
+    "docgen": "solidity-docgen --solc-module solc -t ./docs/templates/ && npm run format-docs",
+    "format-docs": "prettier --write ./docs --loglevel silent",
     "lint": "solhint 'contracts/**/*.sol'",
     "test": "node run-tests.js"
   },
