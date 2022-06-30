@@ -30,7 +30,15 @@ contract ERC721Auction is IERC721Auction, ERC721, Ownable {
     // Other
     address internal immutable WETH;
 
-    /// @dev If startTime is 0, block.timestamp will be used.
+    /// @notice Sets metadata, auction config, creates the first auction and transfers ownership to `owner`.
+    /// @param name The name of the token.
+    /// @param symbol The symbol of the token.
+    /// @param cid_ The ipfs hash, under which the off-chain metadata is uploaded.
+    /// @param maxSupply_ The maximum number of tokens that can ever exist.
+    /// @param config_ AuctionConfig struct: startingPrice, auctionDuration, timeBuffer, minimumPercentageIncreasex100.
+    /// @param startTime The starting time of the auction. If 0, block.timestamp will be used.
+    /// @param weth The address of wrapped ether or a token with a compatible interface.
+    /// @param owner The address of the auction's owner: receives the fees and has special access to the auction's config.
     constructor(
         string memory name,
         string memory symbol,

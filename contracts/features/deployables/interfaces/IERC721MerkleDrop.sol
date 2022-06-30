@@ -3,7 +3,7 @@ pragma solidity 0.8.15;
 
 import { IERC721Metadata } from "@openzeppelin/contracts/token/ERC721/extensions/IERC721Metadata.sol";
 
-/// @title Allows anyone to mint a non-fungible token if they exist in a Merkle root.
+/// @title Provides ERC721 token minting with access restricted based on a Merkle tree.
 interface IERC721MerkleDrop is IERC721Metadata {
     /// @notice The maximum number of NFTs that can ever be minted.
     /// @return count The number of NFTs.

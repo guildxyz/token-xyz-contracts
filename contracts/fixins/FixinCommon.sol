@@ -59,6 +59,7 @@ abstract contract FixinCommon {
         _;
     }
 
+    /// @notice Saves the contract's address.
     constructor() {
         // Remember this feature's original address.
         _implementation = address(this);

@@ -5,11 +5,18 @@ import { ERC20InitialSupply } from "./ERC20InitialSupply.sol";
 import { IERC20MaxSupply } from "./IERC20MaxSupply.sol";
 import { Ownable } from "@openzeppelin/contracts/access/Ownable.sol";
 
-/// @title A mintable ERC20 token.
+/// @title A mintable ERC20 token with a single owner and capped supply.
 contract ERC20MintableOwnedMaxSupply is IERC20MaxSupply, ERC20InitialSupply, Ownable {
     /// @inheritdoc IERC20MaxSupply
     uint256 public immutable maxSupply;
 
+    /// @notice Sets metadata, mints an initial supply and transfers ownership to `minter`.
+    /// @param name The name of the token.
+    /// @param symbol The symbol of the token.
+    /// @param tokenDecimals The number of decimals of the token.
+    /// @param minter The address receiving the initial token supply that will also have permissions to mint it later.
+    /// @param initialSupply The amount of pre-minted tokens.
+    /// @param maxSupply_ The maximum amount of tokens that can ever exist.
     constructor(
         string memory name,
         string memory symbol,

@@ -15,7 +15,7 @@ import { IERC20 } from "@openzeppelin/contracts/token/ERC20/IERC20.sol";
 import { MerkleProof } from "@openzeppelin/contracts/utils/cryptography/MerkleProof.sol";
 import { Multicall } from "@openzeppelin/contracts/utils/Multicall.sol";
 
-/// @title Allows anyone to claim a token if they exist in a Merkle root, but only over time.
+/// @title Provides ERC20 token distribution over time, based on a Merkle tree.
 contract MerkleVesting is IMerkleVesting, Multicall, Ownable {
     /// @inheritdoc IMerkleVesting
     address public immutable token;
@@ -24,6 +24,9 @@ contract MerkleVesting is IMerkleVesting, Multicall, Ownable {
 
     Cohort[] internal cohorts;
 
+    /// @notice Sets the token address and transfers ownership to `owner`.
+    /// @param token_ The address of the ERC20 token to distribute.
+    /// @param owner The owner address: will be able to manage cohorts and withdraw the remaining tokens.
     constructor(address token_, address owner) {
         if (owner == address(0) || token_ == address(0)) revert InvalidParameters();
         token = token_;

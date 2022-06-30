@@ -10,6 +10,12 @@ contract WETHMock is IWETH, ERC20InitialSupply {
     // solhint-disable no-empty-blocks
     mapping(address => uint256) internal _balances;
 
+    /// @notice Sets metadata and mints an initial supply to `supplyReceiver`.
+    /// @param name The name of the token.
+    /// @param symbol The symbol of the token.
+    /// @param tokenDecimals The number of decimals of the token.
+    /// @param supplyReceiver The address receiving the initial token supply.
+    /// @param initialSupply The amount of pre-minted tokens.
     constructor(
         string memory name,
         string memory symbol,

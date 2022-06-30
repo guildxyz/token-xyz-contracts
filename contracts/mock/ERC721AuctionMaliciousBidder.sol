@@ -7,6 +7,8 @@ import { IERC721Auction } from "../features/deployables/interfaces/IERC721Auctio
 contract ERC721AuctionMaliciousBidder {
     IERC721Auction public auctionContract;
 
+    /// @notice Sets the address of an ERC721 auction contract.
+    /// @param auction The address of an ERC721 auction contract.
     constructor(IERC721Auction auction) {
         auctionContract = auction;
     }

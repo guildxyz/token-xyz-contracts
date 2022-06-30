@@ -14,7 +14,7 @@ import { Ownable } from "@openzeppelin/contracts/access/Ownable.sol";
 import { IERC20 } from "@openzeppelin/contracts/token/ERC20/IERC20.sol";
 import { MerkleProof } from "@openzeppelin/contracts/utils/cryptography/MerkleProof.sol";
 
-/// @title Allows anyone to claim a token if they exist in a Merkle root.
+/// @title Provides ERC20 token distribution based on a Merkle tree.
 contract MerkleDistributor is IMerkleDistributor, Ownable {
     /// @inheritdoc IMerkleDistributor
     address public immutable token;
@@ -26,6 +26,11 @@ contract MerkleDistributor is IMerkleDistributor, Ownable {
     // This is a packed array of booleans.
     mapping(uint256 => uint256) private claimedBitMap;
 
+    /// @notice Sets config and transfers ownership to `owner`.
+    /// @param token_ The address of the ERC20 token to distribute.
+    /// @param merkleRoot_ The root of the Merkle tree generated from the distribution list.
+    /// @param distributionDuration The time interval while the distribution lasts in seconds.
+    /// @param owner The owner address: will be able to prolong the distribution period and withdraw the remaining tokens.
     constructor(
         address token_,
         bytes32 merkleRoot_,

@@ -22,6 +22,13 @@ contract ERC721Curve is IERC721Curve, ERC721, Ownable {
     string internal cid;
     Counters.Counter internal tokenIdCounter;
 
+    /// @notice Sets metadata, config and transfers ownership to `owner`.
+    /// @param name The name of the token.
+    /// @param symbol The symbol of the token.
+    /// @param cid_ The ipfs hash, under which the off-chain metadata is uploaded.
+    /// @param maxSupply_ The maximum number of NFTs that can ever be minted.
+    /// @param startingPrice_ The price of the first token in wei.
+    /// @param owner The owner address: will be able to withdraw collected fees.
     constructor(
         string memory name,
         string memory symbol,

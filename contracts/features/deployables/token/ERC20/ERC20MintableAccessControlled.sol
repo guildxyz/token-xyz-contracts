@@ -4,11 +4,17 @@ pragma solidity 0.8.15;
 import { ERC20InitialSupply } from "./ERC20InitialSupply.sol";
 import { AccessControl } from "@openzeppelin/contracts/access/AccessControl.sol";
 
-/// @title A mintable ERC20 token.
+/// @title A mintable ERC20 token with role-based access control.
 contract ERC20MintableAccessControlled is ERC20InitialSupply, AccessControl {
     /// @notice The id of the role that has access to the {mint} function.
     bytes32 public constant MINTER_ROLE = keccak256("MINTER_ROLE");
 
+    /// @notice Sets metadata, mints an initial supply and grants minter role to `minter`.
+    /// @param name The name of the token.
+    /// @param symbol The symbol of the token.
+    /// @param tokenDecimals The number of decimals of the token.
+    /// @param minter The address receiving the initial token supply that will also have permissions to mint it later.
+    /// @param initialSupply The amount of pre-minted tokens.
     constructor(
         string memory name,
         string memory symbol,

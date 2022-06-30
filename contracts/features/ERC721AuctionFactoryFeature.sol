@@ -20,6 +20,8 @@ contract ERC721AuctionFactoryFeature is IFeature, IERC721AuctionFactoryFeature, 
     /// @notice The address of the wrapped ether (or equivalent) contract.
     address public immutable WETH;
 
+    /// @notice Sets WETH address.
+    /// @param weth The address of wrapped ether on the chain the contract is deployed to.
     constructor(address weth) {
         WETH = weth;
     }
