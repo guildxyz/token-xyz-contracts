@@ -15,7 +15,7 @@
     {{#lookup ../args.types @index}}{{/lookup}} {{param}}{{#unless @last}},{{/unless}}
     {{/natspec.params}}
   ) {{#unless (eq name "constructor")}}{{visibility}}{{/unless}}{{#if outputs}} returns ({{outputs}}){{/if}}
-```
+``` {{!-- Note: could just use {{args}} for params, but that would render everything in one line. --}}
 {{#if natspec.userdoc}}{{natspec.userdoc}}{{/if}}
 {{#if natspec.devdoc}}{{natspec.devdoc}}{{/if}}
 {{#if natspec.params}}
