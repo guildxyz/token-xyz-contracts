@@ -11,7 +11,7 @@
     bytes b,
     uint256 index
   ) internal returns (bytes4 result)
-```
+``` 
 Reads an unpadded bytes4 value from a position in a byte array.
 
 

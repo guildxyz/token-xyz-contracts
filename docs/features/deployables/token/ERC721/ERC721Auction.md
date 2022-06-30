@@ -8,18 +8,37 @@ An NFT distributed via on-chain bidding.
 ### constructor
 ```solidity
   constructor(
+    string name,
+    string symbol,
+    string cid_,
+    uint256 maxSupply_,
+    struct IERC721Auction.AuctionConfig config_,
+    uint128 startTime,
+    address weth,
+    address owner
   ) 
-```
+``` 
+Sets metadata, auction config, creates the first auction and transfers ownership to `owner`.
 
-If startTime is 0, block.timestamp will be used.
 
+#### Parameters:
+| Name | Type | Description                                                          |
+| :--- | :--- | :------------------------------------------------------------------- |
+|`name` | string | The name of the token.
+|`symbol` | string | The symbol of the token.
+|`cid_` | string | The ipfs hash, under which the off-chain metadata is uploaded.
+|`maxSupply_` | uint256 | The maximum number of tokens that can ever exist.
+|`config_` | struct IERC721Auction.AuctionConfig | AuctionConfig struct: startingPrice, auctionDuration, timeBuffer, minimumPercentageIncreasex100.
+|`startTime` | uint128 | The starting time of the auction. If 0, block.timestamp will be used.
+|`weth` | address | The address of wrapped ether or a token with a compatible interface.
+|`owner` | address | The address of the auction's owner: receives the fees and has special access to the auction's config.
 
 ### bid
 ```solidity
   function bid(
     uint256 tokenId
   ) external
-```
+``` 
 Creates a bid for the specified token with the amount of ether sent along.
 
 
@@ -32,7 +51,7 @@ Creates a bid for the specified token with the amount of ether sent along.
 ```solidity
   function settleAuction(
   ) external
-```
+``` 
 Sends the token to the highest bidder, mints the next one and transfers the fee to the owner.
 
 
@@ -42,7 +61,7 @@ Sends the token to the highest bidder, mints the next one and transfers the fee 
   function setStartingPrice(
     uint128 newValue
   ) external
-```
+``` 
 Sets a new startingPrice. Callable only by the owner.
 
 
@@ -56,7 +75,7 @@ Sets a new startingPrice. Callable only by the owner.
   function setAuctionDuration(
     uint128 newValue
   ) external
-```
+``` 
 Sets a new auctionDuration. Callable only by the owner.
 
 
@@ -70,7 +89,7 @@ Sets a new auctionDuration. Callable only by the owner.
   function setTimeBuffer(
     uint128 newValue
   ) external
-```
+``` 
 Sets a new timeBuffer. Callable only by the owner.
 
 
@@ -84,7 +103,7 @@ Sets a new timeBuffer. Callable only by the owner.
   function setMinimumPercentageIncreasex100(
     uint128 newValue
   ) external
-```
+``` 
 Sets a new minimumPercentageIncreasex100. Callable only by the owner.
 
 
@@ -97,7 +116,7 @@ Sets a new minimumPercentageIncreasex100. Callable only by the owner.
 ```solidity
   function _createAuction(
   ) internal
-```
+``` 
 Create a new auction if possible and emit an event.
 
 
@@ -106,7 +125,7 @@ Create a new auction if possible and emit an event.
 ```solidity
   function _safeMint(
   ) internal
-```
+``` 
 An optimized version of {_safeMint} using custom errors.
 
 
@@ -115,7 +134,7 @@ An optimized version of {_safeMint} using custom errors.
 ```solidity
   function getAuctionConfig(
   ) external returns (uint128 startingPrice, uint128 auctionDuration, uint128 timeBuffer, uint128 minimumPercentageIncreasex100)
-```
+``` 
 Returns the configuration of an auction. Properties can be changed only by the owner.
 
 
@@ -131,7 +150,7 @@ Returns the configuration of an auction. Properties can be changed only by the o
 ```solidity
   function getAuctionState(
   ) external returns (uint256 tokenId, address bidder, uint256 bidAmount, uint128 startTime, uint128 endTime)
-```
+``` 
 Returns the state of the current auction.
 
 
@@ -149,7 +168,7 @@ Returns the state of the current auction.
   function tokenURI(
     uint256 tokenId
   ) public returns (string)
-```
+``` 
 
 Returns the Uniform Resource Identifier (URI) for `tokenId` token.
 #### Parameters:

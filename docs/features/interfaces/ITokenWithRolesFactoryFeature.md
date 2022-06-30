@@ -16,7 +16,7 @@ A contract that deploys ERC20 token contracts with OpenZeppelin's AccessControl 
     uint256 maxSupply,
     address firstOwner
   ) external
-```
+``` 
 Deploys a new ERC20 token contract.
 
 

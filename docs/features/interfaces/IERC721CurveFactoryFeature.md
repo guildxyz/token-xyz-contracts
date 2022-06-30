@@ -13,7 +13,7 @@ A contract that deploys special ERC721 contracts for anyone.
     uint256 startingPrice,
     address owner
   ) external
-```
+``` 
 Deploys a new ERC721Curve contract.
 
 
@@ -30,7 +30,7 @@ Deploys a new ERC721Curve contract.
   function getDeployedNFTsWithCurve(
     string urlName
   ) external returns (struct IFactoryFeature.DeployData[] nftAddresses)
-```
+``` 
 Returns all the deployed ERC721Curve contract addresses by a specific creator.
 
 

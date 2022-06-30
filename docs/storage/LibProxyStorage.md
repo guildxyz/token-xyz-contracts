@@ -9,7 +9,7 @@ Storage helpers for the proxy contract.
 ```solidity
   function getStorage(
   ) internal returns (struct LibProxyStorage.Storage stor)
-```
+``` 
 Get the storage bucket for this contract.
 
 

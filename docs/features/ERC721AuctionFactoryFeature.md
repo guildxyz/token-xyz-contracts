@@ -8,17 +8,22 @@ A contract that deploys special ERC721 contracts for anyone.
 ### constructor
 ```solidity
   constructor(
+    address weth
   ) 
-```
+``` 
+Sets WETH address.
 
 
-
+#### Parameters:
+| Name | Type | Description                                                          |
+| :--- | :--- | :------------------------------------------------------------------- |
+|`weth` | address | The address of wrapped ether on the chain the contract is deployed to.
 
 ### migrate
 ```solidity
   function migrate(
   ) external returns (bytes4 success)
-```
+``` 
 Initialize and register this feature. Should be delegatecalled by `Migrate.migrate()`.
 
 
@@ -36,7 +41,7 @@ Initialize and register this feature. Should be delegatecalled by `Migrate.migra
     uint128 startTime,
     address owner
   ) external
-```
+``` 
 Deploys a new ERC721Auction contract.
 
 
@@ -54,7 +59,7 @@ Deploys a new ERC721Auction contract.
   function getDeployedNFTAuctions(
     string urlName
   ) external returns (struct IFactoryFeature.DeployData[] nftAddresses)
-```
+``` 
 Returns all the deployed ERC721Auction contract addresses by a specific creator.
 
 

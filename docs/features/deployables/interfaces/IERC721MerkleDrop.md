@@ -1,6 +1,6 @@
 # IERC721MerkleDrop
 
-Allows anyone to mint a non-fungible token if they exist in a Merkle root.
+Provides ERC721 token minting with access restricted based on a Merkle tree.
 
 
 
@@ -9,7 +9,7 @@ Allows anyone to mint a non-fungible token if they exist in a Merkle root.
 ```solidity
   function maxSupply(
   ) external returns (uint256 count)
-```
+``` 
 The maximum number of NFTs that can ever be minted.
 
 
@@ -22,7 +22,7 @@ The maximum number of NFTs that can ever be minted.
 ```solidity
   function totalSupply(
   ) external returns (uint256 count)
-```
+``` 
 The total amount of tokens stored by the contract.
 
 
@@ -35,7 +35,7 @@ The total amount of tokens stored by the contract.
 ```solidity
   function merkleRoot(
   ) external returns (bytes32 root)
-```
+``` 
 Returns the Merkle root of the Merkle tree containing account balances available to claim.
 
 
@@ -48,7 +48,7 @@ Returns the Merkle root of the Merkle tree containing account balances available
 ```solidity
   function distributionEnd(
   ) external returns (uint256 unixSeconds)
-```
+``` 
 Returns the unix timestamp that marks the end of the token distribution.
 
 
@@ -65,7 +65,7 @@ Returns the unix timestamp that marks the end of the token distribution.
     uint256 amount,
     bytes32[] merkleProof
   ) external
-```
+``` 
 Claims tokens to the given address. Reverts if the inputs are invalid.
 
 

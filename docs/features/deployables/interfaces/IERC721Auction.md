@@ -10,7 +10,7 @@ An NFT distributed via on-chain bidding.
   function bid(
     uint256 tokenId
   ) external
-```
+``` 
 Creates a bid for the specified token with the amount of ether sent along.
 
 
@@ -23,7 +23,7 @@ Creates a bid for the specified token with the amount of ether sent along.
 ```solidity
   function settleAuction(
   ) external
-```
+``` 
 Sends the token to the highest bidder, mints the next one and transfers the fee to the owner.
 
 
@@ -33,7 +33,7 @@ Sends the token to the highest bidder, mints the next one and transfers the fee 
   function setStartingPrice(
     uint128 newValue
   ) external
-```
+``` 
 Sets a new startingPrice. Callable only by the owner.
 
 
@@ -47,7 +47,7 @@ Sets a new startingPrice. Callable only by the owner.
   function setAuctionDuration(
     uint128 newValue
   ) external
-```
+``` 
 Sets a new auctionDuration. Callable only by the owner.
 
 
@@ -61,7 +61,7 @@ Sets a new auctionDuration. Callable only by the owner.
   function setTimeBuffer(
     uint128 newValue
   ) external
-```
+``` 
 Sets a new timeBuffer. Callable only by the owner.
 
 
@@ -75,7 +75,7 @@ Sets a new timeBuffer. Callable only by the owner.
   function setMinimumPercentageIncreasex100(
     uint128 newValue
   ) external
-```
+``` 
 Sets a new minimumPercentageIncreasex100. Callable only by the owner.
 
 
@@ -88,7 +88,7 @@ Sets a new minimumPercentageIncreasex100. Callable only by the owner.
 ```solidity
   function getAuctionConfig(
   ) external returns (uint128 startingPrice, uint128 auctionDuration, uint128 timeBuffer, uint128 minimumPercentageIncreasex100)
-```
+``` 
 Returns the configuration of an auction. Properties can be changed only by the owner.
 
 
@@ -104,7 +104,7 @@ Returns the configuration of an auction. Properties can be changed only by the o
 ```solidity
   function getAuctionState(
   ) external returns (uint256 tokenId, address bidder, uint256 bidAmount, uint128 startTime, uint128 endTime)
-```
+``` 
 Returns the state of the current auction.
 
 
@@ -121,7 +121,7 @@ Returns the state of the current auction.
 ```solidity
   function maxSupply(
   ) external returns (uint256 count)
-```
+``` 
 The maximum number of NFTs that can ever be minted.
 
 
@@ -134,7 +134,7 @@ The maximum number of NFTs that can ever be minted.
 ```solidity
   function totalSupply(
   ) external returns (uint256 count)
-```
+``` 
 The total amount of tokens stored by the contract.
 
 

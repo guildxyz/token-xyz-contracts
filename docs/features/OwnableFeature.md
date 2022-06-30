@@ -9,7 +9,7 @@ Owner management features.
 ```solidity
   function bootstrap(
   ) external returns (bytes4 success)
-```
+``` 
 Initializes this feature. The intial owner will be set to this (TokenXyz)
         to allow the bootstrappers to call `extend()`. Ownership should be
         transferred to the real owner by the bootstrapper after
@@ -26,7 +26,7 @@ Initializes this feature. The intial owner will be set to this (TokenXyz)
   function transferOwnership(
     address newOwner
   ) external
-```
+``` 
 Change the owner of this contract. Only directly callable by the owner.
 
 
@@ -42,7 +42,7 @@ Change the owner of this contract. Only directly callable by the owner.
     bytes data,
     address newOwner
   ) external
-```
+``` 
 Execute a migration function in the context of the TokenXyz contract.
         The result of the function being called should be the magic bytes
         0x2c64c5ef (`keccack('MIGRATE_SUCCESS')`). Only callable by the owner.
@@ -61,7 +61,7 @@ Execute a migration function in the context of the TokenXyz contract.
 ```solidity
   function owner(
   ) external returns (address owner_)
-```
+``` 
 Get the owner of this contract.
 
 

@@ -9,7 +9,7 @@ Helper contract for a Truffle feature.
 ```solidity
   function setCompleted(
   ) public
-```
+``` 
 
 
 

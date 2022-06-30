@@ -14,7 +14,7 @@ A contract that deploys token airdrop contracts for anyone.
     uint256 distributionDuration,
     address owner
   ) external
-```
+``` 
 Deploys a new Merkle Distributor contract.
 
 
@@ -32,7 +32,7 @@ Deploys a new Merkle Distributor contract.
   function getDeployedAirdrops(
     string urlName
   ) external returns (struct IFactoryFeature.DeployData[] airdropAddresses)
-```
+``` 
 Returns all the deployed airdrop contract addresses by a specific creator.
 
 

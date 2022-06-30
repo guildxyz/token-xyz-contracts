@@ -1,6 +1,6 @@
 # MerkleDistributor
 
-Allows anyone to claim a token if they exist in a Merkle root.
+Provides ERC20 token distribution based on a Merkle tree.
 
 
 
@@ -8,18 +8,29 @@ Allows anyone to claim a token if they exist in a Merkle root.
 ### constructor
 ```solidity
   constructor(
+    address token_,
+    bytes32 merkleRoot_,
+    uint256 distributionDuration,
+    address owner
   ) 
-```
+``` 
+Sets config and transfers ownership to `owner`.
 
 
-
+#### Parameters:
+| Name | Type | Description                                                          |
+| :--- | :--- | :------------------------------------------------------------------- |
+|`token_` | address | The address of the ERC20 token to distribute.
+|`merkleRoot_` | bytes32 | The root of the Merkle tree generated from the distribution list.
+|`distributionDuration` | uint256 | The time interval while the distribution lasts in seconds.
+|`owner` | address | The owner address: will be able to prolong the distribution period and withdraw the remaining tokens.
 
 ### isClaimed
 ```solidity
   function isClaimed(
     uint256 index
   ) public returns (bool claimed)
-```
+``` 
 Returns true if the index has been marked claimed.
 
 
@@ -40,7 +51,7 @@ Returns true if the index has been marked claimed.
     uint256 amount,
     bytes32[] merkleProof
   ) external
-```
+``` 
 Claim the given amount of the token to the given address. Reverts if the inputs are invalid.
 
 
@@ -57,8 +68,8 @@ Claim the given amount of the token to the given address. Reverts if the inputs 
   function prolongDistributionPeriod(
     uint256 additionalSeconds
   ) external
-```
-Allows the owner to prolong the distribution period of the tokens.
+``` 
+Prolongs the distribution period of the tokens. Callable only by the owner.
 
 
 #### Parameters:
@@ -71,8 +82,8 @@ Allows the owner to prolong the distribution period of the tokens.
   function withdraw(
     address recipient
   ) external
-```
-Allows the owner to reclaim the tokens after the distribution has ended.
+``` 
+Sends the tokens remaining after the distribution has ended to `recipient`. Callable only by the owner.
 
 
 #### Parameters:

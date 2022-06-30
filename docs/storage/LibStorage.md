@@ -10,7 +10,7 @@ Common storage helpers
   function getStorageSlot(
     enum LibStorage.StorageId storageId
   ) internal returns (uint256 slot)
-```
+``` 
 See: https://solidity.readthedocs.io/en/v0.8.14/assembly.html#access-to-external-variables-functions-and-libraries
 
 

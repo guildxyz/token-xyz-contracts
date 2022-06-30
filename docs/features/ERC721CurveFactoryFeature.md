@@ -9,7 +9,7 @@ A contract that deploys special ERC721 contracts for anyone.
 ```solidity
   function migrate(
   ) external returns (bytes4 success)
-```
+``` 
 Initialize and register this feature. Should be delegatecalled by `Migrate.migrate()`.
 
 
@@ -26,7 +26,7 @@ Initialize and register this feature. Should be delegatecalled by `Migrate.migra
     uint256 startingPrice,
     address owner
   ) external
-```
+``` 
 Deploys a new ERC721Curve contract.
 
 
@@ -43,7 +43,7 @@ Deploys a new ERC721Curve contract.
   function getDeployedNFTsWithCurve(
     string urlName
   ) external returns (struct IFactoryFeature.DeployData[] nftAddresses)
-```
+``` 
 Returns all the deployed ERC721Curve contract addresses by a specific creator.
 
 

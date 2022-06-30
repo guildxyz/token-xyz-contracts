@@ -9,7 +9,7 @@ A contract that deploys ERC20 token contracts with OpenZeppelin's AccessControl 
 ```solidity
   function migrate(
   ) external returns (bytes4 success)
-```
+``` 
 Initialize and register this feature. Should be delegatecalled by `Migrate.migrate()`.
 
 
@@ -29,7 +29,7 @@ Initialize and register this feature. Should be delegatecalled by `Migrate.migra
     uint256 maxSupply,
     address firstOwner
   ) external
-```
+``` 
 Deploys a new ERC20 token contract.
 
 
@@ -49,7 +49,7 @@ Deploys a new ERC20 token contract.
   function getDeployedTokens(
     string urlName
   ) external returns (struct IFactoryFeature.DeployData[] tokenAddresses)
-```
+``` 
 Returns all the deployed token addresses by a specific creator.
 
 

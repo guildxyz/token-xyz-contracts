@@ -9,7 +9,7 @@ Storage helpers for the `SimpleFunctionRegistry` feature.
 ```solidity
   function getStorage(
   ) internal returns (struct LibSimpleFunctionRegistryStorage.Storage stor)
-```
+``` 
 Get the storage bucket for this contract.
 
 

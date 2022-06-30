@@ -14,7 +14,7 @@ A contract that deploys special ERC721 contracts for anyone.
     uint128 startTime,
     address owner
   ) external
-```
+``` 
 Deploys a new ERC721Auction contract.
 
 
@@ -32,7 +32,7 @@ Deploys a new ERC721Auction contract.
   function getDeployedNFTAuctions(
     string urlName
   ) external returns (struct IFactoryFeature.DeployData[] nftAddresses)
-```
+``` 
 Returns all the deployed ERC721Auction contract addresses by a specific creator.
 
 
@@ -49,7 +49,7 @@ Returns all the deployed ERC721Auction contract addresses by a specific creator.
 ```solidity
   function WETH(
   ) external returns (address)
-```
+``` 
 The address of the wrapped ether (or equivalent) contract.
 
 

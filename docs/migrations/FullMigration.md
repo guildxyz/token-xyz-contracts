@@ -10,7 +10,7 @@ A contract for deploying and configuring the full TokenXyz contract.
   constructor(
     address payable initializeCaller_
   ) 
-```
+``` 
 Instantiate this contract and set the allowed caller of `initializeTokenXyz()` to `initializeCaller`.
 
 
@@ -23,7 +23,7 @@ Instantiate this contract and set the allowed caller of `initializeTokenXyz()` t
 ```solidity
   function getBootstrapper(
   ) external returns (address bootstrapper)
-```
+``` 
 Retrieve the bootstrapper address to use when constructing `TokenXyz`.
 
 
@@ -39,7 +39,7 @@ Retrieve the bootstrapper address to use when constructing `TokenXyz`.
     contract TokenXyz tokenXyz,
     struct FullMigration.Features features
   ) public returns (contract TokenXyz _tokenXyz)
-```
+``` 
 Initialize the `TokenXyz` contract with the full feature set,
         transfer ownership to `owner`, then self-destruct.
 
@@ -61,7 +61,7 @@ Initialize the `TokenXyz` contract with the full feature set,
   function die(
     address payable ethRecipient
   ) external
-```
+``` 
 Destroy this contract. Only callable from ourselves (from `initializeTokenXyz()`).
 
 

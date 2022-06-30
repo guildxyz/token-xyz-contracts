@@ -1,6 +1,6 @@
 # IMerkleVesting
 
-Allows anyone to claim a token if they exist in a Merkle root, but only over time.
+Provides ERC20 token distribution over time, based on a Merkle tree.
 
 
 
@@ -9,7 +9,7 @@ Allows anyone to claim a token if they exist in a Merkle root, but only over tim
 ```solidity
   function token(
   ) external returns (address tokenAddress)
-```
+``` 
 Returns the address of the token distributed by this contract.
 
 
@@ -22,7 +22,7 @@ Returns the address of the token distributed by this contract.
 ```solidity
   function allCohortsEnd(
   ) external returns (uint256 unixSeconds)
-```
+``` 
 Returns the timestamp when all cohorts' distribution period ends.
 
 
@@ -36,7 +36,7 @@ Returns the timestamp when all cohorts' distribution period ends.
   function getCohort(
     uint256 cohortId
   ) external returns (struct IMerkleVesting.CohortData cohort)
-```
+``` 
 Returns the parameters of a specific cohort.
 
 
@@ -53,7 +53,7 @@ Returns the parameters of a specific cohort.
 ```solidity
   function getCohortsLength(
   ) external returns (uint256 count)
-```
+``` 
 Returns the number of created cohorts.
 
 
@@ -70,7 +70,7 @@ Returns the number of created cohorts.
     address account,
     uint256 fullAmount
   ) external returns (uint256 amount)
-```
+``` 
 Returns the amount of funds an account can claim at the moment.
 
 
@@ -92,7 +92,7 @@ Returns the amount of funds an account can claim at the moment.
     uint256 cohortId,
     address account
   ) external returns (uint256 amount)
-```
+``` 
 Returns the amount of funds an account has claimed.
 
 
@@ -112,7 +112,7 @@ Returns the amount of funds an account has claimed.
     uint256 cohortId,
     uint256 index
   ) external returns (bool)
-```
+``` 
 Check if the address in a cohort at the index is excluded from the vesting.
 
 
@@ -132,7 +132,7 @@ Check if the address in a cohort at the index is excluded from the vesting.
     uint256 cohortId,
     uint256 index
   ) external
-```
+``` 
 Exclude the address in a cohort at the index from the vesting.
 
 
@@ -151,8 +151,8 @@ Exclude the address in a cohort at the index from the vesting.
     uint64 vestingPeriod,
     uint64 cliffPeriod
   ) external
-```
-Allows the owner to add a new cohort.
+``` 
+Adds a new cohort. Callable only by the owner.
 
 
 #### Parameters:
@@ -173,7 +173,7 @@ Allows the owner to add a new cohort.
     uint256 amount,
     bytes32[] merkleProof
   ) external
-```
+``` 
 Claim the given amount of the token to the given address. Reverts if the inputs are invalid.
 
 
@@ -192,8 +192,8 @@ Claim the given amount of the token to the given address. Reverts if the inputs 
     uint256 cohortId,
     uint64 additionalSeconds
   ) external
-```
-Allows the owner to prolong the distribution period of the tokens.
+``` 
+Prolongs the distribution period of the tokens. Callable only by the owner.
 
 
 #### Parameters:
@@ -207,8 +207,8 @@ Allows the owner to prolong the distribution period of the tokens.
   function withdraw(
     address recipient
   ) external
-```
-Allows the owner to reclaim the tokens after the distribution has ended.
+``` 
+Sends the tokens remaining after the distribution has ended to `recipient`. Callable only by the owner.
 
 
 #### Parameters:

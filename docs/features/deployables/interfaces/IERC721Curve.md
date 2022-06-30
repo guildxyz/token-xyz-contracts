@@ -9,7 +9,7 @@ An NFT with an ever increasing price along a curve.
 ```solidity
   function claim(
   ) external
-```
+``` 
 Claims a token to the given address. Reverts if the price is invalid.
 
 
@@ -19,8 +19,8 @@ Claims a token to the given address. Reverts if the price is invalid.
   function withdraw(
     address payable recipient
   ) external
-```
-Allows the owner to withdraw the collected funds.
+``` 
+Sends the collected funds to `recipient`. Callable only by the owner.
 
 
 #### Parameters:
@@ -33,7 +33,7 @@ Allows the owner to withdraw the collected funds.
   function getPriceOf(
     uint256 tokenId
   ) external returns (uint256 price)
-```
+``` 
 Gets the price of a specific token.
 
 
@@ -50,7 +50,7 @@ Gets the price of a specific token.
 ```solidity
   function maxSupply(
   ) external returns (uint256 count)
-```
+``` 
 The maximum number of NFTs that can ever be minted.
 
 
@@ -63,7 +63,7 @@ The maximum number of NFTs that can ever be minted.
 ```solidity
   function startingPrice(
   ) external returns (uint256 price)
-```
+``` 
 The price of the first token.
 
 
@@ -76,7 +76,7 @@ The price of the first token.
 ```solidity
   function totalSupply(
   ) external returns (uint256 count)
-```
+``` 
 The total amount of tokens stored by the contract.
 
 

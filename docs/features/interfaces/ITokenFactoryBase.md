@@ -10,7 +10,7 @@ Common functions and events for a contract that deploys ERC20 token contracts fo
   function getDeployedTokens(
     string urlName
   ) external returns (struct IFactoryFeature.DeployData[] tokenAddresses)
-```
+``` 
 Returns all the deployed token addresses by a specific creator.
 
 

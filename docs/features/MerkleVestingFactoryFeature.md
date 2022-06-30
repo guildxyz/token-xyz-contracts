@@ -9,7 +9,7 @@ A contract that deploys token vesting contracts for anyone.
 ```solidity
   function migrate(
   ) external returns (bytes4 success)
-```
+``` 
 Initialize and register this feature. Should be delegatecalled by `Migrate.migrate()`.
 
 
@@ -25,7 +25,7 @@ Initialize and register this feature. Should be delegatecalled by `Migrate.migra
     address token,
     address owner
   ) external
-```
+``` 
 Deploys a new Merkle Vesting contract.
 
 
@@ -41,7 +41,7 @@ Deploys a new Merkle Vesting contract.
   function getDeployedVestings(
     string urlName
   ) external returns (struct IFactoryFeature.DeployData[] vestingAddresses)
-```
+``` 
 Returns all the deployed vesting contract addresses by a specific creator.
 
 

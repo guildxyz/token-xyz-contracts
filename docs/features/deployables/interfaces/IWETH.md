@@ -9,7 +9,7 @@ Interface for WETH.
 ```solidity
   function deposit(
   ) external
-```
+``` 
 Deposit ether to get wrapped ether.
 
 
@@ -19,7 +19,7 @@ Deposit ether to get wrapped ether.
   function withdraw(
     uint256 wad
   ) external
-```
+``` 
 Withdraw wrapped ether to get ether.
 
 

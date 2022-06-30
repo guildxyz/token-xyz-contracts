@@ -1,6 +1,6 @@
 # ERC721MerkleDrop
 
-Allows anyone to mint a token with a specific ID if they exist in a Merkle root.
+Provides ERC721 token minting with access to individual IDs restricted based on a Merkle tree.
 
 
 
@@ -8,11 +8,28 @@ Allows anyone to mint a token with a specific ID if they exist in a Merkle root.
 ### constructor
 ```solidity
   constructor(
+    string name,
+    string symbol,
+    string cid_,
+    uint256 maxSupply_,
+    bytes32 merkleRoot_,
+    uint256 distributionDuration,
+    address owner
   ) 
-```
+``` 
+Sets metadata, drop config and transfers ownership to `owner`.
 
 
-
+#### Parameters:
+| Name | Type | Description                                                          |
+| :--- | :--- | :------------------------------------------------------------------- |
+|`name` | string | The name of the token.
+|`symbol` | string | The symbol of the token.
+|`cid_` | string | The ipfs hash, under which the off-chain metadata is uploaded.
+|`maxSupply_` | uint256 | The maximum number of NFTs that can ever be minted.
+|`merkleRoot_` | bytes32 | The root of the Merkle tree generated from the distribution list.
+|`distributionDuration` | uint256 | The time interval while the distribution lasts in seconds.
+|`owner` | address | The owner address: will be able to mint tokens after `distributionDuration` ends.
 
 ### claim
 ```solidity
@@ -22,7 +39,7 @@ Allows anyone to mint a token with a specific ID if they exist in a Merkle root.
     uint256 amount,
     bytes32[] merkleProof
   ) external
-```
+``` 
 Claims tokens to the given address. Reverts if the inputs are invalid.
 
 
@@ -40,7 +57,7 @@ Claims tokens to the given address. Reverts if the inputs are invalid.
     address to,
     uint256 tokenId
   ) external
-```
+``` 
 Mint a token to the given address.
 
 
@@ -54,7 +71,7 @@ Mint a token to the given address.
 ```solidity
   function _safeMint(
   ) internal
-```
+``` 
 An optimized version of {_safeMint} using custom errors.
 
 
@@ -64,7 +81,7 @@ An optimized version of {_safeMint} using custom errors.
   function tokenURI(
     uint256 tokenId
   ) public returns (string)
-```
+``` 
 
 Returns the Uniform Resource Identifier (URI) for `tokenId` token.
 #### Parameters:

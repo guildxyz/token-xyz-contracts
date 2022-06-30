@@ -16,7 +16,7 @@ A contract that deploys ERC20 token contracts for anyone.
     uint256 maxSupply,
     address firstOwner
   ) external
-```
+``` 
 Deploys a new ERC20 token contract.
 
 
@@ -37,7 +37,7 @@ Deploys a new ERC20 token contract.
     string urlName,
     address tokenAddress
   ) external
-```
+``` 
 Adds a token to the contract's storage.
 
 

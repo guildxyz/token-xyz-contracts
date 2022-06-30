@@ -10,7 +10,7 @@
   function transferOwnership(
     address newOwner
   ) external
-```
+``` 
 Transfers ownership of the contract to a new address.
 
 
@@ -23,7 +23,7 @@ Transfers ownership of the contract to a new address.
 ```solidity
   function owner(
   ) external returns (address ownerAddress)
-```
+``` 
 The owner of this contract.
 
 

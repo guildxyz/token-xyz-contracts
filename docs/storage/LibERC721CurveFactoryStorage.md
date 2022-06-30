@@ -9,7 +9,7 @@ Storage helpers for the `ERC721CurveFactory` feature.
 ```solidity
   function getStorage(
   ) internal returns (struct LibERC721CurveFactoryStorage.Storage stor)
-```
+``` 
 Get the storage bucket for this contract.
 
 
