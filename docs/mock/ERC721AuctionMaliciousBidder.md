@@ -1,6 +1,8 @@
 # ERC721AuctionMaliciousBidder
 
-A bidder for ERC721Auction that cannot be outbid.
+A bidder for ERC721Auction that cannot receive ether.
+
+The inability to receive ether would make it impossible to outbid it... or wouldn't?
 
 ## Functions
 

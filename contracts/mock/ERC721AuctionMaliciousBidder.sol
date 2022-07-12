@@ -3,7 +3,8 @@ pragma solidity ^0.8.0;
 
 import { IERC721Auction } from "../features/deployables/interfaces/IERC721Auction.sol";
 
-/// @title A bidder for ERC721Auction that cannot be outbid.
+/// @title A bidder for ERC721Auction that cannot receive ether.
+/// @dev The inability to receive ether would make it impossible to outbid it... or wouldn't?
 contract ERC721AuctionMaliciousBidder {
     IERC721Auction public auctionContract;
 
