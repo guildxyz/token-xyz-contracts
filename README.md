@@ -2,6 +2,8 @@
 
 The smart contracts in this repository are the core of token.xyz.
 
+Detailed documentation can be found in the _[docs](docs)_ folder.
+
 ## Requirements
 
 To run the project you need:
@@ -45,8 +47,8 @@ Networks can be configured in _truffle-config.js_. We've preconfigured the follo
 - `goerli` (Görli Ethereum Testnet)
 - `kovan` (Kovan Ethereum Testnet)
 - `ropsten` (Ropsten Ethereum Testnet)
-- `bsc` (Binance Smart Chain)
-- `bsctest` (Binance Smart Chain Testnet)
+- `bsc` (BNB Chain)
+- `bsctest` (BNB Chain Testnet)
 - `polygon` (Polygon Mainnet (formerly Matic))
 - `mumbai` (Matic Mumbai Testnet)
 
@@ -76,7 +78,7 @@ For more detailed instructions, see [the extended version of the deployment inst
 
 ## Verification
 
-For automatic verification you can use [truffle plugin verify](https://github.com/rkalis/truffle-plugin-verify).
+For automatic verification you can use [truffle-plugin-verify](https://github.com/rkalis/truffle-plugin-verify).
 
 ```bash
 truffle run verify [contractName] --network [networkName]
@@ -84,7 +86,7 @@ truffle run verify [contractName] --network [networkName]
 
 ## Linting
 
-The project uses [solhint](https://github.com/protofire/solhint). To run it, simply execute:
+The project uses [Solhint](https://github.com/protofire/solhint). To run it, simply execute:
 
 ```bash
 npm run lint
@@ -103,3 +105,13 @@ To run the unit tests only in a specific file, just append the path to the comma
 ```bash
 npm test ./test/MyContractTest.js
 ```
+
+## Documentation
+
+The documentation for the contracts is generated via the [solidity-docgen](https://github.com/OpenZeppelin/solidity-docgen/tree/0.5) package. Run the tool via the following command:
+
+```bash
+npm run docgen
+```
+
+The output can be found in the _[docs](docs)_ folder.
