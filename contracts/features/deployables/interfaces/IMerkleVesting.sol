@@ -45,8 +45,21 @@ interface IMerkleVesting {
 
     /// @notice Returns the parameters of a specific cohort.
     /// @param cohortId The id of the cohort.
-    /// @return cohort The merkleRoot, distributionStart, distributionEnd, vestingPeriod and cliffPeriod of the cohort.
-    function getCohort(uint256 cohortId) external view returns (CohortData memory cohort);
+    /// @return merkleRoot The Merkle root of the cohort.
+    /// @return distributionStart The unix timestamp that marks the start of the token distribution.
+    /// @return distributionEnd The unix timestamp that marks the end of the token distribution.
+    /// @return vestingPeriod The length of the vesting period in seconds.
+    /// @return cliffPeriod The length of the cliff period in seconds.
+    function getCohort(uint256 cohortId)
+        external
+        view
+        returns (
+            bytes32 merkleRoot,
+            uint64 distributionStart,
+            uint64 distributionEnd,
+            uint64 vestingPeriod,
+            uint64 cliffPeriod
+        );
 
     /// @notice Returns the number of created cohorts.
     /// @return count The number of created cohorts.

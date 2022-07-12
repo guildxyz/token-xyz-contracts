@@ -27,7 +27,7 @@ Sets the token address and transfers ownership to `owner`.
 ```solidity
   function getCohort(
     uint256 cohortId
-  ) external returns (struct IMerkleVesting.CohortData cohort)
+  ) external returns (bytes32 merkleRoot, uint64 distributionStart, uint64 distributionEnd, uint64 vestingPeriod, uint64 cliffPeriod)
 ```
 
 Returns the parameters of a specific cohort.
@@ -40,9 +40,13 @@ Returns the parameters of a specific cohort.
 
 #### Return Values:
 
-| Name     | Type    | Description                                                                                      |
-| :------- | :------ | :----------------------------------------------------------------------------------------------- |
-| `cohort` | uint256 | The merkleRoot, distributionStart, distributionEnd, vestingPeriod and cliffPeriod of the cohort. |
+| Name                | Type    | Description                                                        |
+| :------------------ | :------ | :----------------------------------------------------------------- |
+| `merkleRoot`        | uint256 | The Merkle root of the cohort.                                     |
+| `distributionStart` |         | The unix timestamp that marks the start of the token distribution. |
+| `distributionEnd`   |         | The unix timestamp that marks the end of the token distribution.   |
+| `vestingPeriod`     |         | The length of the vesting period in seconds.                       |
+| `cliffPeriod`       |         | The length of the cliff period in seconds.                         |
 
 ### getCohortsLength
 

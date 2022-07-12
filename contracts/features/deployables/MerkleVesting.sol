@@ -34,8 +34,25 @@ contract MerkleVesting is IMerkleVesting, Multicall, Ownable {
     }
 
     /// @inheritdoc IMerkleVesting
-    function getCohort(uint256 cohortId) external view returns (CohortData memory cohort) {
-        return cohorts[cohortId].data;
+    function getCohort(uint256 cohortId)
+        external
+        view
+        returns (
+            bytes32 merkleRoot,
+            uint64 distributionStart,
+            uint64 distributionEnd,
+            uint64 vestingPeriod,
+            uint64 cliffPeriod
+        )
+    {
+        CohortData memory cohort = cohorts[cohortId].data;
+        return (
+            cohort.merkleRoot,
+            cohort.distributionStart,
+            cohort.distributionEnd,
+            cohort.vestingPeriod,
+            cohort.cliffPeriod
+        );
     }
 
     /// @inheritdoc IMerkleVesting
