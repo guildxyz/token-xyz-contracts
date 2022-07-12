@@ -427,7 +427,7 @@ contract("ERC721 auction", function (accounts) {
       await anotherToken.settleAuction();
       const totalSupply1 = await anotherToken.totalSupply();
       expect(totalSupply1).to.bignumber.eq(totalSupply0);
-      await expectRevert(anotherToken.ownerOf(0), "ERC721: owner query for nonexistent token");
+      await expectRevert(anotherToken.ownerOf(0), "ERC721: invalid token ID");
     });
 
     it("should create a new auction, but only below maxSupply", async function () {

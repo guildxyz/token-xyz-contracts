@@ -229,7 +229,7 @@ contract("ERC721BatchMerkleDrop", function (accounts) {
         const proof0 = tree.getProof(0, wallet0, BigNumber.from(10));
         const tokenId = await token.totalSupply();
         expect(await token.balanceOf(wallet0)).to.bignumber.eq("0");
-        await expectRevert(token.ownerOf(tokenId), "ERC721: owner query for nonexistent token");
+        await expectRevert(token.ownerOf(tokenId), "ERC721: invalid token ID");
         await token.claim(0, wallet0, 10, proof0);
         expect(await token.balanceOf(wallet0)).to.bignumber.eq("10");
         for (let i = 0; i < 10; i++) {
