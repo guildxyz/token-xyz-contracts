@@ -2,7 +2,6 @@
   "name": "token-xyz-contracts",
   "version": "1.0.0",
   "description": "",
-  "main": "index.js",
   "scripts": {
     "docgen": "solidity-docgen --solc-module solc -t ./docs/templates/ && npm run format-docs",
     "format-docs": "prettier --write ./docs --loglevel silent",
@@ -15,17 +14,17 @@
     "@openzeppelin/test-helpers": "^0.5.15",
     "eth-gas-reporter": "^0.2.25",
     "prettier": "^2.7.1",
-    "prettier-plugin-solidity": "^1.0.0-beta.19",
+    "prettier-plugin-solidity": "^1.0.0-dev.22",
+    "solc": "^0.8.15",
     "solhint": "^3.3.7",
     "solidity-docgen": "^0.5.17",
     "truffle-plugin-verify": "^0.5.26"
   },
   "dependencies": {
-    "@openzeppelin/contracts": "^4.6.0",
-    "@truffle/hdwallet-provider": "^2.0.9",
+    "@openzeppelin/contracts": "^4.7.0",
+    "@truffle/hdwallet-provider": "^2.0.10",
     "dotenv": "^16.0.1",
     "ethers": "^5.6.9",
-    "solc": "^0.8.15",
     "ts-import": "^2.0.40"
   }
 }
