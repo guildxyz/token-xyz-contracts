@@ -7,7 +7,7 @@ import { AccessControl } from "@openzeppelin/contracts/access/AccessControl.sol"
 /// @title A mintable ERC20 token with role-based access control.
 contract ERC20MintableAccessControlled is ERC20InitialSupply, AccessControl {
     /// @notice The id of the role that has access to the {mint} function.
-    bytes32 public constant MINTER_ROLE = keccak256("MINTER_ROLE");
+    bytes32 public immutable MINTER_ROLE = 0x9f2df0fed2c77648de5860a4cc508cd0818c85b8b8a1ab4ceeef8d981c8956a6;
 
     /// @notice Sets metadata, mints an initial supply and grants minter role to `minter`.
     /// @param name The name of the token.
