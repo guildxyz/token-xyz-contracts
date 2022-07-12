@@ -75,6 +75,19 @@ module.exports = {
       timeoutBlocks: 200,
       skipDryRun: true
     },
+    rinkeby: {
+      provider: () =>
+        new HDWalletProvider({
+          privateKeys: [process.env.PRIVATE_KEY],
+          providerOrUrl: `wss://rinkeby.infura.io/ws/v3/${process.env.INFURA_ID}`,
+          chainId: 4
+        }),
+      network_id: 4,
+      confirmations: 2,
+      networkCheckTimeout: 90000,
+      timeoutBlocks: 200,
+      skipDryRun: true
+    },
     ropsten: {
       provider: () =>
         new HDWalletProvider({
@@ -117,7 +130,7 @@ module.exports = {
       provider: () =>
         new HDWalletProvider({
           privateKeys: [process.env.PRIVATE_KEY],
-          providerOrUrl: `wss://ws-matic-mainnet.chainstacklabs.com`,
+          providerOrUrl: `https://polygon-rpc.com`,
           chainId: 137
         }),
       network_id: 137,
@@ -133,6 +146,18 @@ module.exports = {
           chainId: 80001
         }),
       network_id: 80001,
+      confirmations: 2,
+      timeoutBlocks: 200,
+      skipDryRun: true
+    },
+    gnosis: {
+      provider: () =>
+        new HDWalletProvider({
+          privateKeys: [process.env.PRIVATE_KEY],
+          providerOrUrl: `wss://rpc.gnosischain.com/wss`,
+          chainId: 100
+        }),
+      network_id: 100,
       confirmations: 2,
       timeoutBlocks: 200,
       skipDryRun: true
