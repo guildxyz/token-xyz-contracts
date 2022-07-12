@@ -138,7 +138,7 @@ contract MerkleVesting is IMerkleVesting, Multicall, Ownable {
 
         // Verify the Merkle proof.
         bytes32 node = keccak256(abi.encodePacked(index, account, amount));
-        if (!MerkleProof.verify(merkleProof, cohort.data.merkleRoot, node)) revert InvalidProof();
+        if (!MerkleProof.verifyCalldata(merkleProof, cohort.data.merkleRoot, node)) revert InvalidProof();
 
         // Calculate the claimable amount and update the claimed amount on storage.
         uint256 claimableAmount = getClaimableAmount(cohortId, index, account, amount);

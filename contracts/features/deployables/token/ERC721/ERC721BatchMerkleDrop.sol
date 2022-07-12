@@ -63,7 +63,7 @@ contract ERC721BatchMerkleDrop is ERC721, IERC721MerkleDrop, Ownable {
 
         // Verify the Merkle proof.
         bytes32 node = keccak256(abi.encodePacked(index, account, amount));
-        if (!MerkleProof.verify(merkleProof, merkleRoot, node)) revert InvalidProof();
+        if (!MerkleProof.verifyCalldata(merkleProof, merkleRoot, node)) revert InvalidProof();
 
         // Mark it claimed and mint the token(s).
         _setClaimed(index);

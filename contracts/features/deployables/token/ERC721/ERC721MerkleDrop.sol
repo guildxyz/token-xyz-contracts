@@ -59,7 +59,7 @@ contract ERC721MerkleDrop is ERC721, IERC721MerkleDrop, Ownable {
 
         // Verify the Merkle proof.
         bytes32 node = keccak256(abi.encodePacked(index, account, tokenId));
-        if (!MerkleProof.verify(merkleProof, merkleRoot, node)) revert InvalidProof();
+        if (!MerkleProof.verifyCalldata(merkleProof, merkleRoot, node)) revert InvalidProof();
 
         // Mint the token.
         _safeMint(account, tokenId);

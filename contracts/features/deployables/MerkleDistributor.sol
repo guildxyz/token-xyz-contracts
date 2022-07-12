@@ -72,7 +72,7 @@ contract MerkleDistributor is IMerkleDistributor, Ownable {
 
         // Verify the Merkle proof.
         bytes32 node = keccak256(abi.encodePacked(index, account, amount));
-        if (!MerkleProof.verify(merkleProof, merkleRoot, node)) revert InvalidProof();
+        if (!MerkleProof.verifyCalldata(merkleProof, merkleRoot, node)) revert InvalidProof();
 
         // Mark it claimed and send the token.
         _setClaimed(index);
