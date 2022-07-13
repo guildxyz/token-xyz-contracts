@@ -317,6 +317,13 @@ contract("MerkleVesting", function (accounts) {
         expect(res1.receipt.status).to.eq(true);
       });
 
+      it("does allow claims after the vesting period ended but the distribution period did not", async function () {
+        await time.increase(distributionDuration - 60);
+        const proof0 = tree.getProof(0, wallet0, BigNumber.from(100));
+        const res0 = await vesting.claim(0, 0, wallet0, 100, proof0);
+        expect(res0.receipt.status).to.eq(true);
+      });
+
       it("cannot claim for address other than proof", async function () {
         await time.increase(randomCliff + 1);
         const proof0 = tree.getProof(0, wallet0, BigNumber.from(100));
