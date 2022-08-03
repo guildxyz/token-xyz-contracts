@@ -74,7 +74,7 @@ contract ERC721Curve is IERC721Curve, ERC721, Ownable {
     /// @param tokenId The id of the token.
     function tokenURI(uint256 tokenId) public view override(ERC721, IERC721Metadata) returns (string memory) {
         if (!_exists(tokenId)) revert NonExistentToken(tokenId);
-        return string(abi.encodePacked("ipfs://", cid, "/", tokenId.toString(), ".json"));
+        return string.concat("ipfs://", cid, "/", tokenId.toString(), ".json");
     }
 
     /// @inheritdoc IERC721Curve
