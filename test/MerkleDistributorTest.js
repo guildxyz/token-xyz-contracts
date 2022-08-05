@@ -327,7 +327,7 @@ contract("MerkleDistributor", function (accounts) {
       );
     });
 
-    it("sets a new, higher distibution end", async function () {
+    it("sets a new, higher distribution end", async function () {
       const addition = new BN(distributionDuration);
       const oldPeriod = await distributor.distributionEnd();
       await distributor.prolongDistributionPeriod(addition);

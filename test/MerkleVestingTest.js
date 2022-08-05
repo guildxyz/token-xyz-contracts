@@ -436,7 +436,7 @@ contract("MerkleVesting", function (accounts) {
       );
     });
 
-    it("sets a new, higher distibution end", async function () {
+    it("sets a new, higher distribution end", async function () {
       const addition = new BN(distributionDuration);
       const oldCohort = await vesting.getCohort(0);
       const oldPeriod = new BN(oldCohort.distributionEnd);
