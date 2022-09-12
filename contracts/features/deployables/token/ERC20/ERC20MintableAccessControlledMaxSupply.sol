@@ -2,7 +2,7 @@
 pragma solidity 0.8.15;
 
 import { ERC20InitialSupply } from "./ERC20InitialSupply.sol";
-import { IERC20MaxSupply } from "./IERC20MaxSupply.sol";
+import { IERC20MaxSupply } from "../../interfaces/IERC20MaxSupply.sol";
 import { AccessControl } from "@openzeppelin/contracts/access/AccessControl.sol";
 
 /// @title A mintable ERC20 token with role-based access control and capped supply.
