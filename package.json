@@ -12,6 +12,7 @@
   "license": "MIT",
   "devDependencies": {
     "@openzeppelin/test-helpers": "^0.5.15",
+    "custom-error-test-helper": "^1.0.6",
     "eth-gas-reporter": "^0.2.25",
     "prettier": "^2.7.1",
     "prettier-plugin-solidity": "^1.0.0-dev.22",
