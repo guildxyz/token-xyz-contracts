@@ -1,4 +1,5 @@
 const { BN, ether, expectEvent, expectRevert } = require("@openzeppelin/test-helpers");
+const { expectRevertCustomError } = require("custom-error-test-helper");
 const expect = require("chai").expect;
 
 const ERC20InitialSupply = artifacts.require("ERC20InitialSupply");
@@ -155,25 +156,31 @@ contract("ERC20 contracts", function (accounts) {
       });
 
       it("should revert if max supply is lower than initial supply", async function () {
-        // error MaxSupplyTooLow(uint256 maxSupply, uint256 initialSupply);
-        await expectRevert(
+        const lowMaxSupply = initialSupply.div(new BN(2));
+        await expectRevertCustomError(
+          runOption.ERC20MintableMaxSupply,
           runOption.ERC20MintableMaxSupply.new(
             tokenName,
             tokenSymbol,
             tokenDecimals,
             wallet0,
             initialSupply,
-            initialSupply.div(new BN(2))
+            lowMaxSupply
           ),
-          "Custom error (could not decode)"
+          "MaxSupplyTooLow",
+          [lowMaxSupply, initialSupply]
         );
       });
 
       it("should fail to mint more tokens if max supply is exceeded", async function () {
         const totalSupply = await token.totalSupply();
-        const mintableAmount = maxSupply.sub(totalSupply);
-        // error MaxSupplyExceeded(uint256 amount, uint256 currentSupply, uint256 maxSupply);
-        await expectRevert.unspecified(token.mint(wallet1, mintableAmount.add(new BN(1))));
+        const amountToBeMinted = maxSupply.sub(totalSupply).add(new BN(1));
+        await expectRevertCustomError(
+          runOption.ERC20MintableMaxSupply,
+          token.mint(wallet1, amountToBeMinted),
+          "MaxSupplyExceeded",
+          [amountToBeMinted, totalSupply, maxSupply]
+        );
       });
     });
   }

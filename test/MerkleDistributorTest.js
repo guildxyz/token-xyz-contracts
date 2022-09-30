@@ -1,5 +1,6 @@
 const { BigNumber, constants } = require("ethers");
 const { BN, time, expectRevert, expectEvent } = require("@openzeppelin/test-helpers");
+const { expectRevertCustomError } = require("custom-error-test-helper");
 const expect = require("chai").expect;
 const { tsImport } = require("ts-import");
 
@@ -41,18 +42,20 @@ contract("MerkleDistributor", function (accounts) {
 
   context("#constructor", function () {
     it("fails if called with invalid parameters", async function () {
-      // error InvalidParameters();
-      await expectRevert(
+      await expectRevertCustomError(
+        Distributor,
         Distributor.new(token.address, randomRoot, distributionDuration, constants.AddressZero),
-        "Custom error (could not decode)"
+        "InvalidParameters"
       );
-      await expectRevert(
+      await expectRevertCustomError(
+        Distributor,
         Distributor.new(constants.AddressZero, randomRoot, distributionDuration, wallet0),
-        "Custom error (could not decode)"
+        "InvalidParameters"
       );
-      await expectRevert(
+      await expectRevertCustomError(
+        Distributor,
         Distributor.new(token.address, constants.HashZero, distributionDuration, wallet0),
-        "Custom error (could not decode)"
+        "InvalidParameters"
       );
     });
 
@@ -77,20 +80,20 @@ contract("MerkleDistributor", function (accounts) {
     it("fails if distribution ended", async function () {
       const distributor = await Distributor.new(token.address, randomRoot, distributionDuration, wallet0);
       await time.increase(distributionDuration + 1);
-      // error DistributionEnded(uint256 current, uint256 end);
-      await expectRevert.unspecified(distributor.claim(0, wallet0, 10, []));
+      await expectRevertCustomError(Distributor, distributor.claim(0, wallet0, 10, []), "DistributionEnded", [
+        await time.latest(),
+        await distributor.distributionEnd()
+      ]);
     });
 
     it("fails for empty proof", async function () {
       const distributor = await Distributor.new(token.address, randomRoot, distributionDuration, wallet0);
-      // error InvalidProof();
-      await expectRevert.unspecified(distributor.claim(0, wallet0, 10, []));
+      await expectRevertCustomError(Distributor, distributor.claim(0, wallet0, 10, []), "InvalidProof");
     });
 
     it("fails for invalid index", async function () {
       const distributor = await Distributor.new(token.address, randomRoot, distributionDuration, wallet0);
-      // error InvalidProof();
-      await expectRevert.unspecified(distributor.claim(0, wallet0, 10, []));
+      await expectRevertCustomError(Distributor, distributor.claim(0, wallet0, 10, []), "InvalidProof");
     });
 
     context("two account tree", function () {
@@ -143,38 +146,37 @@ contract("MerkleDistributor", function (accounts) {
       it("cannot allow two claims", async function () {
         const proof0 = tree.getProof(0, wallet0, BigNumber.from(100));
         await distributor.claim(0, wallet0, 100, proof0);
-        // error DropClaimed();
-        await expectRevert.unspecified(distributor.claim(0, wallet0, 100, proof0));
+        await expectRevertCustomError(Distributor, distributor.claim(0, wallet0, 100, proof0), "AlreadyClaimed");
       });
 
       it("cannot claim more than once: 0 and then 1", async function () {
         await distributor.claim(0, wallet0, 100, tree.getProof(0, wallet0, BigNumber.from(100)));
         await distributor.claim(1, wallet1, 101, tree.getProof(1, wallet1, BigNumber.from(101)));
-        // error DropClaimed();
-        await expectRevert.unspecified(
-          distributor.claim(0, wallet0, 100, tree.getProof(0, wallet0, BigNumber.from(100)))
+        await expectRevertCustomError(
+          Distributor,
+          distributor.claim(0, wallet0, 100, tree.getProof(0, wallet0, BigNumber.from(100))),
+          "AlreadyClaimed"
         );
       });
 
       it("cannot claim more than once: 1 and then 0", async function () {
         await distributor.claim(1, wallet1, 101, tree.getProof(1, wallet1, BigNumber.from(101)));
         await distributor.claim(0, wallet0, 100, tree.getProof(0, wallet0, BigNumber.from(100)));
-        // error DropClaimed();
-        await expectRevert.unspecified(
-          distributor.claim(1, wallet1, 101, tree.getProof(1, wallet1, BigNumber.from(101)))
+        await expectRevertCustomError(
+          Distributor,
+          distributor.claim(1, wallet1, 101, tree.getProof(1, wallet1, BigNumber.from(101))),
+          "AlreadyClaimed"
         );
       });
 
       it("cannot claim for address other than proof", async function () {
         const proof0 = tree.getProof(0, wallet0, BigNumber.from(100));
-        // error InvalidProof();
-        await expectRevert.unspecified(distributor.claim(1, wallet1, 101, proof0));
+        await expectRevertCustomError(Distributor, distributor.claim(1, wallet1, 101, proof0), "InvalidProof");
       });
 
       it("cannot claim more with one proof", async function () {
         const proof0 = tree.getProof(0, wallet0, BigNumber.from(100));
-        // error InvalidProof();
-        await expectRevert.unspecified(distributor.claim(0, wallet0, 101, proof0));
+        await expectRevertCustomError(Distributor, distributor.claim(0, wallet0, 101, proof0), "InvalidProof");
       });
 
       it("gas", async function () {
@@ -298,8 +300,7 @@ contract("MerkleDistributor", function (accounts) {
         for (let i = 0; i < 25; i += Math.floor(Math.random() * (NUM_LEAVES / NUM_SAMPLES))) {
           const proof = tree.getProof(i, wallet0, BigNumber.from(100));
           await distributor.claim(i, wallet0, 100, proof);
-          // error DropClaimed();
-          await expectRevert.unspecified(distributor.claim(i, wallet0, 100, proof));
+          await expectRevertCustomError(Distributor, distributor.claim(i, wallet0, 100, proof), "AlreadyClaimed");
         }
       });
     });
@@ -339,8 +340,10 @@ contract("MerkleDistributor", function (accounts) {
       await setBalance(token, distributor.address, new BN(101));
       const proof0 = tree.getProof(0, wallet0, BigNumber.from(100));
       await time.increase(new BN(distributionDuration).add(new BN(120)));
-      // error DistributionEnded(uint256 current, uint256 end);
-      await expectRevert.unspecified(distributor.claim(0, wallet0, 100, proof0));
+      await expectRevertCustomError(Distributor, distributor.claim(0, wallet0, 100, proof0), "DistributionEnded", [
+        await time.latest(),
+        await distributor.distributionEnd()
+      ]);
       await distributor.prolongDistributionPeriod(990);
       const res = await distributor.claim(0, wallet0, 100, proof0);
       expect(res.receipt.status).to.be.true;
@@ -365,16 +368,17 @@ contract("MerkleDistributor", function (accounts) {
     });
 
     it("fails if distribution period has not ended yet", async function () {
-      // error DistributionOngoing(uint256 current, uint256 end);
-      await expectRevert.unspecified(distributor.withdraw(wallet0));
+      await expectRevertCustomError(Distributor, distributor.withdraw(wallet0), "DistributionOngoing", [
+        await time.latest(),
+        await distributor.distributionEnd()
+      ]);
     });
 
     it("fails if there's nothing to withdraw", async function () {
       await time.increase(distributionDuration + 1);
       const balance = await token.balanceOf(distributor.address);
       expect(balance).to.bignumber.eq("0");
-      // error AlreadyWithdrawn();
-      await expectRevert.unspecified(distributor.withdraw(wallet0));
+      await expectRevertCustomError(Distributor, distributor.withdraw(wallet0), "AlreadyWithdrawn");
     });
 
     it("transfers tokens to the recipient", async function () {
@@ -450,8 +454,11 @@ contract("MerkleDistributor", function (accounts) {
           account: account,
           amount: BigNumber.from(claim.amount).toString()
         });
-        // error DropClaimed();
-        await expectRevert.unspecified(distributor.claim(claim.index, account, claim.amount, claim.proof));
+        await expectRevertCustomError(
+          Distributor,
+          distributor.claim(claim.index, account, claim.amount, claim.proof),
+          "AlreadyClaimed"
+        );
       }
       expect(await token.balanceOf(distributor.address)).to.bignumber.eq(new BN(0));
     });

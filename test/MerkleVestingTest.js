@@ -1,5 +1,6 @@
 const { BigNumber, constants } = require("ethers");
 const { BN, time, expectRevert, expectEvent } = require("@openzeppelin/test-helpers");
+const { expectRevertCustomError } = require("custom-error-test-helper");
 const expect = require("chai").expect;
 const { tsImport } = require("ts-import");
 
@@ -54,9 +55,8 @@ contract("MerkleVesting", function (accounts) {
 
   context("constructor", function () {
     it("fails if called with invalid parameters", async function () {
-      // error InvalidParameters();
-      await expectRevert(Vesting.new(token.address, constants.AddressZero), "Custom error (could not decode)");
-      await expectRevert(Vesting.new(constants.AddressZero, wallet0), "Custom error (could not decode)");
+      await expectRevertCustomError(Vesting, Vesting.new(token.address, constants.AddressZero), "InvalidParameters");
+      await expectRevertCustomError(Vesting, Vesting.new(constants.AddressZero, wallet0), "InvalidParameters");
     });
 
     it("returns the token address", async function () {
@@ -76,33 +76,49 @@ contract("MerkleVesting", function (accounts) {
 
     it("fails if called with invalid parameters", async function () {
       const vesting = await Vesting.new(token.address, wallet0);
-      // error InvalidParameters();
-      await expectRevert.unspecified(
-        vesting.addCohort(constants.HashZero, 0, distributionDuration, randomVestingPeriod, randomCliff)
+      await expectRevertCustomError(
+        Vesting,
+        vesting.addCohort(constants.HashZero, 0, distributionDuration, randomVestingPeriod, randomCliff),
+        "InvalidParameters"
       );
-      await expectRevert.unspecified(vesting.addCohort(randomRoot0, 0, 0, randomVestingPeriod, randomCliff));
-      await expectRevert.unspecified(vesting.addCohort(randomRoot0, 0, distributionDuration, 0, randomCliff));
+      await expectRevertCustomError(
+        Vesting,
+        vesting.addCohort(randomRoot0, 0, 0, randomVestingPeriod, randomCliff),
+        "InvalidParameters"
+      );
+      await expectRevertCustomError(
+        Vesting,
+        vesting.addCohort(randomRoot0, 0, distributionDuration, 0, randomCliff),
+        "InvalidParameters"
+      );
     });
 
     it("fails when cliff < vesting < distribution is not true", async function () {
       const vesting = await Vesting.new(token.address, wallet0);
-      // error InvalidParameters();
-      await expectRevert.unspecified(
-        vesting.addCohort(randomRoot0, 0, randomVestingPeriod, distributionDuration, randomCliff)
+      await expectRevertCustomError(
+        Vesting,
+        vesting.addCohort(randomRoot0, 0, randomVestingPeriod, distributionDuration, randomCliff),
+        "InvalidParameters"
       );
-      await expectRevert.unspecified(
-        vesting.addCohort(randomRoot0, 0, randomCliff, distributionDuration, randomVestingPeriod)
+      await expectRevertCustomError(
+        Vesting,
+        vesting.addCohort(randomRoot0, 0, randomCliff, distributionDuration, randomVestingPeriod),
+        "InvalidParameters"
       );
-      await expectRevert.unspecified(
-        vesting.addCohort(randomRoot0, 0, distributionDuration, randomCliff, randomVestingPeriod)
+      await expectRevertCustomError(
+        Vesting,
+        vesting.addCohort(randomRoot0, 0, distributionDuration, randomCliff, randomVestingPeriod),
+        "InvalidParameters"
       );
     });
 
     it("fails when trying to add a cohort that's already ended", async function () {
       const vesting = await Vesting.new(token.address, wallet0);
-      // error DistributionOngoing(uint256 current, uint256 end);
-      await expectRevert.unspecified(
-        vesting.addCohort(randomRoot0, 1, randomVestingPeriod, distributionDuration, randomCliff)
+      await expectRevertCustomError(
+        Vesting,
+        vesting.addCohort(randomRoot0, 1, distributionDuration, randomVestingPeriod, randomCliff),
+        "DistributionEnded",
+        [await time.latest(), 1 + distributionDuration]
       );
     });
 
@@ -188,31 +204,28 @@ contract("MerkleVesting", function (accounts) {
   context("#claim", function () {
     it("fails for invalid cohortId", async function () {
       const vesting = await Vesting.new(token.address, wallet0);
-      await vesting.addCohort(randomRoot0, 0, distributionDuration, randomVestingPeriod, randomCliff);
-      // error CohortDoesNotExist(uint256 cohortId);
-      await expectRevert.unspecified(vesting.claim(42, 0, wallet0, 10, []));
+      await expectRevertCustomError(Vesting, vesting.claim(42, 0, wallet0, 10, []), "CohortDoesNotExist", [42]);
     });
 
     it("fails if distribution ended", async function () {
       const vesting = await Vesting.new(token.address, wallet0);
       await vesting.addCohort(randomRoot0, 0, distributionDuration, randomVestingPeriod, randomCliff);
       await time.increase(distributionDuration + 1);
-      // error DistributionEnded(uint256 current, uint256 end);
-      await expectRevert.unspecified(vesting.claim(0, 0, wallet0, 10, []));
+      await expectRevertCustomError(Vesting, vesting.claim(0, 0, wallet0, 10, []), "DistributionEnded", [
+        await time.latest(),
+        (await vesting.getCohort(0)).distributionEnd
+      ]);
     });
 
     it("fails if distribution has not started yet", async function () {
       const vesting = await Vesting.new(token.address, wallet0);
       const timestamp = await time.latest();
-      await vesting.addCohort(
-        randomRoot0,
-        timestamp.add(new BN(120)),
-        distributionDuration,
-        randomVestingPeriod,
-        randomCliff
-      );
-      // error DistributionNotStarted(uint256 current, uint256 start);
-      await expectRevert.unspecified(vesting.claim(0, 0, wallet0, 10, []));
+      const distributionStart = timestamp.add(new BN(120));
+      await vesting.addCohort(randomRoot0, distributionStart, distributionDuration, randomVestingPeriod, randomCliff);
+      await expectRevertCustomError(Vesting, vesting.claim(0, 0, wallet0, 10, []), "DistributionNotStarted", [
+        await time.latest(),
+        distributionStart
+      ]);
     });
 
     context("two account tree", function () {
@@ -233,27 +246,27 @@ contract("MerkleVesting", function (accounts) {
       });
 
       it("fails for empty proof", async function () {
-        // error InvalidProof();
-        await expectRevert.unspecified(vesting.claim(0, 0, wallet0, 10, []));
+        await expectRevertCustomError(Vesting, vesting.claim(0, 0, wallet0, 10, []), "InvalidProof");
       });
 
       it("fails for invalid index", async function () {
-        // error InvalidProof();
-        await expectRevert.unspecified(vesting.claim(0, 0, wallet0, 10, []));
+        await expectRevertCustomError(Vesting, vesting.claim(0, 0, wallet0, 10, []), "InvalidProof");
       });
 
       it("fails when trying to claim before the cliff", async function () {
         const proof0 = tree.getProof(0, wallet0, BigNumber.from(100));
-        // error CliffNotReached(uint256 timestamp, uint256 cliff);
-        await expectRevert.unspecified(vesting.claim(0, 0, wallet0, 100, proof0));
+        const cliffEnd = (await vesting.getCohort(0)).distributionEnd.sub(new BN(distributionDuration - randomCliff));
+        await expectRevertCustomError(Vesting, vesting.claim(0, 0, wallet0, 100, proof0), "CliffNotReached", [
+          await time.latest(),
+          cliffEnd
+        ]);
       });
 
       it("fails if the address is disabled", async function () {
         const proof0 = tree.getProof(0, wallet0, BigNumber.from(100));
         await time.increase(randomCliff + 1);
         await vesting.setDisabled(0, 0);
-        // error NotInVesting(uint256 cohortId, address account);
-        await expectRevert.unspecified(vesting.claim(0, 0, wallet0, 100, proof0));
+        await expectRevertCustomError(Vesting, vesting.claim(0, 0, wallet0, 100, proof0), "NotInVesting", [0, wallet0]);
       });
 
       it("correctly calculates the claimable amount", async function () {
@@ -327,15 +340,13 @@ contract("MerkleVesting", function (accounts) {
       it("cannot claim for address other than proof", async function () {
         await time.increase(randomCliff + 1);
         const proof0 = tree.getProof(0, wallet0, BigNumber.from(100));
-        // error InvalidProof();
-        await expectRevert.unspecified(vesting.claim(0, 1, wallet1, 101, proof0));
+        await expectRevertCustomError(Vesting, vesting.claim(0, 1, wallet1, 101, proof0), "InvalidProof");
       });
 
       it("cannot claim more with one proof", async function () {
         await time.increase(randomCliff + 1);
         const proof0 = tree.getProof(0, wallet0, BigNumber.from(100));
-        // error InvalidProof();
-        await expectRevert.unspecified(vesting.claim(0, 0, wallet0, 101, proof0));
+        await expectRevertCustomError(Vesting, vesting.claim(0, 0, wallet0, 101, proof0), "InvalidProof");
       });
     });
 
@@ -450,8 +461,10 @@ contract("MerkleVesting", function (accounts) {
       await setBalance(token, vesting.address, new BN(101));
       const proof0 = tree.getProof(0, wallet0, BigNumber.from(100));
       await time.increase(new BN(distributionDuration).add(new BN(120)));
-      // error DistributionEnded(uint256 current, uint256 end);
-      await expectRevert.unspecified(vesting.claim(0, 0, wallet0, 100, proof0));
+      await expectRevertCustomError(Vesting, vesting.claim(0, 0, wallet0, 100, proof0), "DistributionEnded", [
+        await time.latest(),
+        (await vesting.getCohort(0)).distributionEnd
+      ]);
       await vesting.prolongDistributionPeriod(0, 990);
       const res = await vesting.claim(0, 0, wallet0, 100, proof0);
       expect(res.receipt.status).to.be.true;
@@ -498,16 +511,17 @@ contract("MerkleVesting", function (accounts) {
     });
 
     it("fails if distribution period has not ended yet", async function () {
-      // error DistributionOngoing(uint256 current, uint256 end);
-      await expectRevert.unspecified(vesting.withdraw(wallet0));
+      await expectRevertCustomError(Vesting, vesting.withdraw(wallet0), "DistributionOngoing", [
+        await time.latest(),
+        (await vesting.getCohort(0)).distributionEnd
+      ]);
     });
 
     it("fails if there's nothing to withdraw", async function () {
       await time.increase(distributionDuration + 1);
       const balance = await token.balanceOf(vesting.address);
       expect(balance).to.bignumber.eq("0");
-      // error AlreadyWithdrawn();
-      await expectRevert.unspecified(vesting.withdraw(wallet0));
+      await expectRevertCustomError(Vesting, vesting.withdraw(wallet0), "AlreadyWithdrawn");
     });
 
     it("transfers tokens to the recipient", async function () {

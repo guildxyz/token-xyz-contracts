@@ -1,5 +1,6 @@
 const { utils } = require("ethers");
 const { BN, constants, ether, expectEvent, expectRevert } = require("@openzeppelin/test-helpers");
+const { expectRevertCustomError } = require("custom-error-test-helper");
 const expect = require("chai").expect;
 
 const InitialMigration = artifacts.require("InitialMigration");
@@ -116,8 +117,12 @@ contract("TokenFactory", function (accounts) {
       if (runOption.contract === "TokenFactory")
         context("manually adding tokens", function () {
           it("fails if not called by the owner", async function () {
-            // error OnlyOwner(address caller, address owner);
-            await expectRevert.unspecified(tokenXyz.addToken("Stranger", constants.ZERO_ADDRESS, { from: wallet1 }));
+            await expectRevertCustomError(
+              TokenFactoryFeature,
+              tokenXyz.addToken("Stranger", constants.ZERO_ADDRESS, { from: wallet1 }),
+              "OnlyOwner",
+              [wallet1, await tokenXyz.owner()]
+            );
           });
 
           it("saves token addresses", async function () {
@@ -295,17 +300,20 @@ contract("TokenFactory", function (accounts) {
         });
 
         it("should revert if max supply is lower than initial supply", async function () {
-          // error MaxSupplyTooLow(uint256 maxSupply, uint256 initialSupply);
-          await expectRevert.unspecified(
+          const lowMaxSupply = initialSupply.div(new BN(2));
+          await expectRevertCustomError(
+            TokenFactoryFeature,
             tokenXyz[runOption.createToken](
               "Test",
               tokenName,
               tokenSymbol,
               tokenDecimals,
               initialSupply,
-              initialSupply.div(new BN(2)),
+              lowMaxSupply,
               wallet0
-            )
+            ),
+            "MaxSupplyTooLow",
+            [lowMaxSupply, initialSupply]
           );
         });
       });

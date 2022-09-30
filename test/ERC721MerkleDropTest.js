@@ -1,5 +1,6 @@
 const { BigNumber, constants } = require("ethers");
 const { BN, expectEvent, expectRevert, time } = require("@openzeppelin/test-helpers");
+const { expectRevertCustomError } = require("custom-error-test-helper");
 const expect = require("chai").expect;
 const { tsImport } = require("ts-import");
 
@@ -31,8 +32,8 @@ contract("ERC721MerkleDrop", function (accounts) {
 
   context("constructor and initial setup", function () {
     it("fails if called with invalid parameters", async function () {
-      // error InvalidParameters();
-      await expectRevert(
+      await expectRevertCustomError(
+        ERC721MerkleDrop,
         ERC721MerkleDrop.new(
           tokenName,
           tokenSymbol,
@@ -42,9 +43,10 @@ contract("ERC721MerkleDrop", function (accounts) {
           distributionDuration,
           constants.AddressZero
         ),
-        "Custom error (could not decode)"
+        "InvalidParameters"
       );
-      await expectRevert(
+      await expectRevertCustomError(
+        ERC721MerkleDrop,
         ERC721MerkleDrop.new(
           tokenName,
           tokenSymbol,
@@ -52,23 +54,14 @@ contract("ERC721MerkleDrop", function (accounts) {
           tokenMaxSupply,
           constants.HashZero,
           distributionDuration,
-          constants.AddressZero
+          wallet0
         ),
-        "Custom error (could not decode)"
+        "InvalidParameters"
       );
-
-      // error MaxSupplyZero();
-      await expectRevert(
-        ERC721MerkleDrop.new(
-          tokenName,
-          tokenSymbol,
-          tokenCid,
-          0,
-          randomRoot,
-          distributionDuration,
-          constants.AddressZero
-        ),
-        "Custom error (could not decode)"
+      await expectRevertCustomError(
+        ERC721MerkleDrop,
+        ERC721MerkleDrop.new(tokenName, tokenSymbol, tokenCid, 0, randomRoot, distributionDuration, wallet0),
+        "MaxSupplyZero"
       );
     });
 
@@ -137,8 +130,7 @@ contract("ERC721MerkleDrop", function (accounts) {
     });
 
     it("should revert when trying to get the tokenURI for a non-existent token", async function () {
-      // error NonExistentToken(uint256 tokenId);
-      expectRevert.unspecified(token.tokenURI(84));
+      await expectRevertCustomError(ERC721MerkleDrop, token.tokenURI(84), "NonExistentToken", [84]);
     });
 
     it("should return the correct tokenURI", async function () {
@@ -161,8 +153,10 @@ contract("ERC721MerkleDrop", function (accounts) {
         wallet0
       );
       await time.increase(distributionDuration + 1);
-      // error DistributionEnded(uint256 current, uint256 end);
-      await expectRevert.unspecified(token.claim(0, wallet0, 10, []));
+      await expectRevertCustomError(ERC721MerkleDrop, token.claim(0, wallet0, 10, []), "DistributionEnded", [
+        await time.latest(),
+        await token.distributionEnd()
+      ]);
     });
 
     it("fails for empty proof", async function () {
@@ -175,8 +169,7 @@ contract("ERC721MerkleDrop", function (accounts) {
         distributionDuration,
         wallet0
       );
-      // error InvalidProof();
-      await expectRevert.unspecified(token.claim(0, wallet0, 10, []));
+      await expectRevertCustomError(ERC721MerkleDrop, token.claim(0, wallet0, 10, []), "InvalidProof");
     });
 
     it("fails for invalid index", async function () {
@@ -189,7 +182,7 @@ contract("ERC721MerkleDrop", function (accounts) {
         distributionDuration,
         wallet0
       );
-      await expectRevert.unspecified(token.claim(1000, wallet0, 10, []));
+      await expectRevertCustomError(ERC721MerkleDrop, token.claim(1000, wallet0, 10, []), "InvalidProof");
     });
 
     context("two account tree", function () {
@@ -260,14 +253,12 @@ contract("ERC721MerkleDrop", function (accounts) {
 
       it("cannot claim for address other than proof", async function () {
         const proof0 = tree.getProof(0, wallet0, BigNumber.from(10));
-        // error InvalidProof();
-        await expectRevert.unspecified(token.claim(1, wallet1, 11, proof0));
+        await expectRevertCustomError(ERC721MerkleDrop, token.claim(1, wallet1, 11, proof0), "InvalidProof");
       });
 
       it("cannot claim more with one proof", async function () {
         const proof0 = tree.getProof(0, wallet0, BigNumber.from(10));
-        // error InvalidProof();
-        await expectRevert.unspecified(token.claim(0, wallet0, 11, proof0));
+        await expectRevertCustomError(ERC721MerkleDrop, token.claim(0, wallet0, 11, proof0), "InvalidProof");
       });
     });
 
@@ -410,8 +401,10 @@ contract("ERC721MerkleDrop", function (accounts) {
     });
 
     it("fails before distributionEnd", async function () {
-      // error DistributionOngoing(uint256 current, uint256 end);
-      await expectRevert.unspecified(token.safeMint(wallet0, 0));
+      await expectRevertCustomError(ERC721MerkleDrop, token.safeMint(wallet0, 0), "DistributionOngoing", [
+        await time.latest(),
+        await token.distributionEnd()
+      ]);
     });
 
     it("fails if not called by the owner", async function () {
@@ -426,8 +419,12 @@ contract("ERC721MerkleDrop", function (accounts) {
 
     it("fails to mint above maxSupply", async function () {
       await time.increase(distributionDuration + 1);
-      // error TokenIdOutOfBounds(uint256 tokenId, uint256 maxSupply);
-      await expectRevert.unspecified(token.safeMint(wallet0, tokenMaxSupply + 1));
+      await expectRevertCustomError(
+        ERC721MerkleDrop,
+        token.safeMint(wallet0, tokenMaxSupply + 1),
+        "TokenIdOutOfBounds",
+        [tokenMaxSupply + 1, tokenMaxSupply]
+      );
     });
 
     it("minting increases totalSupply", async function () {

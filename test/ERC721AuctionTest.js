@@ -1,9 +1,16 @@
 const { balance, BN, constants, ether, expectEvent, expectRevert, time } = require("@openzeppelin/test-helpers");
+const { expectRevertCustomError } = require("custom-error-test-helper");
 const expect = require("chai").expect;
 
 const ERC721Auction = artifacts.require("ERC721Auction");
 const WETH = artifacts.require("WETHMock");
 const ERC721AuctionMaliciousBidder = artifacts.require("ERC721AuctionMaliciousBidder.sol");
+
+function calculateNextBid(previousBid) {
+  return previousBid.add(
+    auctionConfig.startingPrice.mul(auctionConfig.minimumPercentageIncreasex100).div(new BN(10000))
+  );
+}
 
 const tokenName = "SupercoolNFT";
 const tokenSymbol = "SNFT";
@@ -42,13 +49,13 @@ contract("ERC721 auction", function (accounts) {
   });
 
   it("creation fails if called with invalid parameters", async function () {
-    // error MaxSupplyZero();
-    await expectRevert(
+    await expectRevertCustomError(
+      ERC721Auction,
       ERC721Auction.new(tokenName, tokenSymbol, tokenCid, 0, auctionConfigString, 0, weth.address, wallet0),
-      "Custom error (could not decode)"
+      "MaxSupplyZero"
     );
-    // error StartingPriceZero();
-    await expectRevert(
+    await expectRevertCustomError(
+      ERC721Auction,
       ERC721Auction.new(
         tokenName,
         tokenSymbol,
@@ -64,10 +71,10 @@ contract("ERC721 auction", function (accounts) {
         weth.address,
         wallet0
       ),
-      "Custom error (could not decode)"
+      "StartingPriceZero"
     );
-    // error InvalidParameters();
-    await expectRevert(
+    await expectRevertCustomError(
+      ERC721Auction,
       ERC721Auction.new(
         tokenName,
         tokenSymbol,
@@ -83,10 +90,10 @@ contract("ERC721 auction", function (accounts) {
         weth.address,
         wallet0
       ),
-      "Custom error (could not decode)"
+      "InvalidParameters"
     );
-    // error InvalidParameters();
-    await expectRevert(
+    await expectRevertCustomError(
+      ERC721Auction,
       ERC721Auction.new(
         tokenName,
         tokenSymbol,
@@ -97,10 +104,10 @@ contract("ERC721 auction", function (accounts) {
         constants.ZERO_ADDRESS,
         wallet0
       ),
-      "Custom error (could not decode)"
+      "InvalidParameters"
     );
-    // error InvalidParameters();
-    await expectRevert(
+    await expectRevertCustomError(
+      ERC721Auction,
       ERC721Auction.new(
         tokenName,
         tokenSymbol,
@@ -111,7 +118,7 @@ contract("ERC721 auction", function (accounts) {
         weth.address,
         constants.ZERO_ADDRESS
       ),
-      "Custom error (could not decode)"
+      "InvalidParameters"
     );
   });
 
@@ -165,8 +172,7 @@ contract("ERC721 auction", function (accounts) {
   });
 
   it("should revert when trying to get the tokenURI for a non-existent token", async function () {
-    // error NonExistentToken(uint256 tokenId);
-    expectRevert.unspecified(token.tokenURI(84));
+    await expectRevertCustomError(ERC721Auction, token.tokenURI(84), "NonExistentToken", [84]);
   });
 
   it("should return the correct tokenURI", async function () {
@@ -183,8 +189,7 @@ contract("ERC721 auction", function (accounts) {
     });
 
     it("should fail to update startingPrice to zero", async function () {
-      // error StartingPriceZero();
-      await expectRevert.unspecified(token.setStartingPrice(0));
+      await expectRevertCustomError(ERC721Auction, token.setStartingPrice(0), "StartingPriceZero");
     });
 
     it("should fail to update auctionDuration if not called by the owner", async function () {
@@ -192,8 +197,7 @@ contract("ERC721 auction", function (accounts) {
     });
 
     it("should fail to update auctionDuration to zero", async function () {
-      // error InvalidParameters();
-      await expectRevert.unspecified(token.setAuctionDuration(0));
+      await expectRevertCustomError(ERC721Auction, token.setAuctionDuration(0), "InvalidParameters");
     });
 
     it("should fail to update timeBuffer if not called by the owner", async function () {
@@ -275,17 +279,16 @@ contract("ERC721 auction", function (accounts) {
         await time.increase(auctionConfig.auctionDuration);
         await token.settleAuction();
       }
-      // error TokenIdOutOfBounds(uint256 tokenId, uint256 maxSupply);
-      await expectRevert.unspecified(token.bid(3));
+      await expectRevertCustomError(ERC721Auction, token.bid(3), "TokenIdOutOfBounds", [3, tokenMaxSupply]);
     });
 
     it("should fail if bidding for another token", async function () {
-      // error BidForAnotherToken(uint256 tokenId, uint256 currentAuctionId);
-      await expectRevert.unspecified(token.bid(2));
+      await expectRevertCustomError(ERC721Auction, token.bid(2), "BidForAnotherToken", [2, 0]);
     });
 
     it("should fail if bidding outside the auction's time frame", async function () {
       const timestamp = await time.latest();
+      const auctionStart = timestamp.add(new BN(420));
 
       const aToken = await ERC721Auction.new(
         tokenName,
@@ -298,24 +301,39 @@ contract("ERC721 auction", function (accounts) {
           timeBuffer: auctionConfig.timeBuffer.toString(),
           minimumPercentageIncreasex100: auctionConfig.minimumPercentageIncreasex100.toString()
         },
-        timestamp.add(new BN(420)),
+        auctionStart,
         weth.address,
         wallet0
       );
-      // error AuctionNotStarted(uint256 current, uint256 start);
-      await expectRevert.unspecified(aToken.bid(0, { value: auctionConfig.startingPrice }));
+      await expectRevertCustomError(
+        ERC721Auction,
+        aToken.bid(0, { value: auctionConfig.startingPrice }),
+        "AuctionNotStarted",
+        [await time.latest(), auctionStart]
+      );
 
       await time.increase(690);
-      // error AuctionEnded(uint256 current, uint256 end);
-      await expectRevert.unspecified(aToken.bid(0, { value: auctionConfig.startingPrice }));
+
+      await expectRevertCustomError(
+        ERC721Auction,
+        aToken.bid(0, { value: auctionConfig.startingPrice }),
+        "AuctionEnded",
+        [await time.latest(), auctionStart.add(new BN(270))]
+      );
     });
 
     it("should fail if the bid is too low", async function () {
-      // error BidTooLow(uint256 paid, uint256 minBid);
-      await expectRevert.unspecified(token.bid(0, { value: auctionConfig.startingPrice.div(new BN(2)) }));
+      await expectRevertCustomError(
+        ERC721Auction,
+        token.bid(0, { value: auctionConfig.startingPrice.div(new BN(2)) }),
+        "BidTooLow",
+        [auctionConfig.startingPrice.div(new BN(2)), auctionConfig.startingPrice]
+      );
       await token.bid(0, { value: auctionConfig.startingPrice });
-      // error BidTooLow(uint256 paid, uint256 minBid);
-      await expectRevert.unspecified(token.bid(0, { value: auctionConfig.startingPrice }));
+      await expectRevertCustomError(ERC721Auction, token.bid(0, { value: auctionConfig.startingPrice }), "BidTooLow", [
+        auctionConfig.startingPrice,
+        calculateNextBid(auctionConfig.startingPrice)
+      ]);
     });
 
     it("should refund the previous bidder", async function () {
@@ -324,9 +342,7 @@ contract("ERC721 auction", function (accounts) {
       const tracker = await balance.tracker(wallet0);
       await token.bid(0, {
         from: wallet1,
-        value: auctionConfig.startingPrice.add(
-          auctionConfig.startingPrice.mul(auctionConfig.minimumPercentageIncreasex100).div(new BN(10000))
-        )
+        value: calculateNextBid(auctionConfig.startingPrice)
       });
       const delta = await tracker.delta();
       expect(delta).to.bignumber.eq(auctionConfig.startingPrice);
@@ -341,9 +357,7 @@ contract("ERC721 auction", function (accounts) {
 
       await token.bid(0, {
         from: wallet1,
-        value: auctionConfig.startingPrice.add(
-          auctionConfig.startingPrice.mul(auctionConfig.minimumPercentageIncreasex100).div(new BN(10000))
-        )
+        value: calculateNextBid(auctionConfig.startingPrice)
       });
 
       const delta = await ethTracker.delta();
@@ -392,8 +406,10 @@ contract("ERC721 auction", function (accounts) {
     });
 
     it("should fail if the auction is not over yet", async function () {
-      // error AuctionNotEnded(uint256 current, uint256 end);
-      await expectRevert.unspecified(token.settleAuction());
+      await expectRevertCustomError(ERC721Auction, token.settleAuction(), "AuctionNotEnded", [
+        await time.latest(),
+        (await token.getAuctionState()).endTime
+      ]);
     });
 
     it("should increase the total supply", async function () {

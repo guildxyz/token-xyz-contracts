@@ -1,4 +1,5 @@
 const { balance, BN, constants, ether, expectEvent, expectRevert } = require("@openzeppelin/test-helpers");
+const { expectRevertCustomError } = require("custom-error-test-helper");
 const expect = require("chai").expect;
 
 const ERC721Curve = artifacts.require("ERC721Curve");
@@ -23,20 +24,20 @@ contract("ERC721 with curve", function (accounts) {
   });
 
   it("creation fails if called with invalid parameters", async function () {
-    // error MaxSupplyZero();
-    await expectRevert(
+    await expectRevertCustomError(
+      ERC721Curve,
       ERC721Curve.new(tokenName, tokenSymbol, tokenCid, 0, tokenStartingPrice, wallet0),
-      "Custom error (could not decode)"
+      "MaxSupplyZero"
     );
-    // error StartingPriceZero();
-    await expectRevert(
+    await expectRevertCustomError(
+      ERC721Curve,
       ERC721Curve.new(tokenName, tokenSymbol, tokenCid, tokenMaxSupply, 0, wallet0),
-      "Custom error (could not decode)"
+      "StartingPriceZero"
     );
-    // error InvalidParameters();
-    await expectRevert(
+    await expectRevertCustomError(
+      ERC721Curve,
       ERC721Curve.new(tokenName, tokenSymbol, tokenCid, tokenMaxSupply, tokenStartingPrice, constants.ZERO_ADDRESS),
-      "Custom error (could not decode)"
+      "InvalidParameters"
     );
   });
 
@@ -59,8 +60,10 @@ contract("ERC721 with curve", function (accounts) {
   });
 
   it("should fail to calculate the price of a token that will never exist", async function () {
-    // error TokenIdOutOfBounds(uint256 tokenId, uint256 maxSupply);
-    await expectRevert.unspecified(token.getPriceOf(tokenMaxSupply));
+    await expectRevertCustomError(ERC721Curve, token.getPriceOf(tokenMaxSupply), "TokenIdOutOfBounds", [
+      tokenMaxSupply,
+      tokenMaxSupply
+    ]);
   });
 
   it("should correctly calculate the price of tokens", async function () {
@@ -70,8 +73,7 @@ contract("ERC721 with curve", function (accounts) {
   });
 
   it("should revert when trying to get the tokenURI for a non-existent token", async function () {
-    // error NonExistentToken(uint256 tokenId);
-    expectRevert.unspecified(token.tokenURI(84));
+    await expectRevertCustomError(ERC721Curve, token.tokenURI(84), "NonExistentToken", [84]);
   });
 
   it("should return the correct tokenURI", async function () {
@@ -85,13 +87,18 @@ contract("ERC721 with curve", function (accounts) {
       await token.claim(wallet0, { value: tokenStartingPrice });
       await token.claim(wallet0, { value: getTokenPrice(1) });
       await token.claim(wallet0, { value: getTokenPrice(2) });
-      // error TokenIdOutOfBounds(uint256 tokenId, uint256 maxSupply);
-      await expectRevert.unspecified(token.claim(wallet0, { value: ether("100") }));
+      await expectRevertCustomError(ERC721Curve, token.claim(wallet0, { value: ether("100") }), "TokenIdOutOfBounds", [
+        3,
+        tokenMaxSupply
+      ]);
     });
 
     it("should fail to claim if did not receive enough ether", async function () {
-      // error PriceTooLow(uint256 paid, uint256 nextPrice);
-      await expectRevert.unspecified(token.claim(wallet0, { value: tokenStartingPrice.div(new BN(2)) }));
+      const amount = tokenStartingPrice.div(new BN(2));
+      await expectRevertCustomError(ERC721Curve, token.claim(wallet0, { value: amount }), "PriceTooLow", [
+        amount,
+        tokenStartingPrice
+      ]);
     });
 
     it("should give back any leftover ether if paid too much", async function () {
