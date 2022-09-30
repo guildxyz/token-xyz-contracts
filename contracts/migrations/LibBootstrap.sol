@@ -25,7 +25,7 @@
 
 */
 
-pragma solidity 0.8.15;
+pragma solidity 0.8.17;
 
 library LibBootstrap {
     /// @notice Magic bytes returned by the bootstrapper to indicate success.

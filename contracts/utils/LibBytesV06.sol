@@ -25,7 +25,7 @@
 
 */
 
-pragma solidity 0.8.15;
+pragma solidity 0.8.17;
 
 library LibBytesV06 {
     /// @notice Error thrown on an invalid byte operation.

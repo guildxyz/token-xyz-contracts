@@ -1,5 +1,5 @@
 // SPDX-License-Identifier: MIT
-pragma solidity 0.8.15;
+pragma solidity 0.8.17;
 
 import { FixinCommon } from "../fixins/FixinCommon.sol";
 import { LibMigrate } from "../migrations/LibMigrate.sol";

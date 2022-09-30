@@ -25,7 +25,7 @@
 
 */
 
-pragma solidity 0.8.15;
+pragma solidity 0.8.17;
 
 library LibMigrate {
     /// @notice Magic bytes returned by a migrator to indicate success.

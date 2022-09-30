@@ -25,7 +25,7 @@
 
 */
 
-pragma solidity 0.8.15;
+pragma solidity 0.8.17;
 
 import { TokenXyz } from "../TokenXyz.sol";
 import { IBootstrapFeature } from "../features/interfaces/IBootstrapFeature.sol";
