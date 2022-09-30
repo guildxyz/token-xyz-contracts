@@ -2,17 +2,19 @@ const { BigNumber, constants } = require("ethers");
 const { BN, time, expectRevert, expectEvent } = require("@openzeppelin/test-helpers");
 const { expectRevertCustomError } = require("custom-error-test-helper");
 const expect = require("chai").expect;
-const { tsImport } = require("ts-import");
+const tsImport = require("ts-import");
 
 const Distributor = artifacts.require("MerkleDistributor");
 const ERC20MintableBurnable = artifacts.require("ERC20MintableBurnable");
 
 // ts imports
 async function importTs() {
+  const filePath0 = "./scripts/merkleTree/merkle-tree.ts";
   const filePath1 = "./scripts/merkleTree/balance-tree.ts";
-  BalanceTree = await tsImport.compile(filePath1);
   const filePath2 = "./scripts/merkleTree/parse-balance-map.ts";
-  parseBalanceMap = await tsImport.compile(filePath2);
+  BalanceTree = await tsImport.load(filePath0);
+  BalanceTree = await tsImport.load(filePath1);
+  parseBalanceMap = await tsImport.load(filePath2);
 }
 
 let BalanceTree;
