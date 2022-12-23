@@ -10,7 +10,7 @@ To run the project you need:
 
 - [Node.js](https://nodejs.org/en/download) development environment (version 14 or newer).
 - [Truffle](https://www.trufflesuite.com/truffle) for compiling, deploying and testing (version 5.4.30 or newer).
-- [Ganache](https://github.com/trufflesuite/ganache/releases) environment for local testing (version 7.0.0 or newer).
+- [Ganache](https://github.com/trufflesuite/ganache/releases) environment for local testing (version 7.6.0 or newer).
 
 Pull the repository from GitHub, then install its dependencies by executing this command:
 
